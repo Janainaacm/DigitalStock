@@ -1,7 +1,6 @@
 package com.example.digitalstockbackend.repository;
 
 
-import com.example.digitalstockbackend.model.Category;
 import com.example.digitalstockbackend.model.Color;
 import com.example.digitalstockbackend.model.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -11,8 +10,8 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface ProductRepository extends JpaRepository<Product, Long> {
-    Optional<Product> findByName(String name);
-    List<Product> findByCategory(Category category);
+public interface ColorRepository extends JpaRepository<Color, Long> {
+    Optional<Color> findByColorName(String colorName);
+    List<Color> findByProduct(Product product);
 }
 

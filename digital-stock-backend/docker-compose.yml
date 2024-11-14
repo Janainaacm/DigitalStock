@@ -1,0 +1,28 @@
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: janaina
+      POSTGRES_PASSWORD: enzo
+      POSTGRES_DB: digital-stock-db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/digital-stock-db
+      SPRING_DATASOURCE_USERNAME: janaina
+      SPRING_DATASOURCE_PASSWORD: enzo
+
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+
+volumes:
+  postgres_data:

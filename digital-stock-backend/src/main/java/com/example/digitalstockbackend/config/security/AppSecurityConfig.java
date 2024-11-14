@@ -35,12 +35,12 @@ public class AppSecurityConfig {
                         .requestMatchers("/admin/**").hasRole(UserRole.ADMIN.name()) // Restrict admin paths to ADMIN role
                         .anyRequest().authenticated()
                 )
-                .formLogin(login -> login
+               /* .formLogin(login -> login
                         .loginPage("/login")
                         .defaultSuccessUrl("/")
                         .failureUrl("/login?error=true")
                         .permitAll()
-                )
+                ) */
                 .logout(logout -> logout
                         .logoutUrl("/custom-logout")
                         .invalidateHttpSession(true)

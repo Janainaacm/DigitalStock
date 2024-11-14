@@ -2,11 +2,11 @@ package com.example.digitalstockbackend.model;
 
 import jakarta.persistence.*;
 import java.math.BigDecimal;
+import java.util.List;
 
 @Entity
 @Table(name = "products")
 public class Product {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -20,15 +20,20 @@ public class Product {
     @Column(nullable = false)
     private BigDecimal price;
 
-    private int stock;
+
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    private Category category;
+
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Color> colors;
 
     public Product() {}
-    public Product(Long id, String name, String description, BigDecimal price, int stock) {
+    public Product(Long id, String name, String description, BigDecimal price) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.price = price;
-        this.stock = stock;
     }
 
     public Long getId() {
@@ -63,12 +68,20 @@ public class Product {
         this.price = price;
     }
 
-    public int getStock() {
-        return stock;
+    public Category getCategory() {
+        return category;
     }
 
-    public void setStock(int stock) {
-        this.stock = stock;
+    public void setCategory(Category category) {
+        this.category = category;
+    }
+
+    public List<Color> getColors() {
+        return colors;
+    }
+
+    public void setColors(List<Color> colors) {
+        this.colors = colors;
     }
 }
 
