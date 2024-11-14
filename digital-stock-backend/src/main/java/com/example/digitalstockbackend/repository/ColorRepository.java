@@ -12,6 +12,6 @@ import java.util.Optional;
 @Repository
 public interface ColorRepository extends JpaRepository<Color, Long> {
     Optional<Color> findByColorName(String colorName);
-    List<Color> findByProduct(Product product);
+    List<Color> findByProductId(Long id);
 }
 

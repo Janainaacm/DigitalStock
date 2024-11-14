@@ -34,6 +34,12 @@ public class CustomUser {
     @NotNull(message = "Role is required")
     private UserRole userRole;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Wishlist> userWishlist;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Order> userOrders;
+
 
     private boolean isAccountNonExpired = true;
     private boolean isAccountNonLocked = true;
