@@ -27,7 +27,7 @@ export default function Home() {
 
           <div className="p-4 md:max-w-xl ">
             <Image
-              src={"/electronic-device-collection.jpg"}
+              src={"/images/electronic-device-collection.jpg"}
               alt={"Electronic Device Image"}
               width={700}
               height={500}

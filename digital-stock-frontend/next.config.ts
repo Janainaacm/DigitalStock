@@ -12,7 +12,7 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: "https",
-        hostname: "example.com", // Add the new hostname
+        hostname: "opencdn.vn",
         port: "",
         pathname: "/**",
       },
