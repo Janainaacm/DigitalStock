@@ -1,6 +1,7 @@
 package com.example.digitalstockbackend.repository;
 
 
+import com.example.digitalstockbackend.authorities.OrderStatus;
 import com.example.digitalstockbackend.model.Order;
 import com.example.digitalstockbackend.model.CustomUser;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -10,7 +11,8 @@ import java.util.List;
 
 @Repository
 public interface OrderRepository extends JpaRepository<Order, Long> {
-    List<Order> findByUser(CustomUser user);
-    List<Order> findByStatus (String status);
+    List<Order> findByStatus (OrderStatus status);
+    List<Order> findByUserId(Long id);
+    Order findOrderById (Long id);
 }
 

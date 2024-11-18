@@ -40,6 +40,9 @@ public class CustomUser {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Order> userOrders;
 
+    @OneToOne
+    private Cart cart;
+
 
     private boolean isAccountNonExpired = true;
     private boolean isAccountNonLocked = true;

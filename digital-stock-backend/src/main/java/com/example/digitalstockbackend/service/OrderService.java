@@ -1,61 +1,120 @@
 package com.example.digitalstockbackend.service;
 
+import com.example.digitalstockbackend.authorities.OrderStatus;
+import com.example.digitalstockbackend.model.Cart;
 import com.example.digitalstockbackend.model.CustomUser;
 import com.example.digitalstockbackend.model.Order;
+import com.example.digitalstockbackend.model.OrderItem;
+import com.example.digitalstockbackend.repository.CartRepository;
+import com.example.digitalstockbackend.repository.OrderItemRepository;
 import com.example.digitalstockbackend.repository.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.security.Principal;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class OrderService {
 
     private final OrderRepository orderRepository;
     private final UserService userService;
+    private final CartRepository cartRepository;
+    private final OrderItemRepository orderItemRepository;
 
     @Autowired
-    public OrderService(OrderRepository orderRepository, UserService userService) {
+    public OrderService(OrderRepository orderRepository, UserService userService, CartRepository cartRepository, OrderItemRepository orderItemRepository) {
         this.orderRepository = orderRepository;
         this.userService = userService;
+        this.cartRepository = cartRepository;
+        this.orderItemRepository = orderItemRepository;
     }
 
-    public List<Order> getOrdersByUser(String username) {
-        CustomUser user = userService.getUserByUsername(username);
-        return orderRepository.findByUser(user);
+    public ResponseEntity<Order> fetchOrderById(Long id) {
+        Order order = orderRepository.findOrderById(id);
+
+        if (order == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(order);
     }
 
-
-    public List<Order> getOrdersByStatus(String status) {
-        return orderRepository.findByStatus(status);
+    public ResponseEntity<List<Order>> fetchOrdersByUserId(Principal principal) {
+        CustomUser requestedUser = userService.getUserByUsername(principal.getName());
+        List<Order> requestedList = orderRepository.findByUserId(requestedUser.getId());
+        return ResponseEntity.ok(requestedList);
     }
 
-    public List<Order> getAllOrders() {
-        return orderRepository.findAll();
+    public ResponseEntity<List<Order>> fetchOrdersByStatus(OrderStatus status) {
+        List<Order> orders = orderRepository.findByStatus(status);
+
+        return ResponseEntity.ok(orders);
     }
 
-    public Optional<Order> getOrderById(Long id) {
-        return orderRepository.findById(id);
+    public ResponseEntity<Order> placeOrder(Long userId) {
+        Optional<Cart> optionalCart = cartRepository.findByUserId(userId);
+
+        if (optionalCart.isEmpty()) {
+            throw new RuntimeException("Cart is empty, cannot place an order");
+        }
+        Cart cart = optionalCart.get();
+
+        Order order = new Order();
+        order.setUser(cart.getUser());
+        order.setOrderDate(LocalDateTime.now());
+        order.setStatus(OrderStatus.PENDING);
+
+        List<OrderItem> orderItems = cart.getItems().stream().map(cartItem -> {
+            OrderItem orderItem = new OrderItem();
+            orderItem.setOrder(order);
+            orderItem.setProduct(cartItem.getProduct());
+            orderItem.setQuantity(cartItem.getQuantity());
+            return orderItem;
+        }).collect(Collectors.toList());
+
+        order.setOrderItems(orderItems);
+
+        Order savedOrder = orderRepository.save(order);
+        orderItemRepository.saveAll(orderItems);
+
+        cart.getItems().clear();
+        cartRepository.save(cart);
+
+        return ResponseEntity.ok(savedOrder);
+
     }
 
-    public Order saveOrder(Order order) {
-        return orderRepository.save(order);
-    }
-
-    public Order updateOrder(Long id, Order orderDetails) {
-        return orderRepository.findById(id)
+    public ResponseEntity<Order> cancelOrder(Long orderId) {
+        return orderRepository.findById(orderId)
                 .map(order -> {
-                    order.setQuantity(orderDetails.getQuantity());
-                    order.setStatus(orderDetails.getStatus());
-                    order.setPointsEarned(orderDetails.getPointsEarned());
-                    return orderRepository.save(order);
+                    if (order.getStatus() == OrderStatus.PENDING ||
+                            order.getStatus() == OrderStatus.ONGOING ||
+                            order.getStatus() == OrderStatus.CANCELLED) {
+
+                        order.setStatus(OrderStatus.CANCELLED);
+                        orderRepository.save(order);
+                        return ResponseEntity.ok(order);
+
+                    } else {
+                        return ResponseEntity.badRequest().body(order);
+                    }
                 })
-                .orElseThrow(() -> new RuntimeException("Order not found"));
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    public void deleteOrder(Long id) {
+    public ResponseEntity<Void> deleteOrder(Long id) {
+        if (!orderRepository.existsById(id)) {
+            return ResponseEntity.notFound().build();
+        }
+
         orderRepository.deleteById(id);
+
+        return ResponseEntity.ok().build();
     }
+
+
 }

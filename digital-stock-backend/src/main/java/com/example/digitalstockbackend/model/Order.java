@@ -1,7 +1,11 @@
 package com.example.digitalstockbackend.model;
 
+import com.example.digitalstockbackend.authorities.OrderStatus;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "orders")
@@ -15,24 +19,23 @@ public class Order {
     @JoinColumn(name = "user_id")
     private CustomUser user;
 
-    @ManyToOne
-    @JoinColumn(name = "product_id")
-    private Product product;
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<OrderItem> orderItems;
 
-    private int quantity;
+    @Enumerated(EnumType.STRING)
+    @NotNull(message = "Status is required")
+    private OrderStatus status;
 
-    private String status = "pending";
+    private int pointsEarned;
 
-    private int pointsEarned = 0;
-
-    private LocalDateTime orderDate = LocalDateTime.now();
+    private LocalDateTime orderDate;
 
     public Order () {};
-    public Order(Long id, CustomUser user, Product product, int quantity, String status, int pointsEarned, LocalDateTime orderDate) {
+
+    public Order(Long id, CustomUser user, List<OrderItem> orderItems, OrderStatus status, int pointsEarned, LocalDateTime orderDate) {
         this.id = id;
         this.user = user;
-        this.product = product;
-        this.quantity = quantity;
+        this.orderItems = orderItems;
         this.status = status;
         this.pointsEarned = pointsEarned;
         this.orderDate = orderDate;
@@ -54,27 +57,19 @@ public class Order {
         this.user = user;
     }
 
-    public Product getProduct() {
-        return product;
+    public List<OrderItem> getOrderItems() {
+        return orderItems;
     }
 
-    public void setProduct(Product product) {
-        this.product = product;
+    public void setOrderItems(List<OrderItem> orderItems) {
+        this.orderItems = orderItems;
     }
 
-    public int getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
-    }
-
-    public String getStatus() {
+    public OrderStatus getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(OrderStatus status) {
         this.status = status;
     }
 
@@ -87,7 +82,7 @@ public class Order {
     }
 
     public LocalDateTime getOrderDate() {
-        return orderDate;
+        return LocalDateTime.now();
     }
 
     public void setOrderDate(LocalDateTime orderDate) {

@@ -18,22 +18,58 @@ public class Product {
     private String description;
 
     @Column(nullable = false)
-    private BigDecimal price;
+    private String colorName;
 
+    @Column(nullable = false, length = 600)
+    private String imageUrl;
+
+    @Column(nullable = false)
+    private int stock;
+
+    @Column(nullable = false)
+    private BigDecimal price;
 
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;
 
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Color> colors;
+
 
     public Product() {}
-    public Product(Long id, String name, String description, BigDecimal price) {
+
+    public Product(Long id, String name, String description, String colorName, String imageUrl, int stock, BigDecimal price, Category category) {
         this.id = id;
         this.name = name;
         this.description = description;
+        this.colorName = colorName;
+        this.imageUrl = imageUrl;
+        this.stock = stock;
         this.price = price;
+        this.category = category;
+    }
+
+    public String getColorName() {
+        return colorName;
+    }
+
+    public void setColorName(String colorName) {
+        this.colorName = colorName;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    public int getStock() {
+        return stock;
+    }
+
+    public void setStock(int stock) {
+        this.stock = stock;
     }
 
     public Long getId() {
@@ -76,12 +112,5 @@ public class Product {
         this.category = category;
     }
 
-    public List<Color> getColors() {
-        return colors;
-    }
-
-    public void setColors(List<Color> colors) {
-        this.colors = colors;
-    }
 }
 

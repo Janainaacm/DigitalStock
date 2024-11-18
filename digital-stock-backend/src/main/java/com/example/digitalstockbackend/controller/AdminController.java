@@ -3,10 +3,9 @@ package com.example.digitalstockbackend.controller;
 import com.example.digitalstockbackend.model.Order;
 import com.example.digitalstockbackend.model.Product;
 import com.example.digitalstockbackend.model.CustomUser;
-import com.example.digitalstockbackend.service.OrderService;
-import com.example.digitalstockbackend.service.ProductService;
-import com.example.digitalstockbackend.service.UserService;
+import com.example.digitalstockbackend.service.AdminService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,51 +16,47 @@ import java.util.List;
 @PreAuthorize("hasRole('ADMIN')")
 public class AdminController {
 
-    private final ProductService productService;
-    private final UserService userService;
-    private final OrderService orderService;
+
+    private final AdminService adminService;
 
     @Autowired
-    public AdminController(ProductService productService, UserService userService, OrderService orderService) {
-        this.productService = productService;
-        this.userService = userService;
-        this.orderService = orderService;
+    public AdminController(AdminService adminService) {
+        this.adminService = adminService;
     }
-
-    // Handle product management
-    @PostMapping("/products")
-    public Product createProduct(@RequestBody Product product) {
-        product.getColors().forEach(color -> color.setProduct(product));
-        return productService.saveProduct(product);
-    }
-
-    @PutMapping("/products/{id}")
-    public Product updateProduct(@PathVariable Long id, @RequestBody Product productDetails) {
-        return productService.updateProduct(id, productDetails);
-    }
-
-    @DeleteMapping("/products/{id}")
-    public void deleteProduct(@PathVariable Long id) {
-        productService.deleteProduct(id);
-    }
-
-
 
 
     // Handle user management
     @GetMapping("/users")
-    public List<CustomUser> getAllUsers() {
-        return userService.getAllUsers();
+    public ResponseEntity<List<CustomUser>> getAllUsers() {
+        return adminService.fetchAllUsers();
     }
 
 
+    // Handle product management
+    @PostMapping("/products/new")
+    public ResponseEntity<Product> createProduct(@RequestBody Product product) {
+        return adminService.createProduct(product);
+    }
 
+    @PutMapping("/products/{productId}")
+    public ResponseEntity<Product> updateProduct(@PathVariable Long productId, @RequestBody Product productDetails) {
+        return adminService.updateProduct(productId, productDetails);
+    }
 
+    @DeleteMapping("/products/{productId}")
+    public ResponseEntity<Void> deleteProduct(@PathVariable Long productId) {
+        return adminService.deleteProduct(productId);
+    }
 
 
     // Handle order management
     @GetMapping("/orders")
-    public List<Order> getAllOrders() {
-        return orderService.getAllOrders();
+    public ResponseEntity<List<Order>> getAllOrders() {
+        return adminService.fetchAllOrders();
+    }
+
+    @PutMapping("/orders/update/{orderId}")
+    public ResponseEntity<Order> updateOrderStatus(@PathVariable Long orderId, @RequestBody String orderStatus) {
+        return adminService.updateOrderStatus(orderId, orderStatus);
     }
 }
