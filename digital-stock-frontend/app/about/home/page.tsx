@@ -1,5 +1,6 @@
 import Image from "next/image"
-import CustomButton from "./globalComponents/ui-elements/CustomButton"
+import CustomButton from "../../globalComponents/ui-elements/CustomButton"
+import React from "react"
 
 export default function Home() {
   return (
@@ -22,8 +23,6 @@ export default function Home() {
             <section className="flex gap-8 my-8 justify-evenly md:justify-start ">
               <CustomButton href={"/store"} text={"Shop"} />
               <CustomButton href={"/products"} text={"products"} />
-              <CustomButton href={"/auth/register"} text={"Register user"} />
-
 
             </section>
           </section>

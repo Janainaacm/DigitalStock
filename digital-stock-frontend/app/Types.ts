@@ -1,13 +1,14 @@
-
 export interface UserInterface {
-    id: number,
-    email: string,
-    username: string,
-    password: string,
-    userRole: string,
-    wishlist: WishlistInterface[],
-    orders: OrderInterface[]
-}
+    id: number;
+    username: string;
+    email: string;
+    roles: string[];
+    token: string; 
+    userWishlist: WishlistInterface[] | null; 
+    userOrders: OrderInterface[] | null; 
+    cart: CartInterface | null; 
+  }
+  
 
 export interface WishlistInterface {
     id: number,

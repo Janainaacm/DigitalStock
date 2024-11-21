@@ -2,7 +2,7 @@ import type { Metadata } from "next"
 import localFont from "next/font/local"
 import "./globals.css"
 import Link from "next/link"
-import CustomLink from "./_component/ui-elements/CustomLink"
+import CustomLink from "./globalComponents/ui-elements/CustomLink"
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -33,7 +33,6 @@ export default function RootLayout({
         <nav className="">
           <ul className="flex p-4 text-4xl border-b-2 justify-evenly border-limedSpruce-200">
             <CustomLink href={"/"} text={"Home"} />
-            <CustomLink href={"/about"} text={"About"} />
             <CustomLink href={"/products"} text={"Products"} />
           </ul>
         </nav>

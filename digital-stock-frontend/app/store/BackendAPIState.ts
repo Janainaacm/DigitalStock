@@ -15,7 +15,7 @@ import {
 interface AppState {
   user: UserInterface | null;
   users: UserInterface[];
-  products: ProductInterface[];
+  productsList: ProductInterface[];
   product: ProductInterface | null;
   categories: CategoryInterface[];
   wishlist: ProductInterface[];
@@ -50,7 +50,7 @@ interface AppState {
 
   // Cart Actions
   fetchCartByUserId: (userId: number) => Promise<CartInterface>;
-  addItemToCart: (cartItem: CartItemInterface) => Promise<void>;
+  addItemToCart: (product: ProductInterface) => Promise<void>;
   removeItemFromCart: (cartItemId: number) => Promise<void>;
   clearCart: () => Promise<void>;
 
@@ -62,17 +62,12 @@ interface AppState {
   fetchAllOrders: () => Promise<OrderInterface[]>;
   updateOrderStatus: (orderId: number, status: string) => Promise<void>;
 
-  //Auth Actions
-  //logInUser: (username: string, password: string) => Promise<UserInterface | null>;
-  //logOutUser: () => Promise<void>;
-  //registerUser: (userData: UserInterface) => Promise<void>;
-
 }
 
 export const useAppState = create<AppState>((set) => ({
   user: null,
   users: [],
-  products: [],
+  productsList: [],
   product: null,
   categories: [],
   wishlist: [],
@@ -123,19 +118,24 @@ export const useAppState = create<AppState>((set) => ({
   // Product Actions
   fetchProducts: async (): Promise<ProductInterface[]> => {
     try {
-      const response = await axios.get(`${API_URL}`);
-      set({ products: response.data });
+      console.log("Fetching products...");
+      const response = await axios.get(`${API_URL}/products`);
+      console.log("Products fetched:", response.data);
+      set({ 
+        productsList: response.data
+      });
       return response.data;
     } catch (error) {
       console.error("Error fetching products:", error);
       throw error;
     }
   },
+  
 
 
   fetchProductById: async (productId: number): Promise<ProductInterface | null> => {
     try {
-      const response = await axios.get(`${API_URL}/id/${productId}`);
+      const response = await axios.get(`${API_URL}/products/id/${productId}`);
       set({ product: response.data });
       return response.data;
     } catch (error) {
@@ -146,8 +146,8 @@ export const useAppState = create<AppState>((set) => ({
 
   fetchProductsByCategory: async (categoryName: string): Promise<ProductInterface[]> => {
     try {
-      const response = await axios.get(`${API_URL}/category/${categoryName}`);
-      set({ products: response.data });
+      const response = await axios.get(`${API_URL}/products/category/${categoryName}`);
+      set({ productsList: response.data });
       return response.data;
     } catch (error) {
       console.error("Error fetching products by category:", error);
@@ -159,8 +159,8 @@ export const useAppState = create<AppState>((set) => ({
 
   fetchAllProductColorsByName: async (productName: string): Promise<ProductInterface[] | null> => {
     try {
-      const response = await axios.get(`${API_URL}/name/${productName}/colors`);
-      set({ products: response.data });
+      const response = await axios.get(`${API_URL}/products/name/${productName}/colors`);
+      set({ productsList: response.data });
       return response.data;
     } catch (error) {
       console.error("Error fetching product colors by name:", error);
@@ -304,19 +304,26 @@ fetchCartByUserId: async (userId: number): Promise<CartInterface> => {
     }
   },
 
-  addItemToCart: async (cartItem: CartItemInterface): Promise<void> => {
-    if (!cartItem.cart?.user?.id) return;
+  addItemToCart: async (product: ProductInterface): Promise<void> => {
+    console.log("made it here")
+    const userId = useAppState.getState().user?.id;
+    if (!userId) {
+      console.log("no user, open login pop up")
+      return;
+    }
 
     try {
-      const response = await axios.put(
-        `${API_URL}/cart/${cartItem.cart.user.id}/${cartItem.id}`
-      );
-      set({ cart: response.data });
+        const response = await axios.post(`${API_URL}/cart/add`, {
+            productId: product.id,
+            quantity: 1, 
+        });
+        set({ cart: response.data }); 
     } catch (error) {
-      console.error("Error adding item to cart:", error);
-      throw error;
+        console.error("Error adding item to cart:", error);
+        throw error;
     }
-  },
+},
+
   
   removeItemFromCart: async (cartItemId: number): Promise<void> => {
     const userId = useAppState.getState().user?.id;
@@ -362,18 +369,19 @@ fetchCartByUserId: async (userId: number): Promise<CartInterface> => {
     try {
       const response = await axios.post(`${API_URL}/products/new`, productData);
       set((state) => ({
-        products: [...state.products, response.data],
+        productList: [...state.productList, response.data],
       }));
     } catch (error) {
       console.error("Error adding new product:", error);
       throw error;
     }
   },
+
   editProduct: async (productId: number, productDetails: ProductInterface): Promise<void> => {
     try {
       const response = await axios.put(`${API_URL}/products/${productId}`, productDetails);
       set((state) => ({
-        products: state.products.map((product) =>
+        productList: state.productList.map((product) =>
           product.id === productId ? response.data : product
         ),
       }));
