@@ -1,17 +1,22 @@
-package com.example.digitalstockbackend.model;
+package com.example.digitalstockbackend.model.roles;
 
-import com.example.digitalstockbackend.authorities.UserRole;
+import com.example.digitalstockbackend.model.Cart;
+import com.example.digitalstockbackend.model.Order;
+import com.example.digitalstockbackend.model.Wishlist;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
-@Table(name = "users")
+@Table(name = "users", uniqueConstraints = {
+        @UniqueConstraint(columnNames = "username"),
+        @UniqueConstraint(columnNames = "email")
+})
 public class CustomUser {
 
     @Id
@@ -30,9 +35,7 @@ public class CustomUser {
     @Size(min = 7, message = "Password must be at least 7 characters")
     private String password;
 
-    @Enumerated(EnumType.STRING)
-    @NotNull(message = "Role is required")
-    private UserRole userRole;
+    private String userRole;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Wishlist> userWishlist;
@@ -49,21 +52,13 @@ public class CustomUser {
     private boolean isCredentialsNonExpired = true;
     private boolean isEnabled = true;
 
-    private int points = 0;
-
     public CustomUser() {}
 
-    public CustomUser(Long id, String email, String username, String password, UserRole userRole, boolean isAccountNonExpired, boolean isAccountNonLocked, boolean isCredentialsNonExpired, boolean isEnabled, int points) {
-        this.id = id;
+    public CustomUser(String email, String username, String password) {
         this.email = email;
         this.username = username;
         this.password = password;
-        this.userRole = userRole;
-        this.isAccountNonExpired = isAccountNonExpired;
-        this.isAccountNonLocked = isAccountNonLocked;
-        this.isCredentialsNonExpired = isCredentialsNonExpired;
-        this.isEnabled = isEnabled;
-        this.points = points;
+        this.userRole = null;
     }
 
     public Long getId() {
@@ -98,14 +93,6 @@ public class CustomUser {
         this.password = password;
     }
 
-    public @NotNull(message = "Role is required") UserRole getUserRole() {
-        return userRole;
-    }
-
-    public void setUserRole(@NotNull(message = "Role is required") UserRole userRole) {
-        this.userRole = userRole;
-    }
-
     public boolean isAccountNonExpired() {
         return isAccountNonExpired;
     }
@@ -138,16 +125,36 @@ public class CustomUser {
         isEnabled = enabled;
     }
 
-    public int getPoints() {
-        return points;
+    public String getUserRole() {
+        return userRole;
     }
 
-    public void setPoints(int points) {
-        this.points = points;
+    public void setUserRole(String userRole) {
+        this.userRole = userRole;
     }
 
-    public List<SimpleGrantedAuthority> getAuthorities() {
-        return userRole.getAuthorities();
+    public List<Wishlist> getUserWishlist() {
+        return userWishlist;
+    }
+
+    public void setUserWishlist(List<Wishlist> userWishlist) {
+        this.userWishlist = userWishlist;
+    }
+
+    public List<Order> getUserOrders() {
+        return userOrders;
+    }
+
+    public void setUserOrders(List<Order> userOrders) {
+        this.userOrders = userOrders;
+    }
+
+    public Cart getCart() {
+        return cart;
+    }
+
+    public void setCart(Cart cart) {
+        this.cart = cart;
     }
 }
 

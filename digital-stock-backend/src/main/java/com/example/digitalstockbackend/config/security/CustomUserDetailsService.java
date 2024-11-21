@@ -1,7 +1,8 @@
 package com.example.digitalstockbackend.config.security;
 
-import com.example.digitalstockbackend.model.CustomUser;
+import com.example.digitalstockbackend.model.roles.CustomUser;
 import com.example.digitalstockbackend.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -19,11 +20,11 @@ public class CustomUserDetailsService implements UserDetailsService {
     }
 
     @Override
+    @Transactional
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        CustomUser customUser = userRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User Not Found"));
-        return new CustomUserDetails(customUser);
+        CustomUser user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User Not Found with username: " + username));
+
+        return CustomUserDetails.build(user);
     }
-
 }
-

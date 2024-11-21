@@ -1,15 +1,22 @@
 package com.example.digitalstockbackend.config.security;
 
-import com.example.digitalstockbackend.authorities.UserPermission;
-import com.example.digitalstockbackend.authorities.UserRole;
-import com.example.digitalstockbackend.config.security.CustomUserDetailsService;
+import com.example.digitalstockbackend.config.AppPasswordConfig;
+import com.example.digitalstockbackend.config.security.jwt.AuthEntryPointJwt;
+import com.example.digitalstockbackend.config.security.jwt.AuthTokenFilter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import java.util.concurrent.TimeUnit;
 
@@ -18,29 +25,39 @@ import java.util.concurrent.TimeUnit;
 public class AppSecurityConfig {
 
     private final CustomUserDetailsService customUserDetailsService;
-    private final PasswordEncoder passwordEncoder;
+    private final AppPasswordConfig appPasswordConfig;
+    private final AuthEntryPointJwt unauthorizedHandler;
 
-    public AppSecurityConfig(CustomUserDetailsService customUserDetailsService, PasswordEncoder passwordEncoder) {
+    @Autowired
+    public AppSecurityConfig(CustomUserDetailsService customUserDetailsService, AppPasswordConfig appPasswordConfig, AuthEntryPointJwt unauthorizedHandler) {
         this.customUserDetailsService = customUserDetailsService;
-        this.passwordEncoder = passwordEncoder;
+        this.appPasswordConfig = appPasswordConfig;
+        this.unauthorizedHandler = unauthorizedHandler;
     }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .authorizeRequests(auth -> auth
-                        .requestMatchers("/", "/login", "/static/**", "/logout", "/custom-logout").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/products/**").permitAll()  // Public product viewing
-                        .requestMatchers("/wishlist/**", "/purchase/**").hasRole(UserRole.USER.name()) // Restrict wishlist and purchase to USER role
-                        .requestMatchers("/admin/**").hasRole(UserRole.ADMIN.name()) // Restrict admin paths to ADMIN role
-                        .anyRequest().authenticated()
-                )
-               /* .formLogin(login -> login
+                .cors(Customizer.withDefaults())
+                .csrf(AbstractHttpConfigurer::disable)
+                .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/", "/auth/signup", "/auth/signin", "/error").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/products/**").permitAll()
+                        .anyRequest().authenticated());
+
+        http.authenticationProvider(authenticationProvider());
+
+        http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
+
+       http
+               .formLogin(login -> login
                         .loginPage("/login")
                         .defaultSuccessUrl("/")
                         .failureUrl("/login?error=true")
                         .permitAll()
-                ) */
+                )
                 .logout(logout -> logout
                         .logoutUrl("/custom-logout")
                         .invalidateHttpSession(true)
@@ -55,5 +72,27 @@ public class AppSecurityConfig {
 
         return http.build();
     }
+
+    @Bean
+    public AuthTokenFilter authenticationJwtTokenFilter() {
+        return new AuthTokenFilter();
+    }
+
+    @Bean
+    public DaoAuthenticationProvider authenticationProvider() {
+        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+
+        authProvider.setUserDetailsService(customUserDetailsService);
+        authProvider.setPasswordEncoder(appPasswordConfig.bcryptPasswordEncoder());
+
+        return authProvider;
+    }
+
+
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+        return authenticationConfiguration.getAuthenticationManager();
+    }
+
 }
 

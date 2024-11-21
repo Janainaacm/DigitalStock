@@ -1,6 +1,7 @@
 package com.example.digitalstockbackend.model;
 
 import jakarta.persistence.*;
+import org.springframework.beans.factory.annotation.Autowired;
 
 @Entity
 public class CartItem {
@@ -21,12 +22,12 @@ public class CartItem {
     public CartItem() {
     }
 
-    public CartItem(Long id, Cart cart, Product product, int quantity) {
-        this.id = id;
+    public CartItem(Cart cart, Product product, int quantity) {
         this.cart = cart;
         this.product = product;
         this.quantity = quantity;
     }
+
 
     public Long getId() {
         return id;

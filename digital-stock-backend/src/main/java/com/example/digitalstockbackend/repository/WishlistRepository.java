@@ -1,8 +1,6 @@
 package com.example.digitalstockbackend.repository;
 
 import com.example.digitalstockbackend.model.Wishlist;
-import com.example.digitalstockbackend.model.CustomUser;
-import com.example.digitalstockbackend.model.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

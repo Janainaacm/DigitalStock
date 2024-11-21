@@ -1,6 +1,7 @@
 package com.example.digitalstockbackend.service;
 
 
+import com.example.digitalstockbackend.dto.ProductDTO;
 import com.example.digitalstockbackend.model.Category;
 import com.example.digitalstockbackend.model.Product;
 import com.example.digitalstockbackend.repository.ProductRepository;
@@ -20,40 +21,57 @@ public class ProductService {
         this.productRepository = productRepository;
     }
 
-    public ResponseEntity<List<Product>> fetchAllProducts() {
+    public ResponseEntity<List<ProductDTO>> fetchAllProducts() {
         List<Product> allProducts = productRepository.findAll();
+
         if (allProducts.isEmpty()) {
             return ResponseEntity.noContent().build();
         }
-        return ResponseEntity.ok(allProducts);
+
+        // Convert List<Product> to List<ProductDTO>
+        List<ProductDTO> productDTOs = allProducts.stream()
+                .map(ProductDTO::new)
+                .toList();
+
+        return ResponseEntity.ok(productDTOs);
     }
 
-    public ResponseEntity<List<Product>> fetchProductsByCategory(Category category) {
+    public ResponseEntity<List<ProductDTO>> fetchProductsByCategory(Category category) {
         List<Product> list = productRepository.findByCategory(category);
 
         if (list.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(list);
 
+        List<ProductDTO> productDTOs = list.stream()
+                .map(ProductDTO::new)
+                .toList();
+
+        return ResponseEntity.ok(productDTOs);
     }
 
-    public ResponseEntity<List<Product>> fetchAllByName(String name) {
+    public ResponseEntity<List<ProductDTO>> fetchAllByName(String name) {
         List<Product> list = productRepository.findAllByName(name);
-
 
         if (list.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
 
-        return ResponseEntity.ok(list);
+        List<ProductDTO> productDTOs = list.stream()
+                .map(ProductDTO::new)
+                .toList();
+
+        return ResponseEntity.ok(productDTOs);
     }
 
-    public ResponseEntity<Product> fetchProductById(Long id) {
+    public ResponseEntity<ProductDTO> fetchProductById(Long id) {
         Optional<Product> product = productRepository.findById(id);
+
         if (product.isPresent()) {
-            return ResponseEntity.ok(product.get());
+            ProductDTO productDTO = new ProductDTO(product.get());
+            return ResponseEntity.ok(productDTO);
         }
+
         return ResponseEntity.notFound().build();
     }
 

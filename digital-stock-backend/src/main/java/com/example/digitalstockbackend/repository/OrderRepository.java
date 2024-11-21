@@ -3,7 +3,6 @@ package com.example.digitalstockbackend.repository;
 
 import com.example.digitalstockbackend.authorities.OrderStatus;
 import com.example.digitalstockbackend.model.Order;
-import com.example.digitalstockbackend.model.CustomUser;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

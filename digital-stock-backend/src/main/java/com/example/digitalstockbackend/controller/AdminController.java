@@ -2,7 +2,7 @@ package com.example.digitalstockbackend.controller;
 
 import com.example.digitalstockbackend.model.Order;
 import com.example.digitalstockbackend.model.Product;
-import com.example.digitalstockbackend.model.CustomUser;
+import com.example.digitalstockbackend.model.roles.CustomUser;
 import com.example.digitalstockbackend.service.AdminService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

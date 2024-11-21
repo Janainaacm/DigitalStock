@@ -22,10 +22,11 @@ public class CartController {
         return cartService.fetchCartByUserId(userId);
     }
 
-    @PutMapping("/{userId}/{cartItemId}")
-    public ResponseEntity<Cart> addItemToCart(@PathVariable Long userId, @PathVariable Long cartItemId) {
-        return cartService.addItemToCart(cartItemId, userId);
+    @PutMapping("/{userId}/add/{productId}")
+    public ResponseEntity<Cart> addProductToCart(@PathVariable Long userId, @PathVariable Long productId) {
+        return cartService.addProductToCart(productId, userId);
     }
+
 
     @DeleteMapping("/{userId}/{cartItemId}")
     public ResponseEntity<Cart> removeItemFromCart(@PathVariable Long userId, @PathVariable Long cartItemId) {

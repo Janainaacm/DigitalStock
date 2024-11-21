@@ -1,7 +1,7 @@
 package com.example.digitalstockbackend.service;
 
 import com.example.digitalstockbackend.exception.WishlistItemNotFoundException;
-import com.example.digitalstockbackend.model.CustomUser;
+import com.example.digitalstockbackend.model.roles.CustomUser;
 import com.example.digitalstockbackend.model.Product;
 import com.example.digitalstockbackend.model.Wishlist;
 import com.example.digitalstockbackend.repository.WishlistRepository;

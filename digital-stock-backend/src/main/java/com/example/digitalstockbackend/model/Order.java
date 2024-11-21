@@ -1,6 +1,7 @@
 package com.example.digitalstockbackend.model;
 
 import com.example.digitalstockbackend.authorities.OrderStatus;
+import com.example.digitalstockbackend.model.roles.CustomUser;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 

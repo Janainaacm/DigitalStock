@@ -1,52 +1,100 @@
 package com.example.digitalstockbackend.config.security;
 
-import com.example.digitalstockbackend.model.CustomUser;
+import com.example.digitalstockbackend.model.roles.CustomUser;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class CustomUserDetails implements UserDetails {
+    private static final long serialVersionUID = 1L;
 
-    private final CustomUser customUser;
+    private Long id;
 
-    public CustomUserDetails(CustomUser customUser) {
-        this.customUser = customUser;
+    private String username;
+
+    private String email;
+
+    @JsonIgnore
+    private String password;
+
+    private Collection<? extends GrantedAuthority> authorities;
+
+    public CustomUserDetails(Long id, String username, String email, String password,
+                           Collection<? extends GrantedAuthority> authorities) {
+        this.id = id;
+        this.username = username;
+        this.email = email;
+        this.password = password;
+        this.authorities = authorities;
+    }
+
+    public static CustomUserDetails build(CustomUser user) {
+        List<GrantedAuthority> authorities = List.of( new SimpleGrantedAuthority(user.getUserRole()));
+
+        return new CustomUserDetails(user.getId(),
+                user.getUsername(),
+                user.getEmail(),
+                user.getPassword(),
+                authorities);
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return customUser.getAuthorities();
+        return authorities;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getEmail() {
+        return email;
     }
 
     @Override
     public String getPassword() {
-        return customUser.getPassword();
+        return password;
     }
 
     @Override
     public String getUsername() {
-        return customUser.getUsername();
+        return username;
     }
 
     @Override
     public boolean isAccountNonExpired() {
-        return customUser.isAccountNonExpired();
+        return true;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return customUser.isAccountNonLocked();
+        return true;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return customUser.isCredentialsNonExpired();
+        return true;
     }
 
     @Override
     public boolean isEnabled() {
-        return customUser.isEnabled();
+        return true;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
+        CustomUserDetails user = (CustomUserDetails) o;
+        return Objects.equals(id, user.id);
     }
 }
 

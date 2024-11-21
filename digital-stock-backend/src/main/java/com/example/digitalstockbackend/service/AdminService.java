@@ -1,7 +1,7 @@
 package com.example.digitalstockbackend.service;
 
 import com.example.digitalstockbackend.authorities.OrderStatus;
-import com.example.digitalstockbackend.model.CustomUser;
+import com.example.digitalstockbackend.model.roles.CustomUser;
 import com.example.digitalstockbackend.model.Order;
 import com.example.digitalstockbackend.model.Product;
 import com.example.digitalstockbackend.repository.OrderRepository;
