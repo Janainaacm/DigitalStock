@@ -21,8 +21,8 @@ export default function Home() {
             </p>
             <section className="flex gap-8 my-8 justify-evenly md:justify-start ">
               <CustomButton href={"/store"} text={"Shop"} />
-              <CustomButton href={"/products"} text={"products"} />
-              <CustomButton href={"/auth/register"} text={"Register user"} />
+              <CustomButton href={"/pages/products"} text={"products"} />
+              <CustomButton href={"/pages/auth/register"} text={"Register user"} />
 
 
             </section>

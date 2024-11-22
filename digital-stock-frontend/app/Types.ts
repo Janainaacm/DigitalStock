@@ -3,7 +3,6 @@ export interface UserInterface {
     username: string;
     email: string;
     roles: string[];
-    token: string; 
     userWishlist: WishlistInterface[] | null; 
     userOrders: OrderInterface[] | null; 
     cart: CartInterface | null; 

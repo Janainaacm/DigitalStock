@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import axios from "axios";
-import { API_URL } from "../config";
+import { API_URL } from "./config/config";
 import {
   UserInterface,
   WishlistInterface,
@@ -11,6 +11,7 @@ import {
   CartInterface,
   CartItemInterface
 } from "../Types";
+import axiosInstance from "./config/axiosConfig";
 
 interface AppState {
   user: UserInterface | null;
@@ -79,7 +80,7 @@ export const useAppState = create<AppState>((set) => ({
   // User Actions
   fetchUserById: async (userId: number): Promise<UserInterface | null> => {
     try {
-      const response = await axios.get(`${API_URL}/user/${userId}`);
+      const response = await axiosInstance.get(`/user/${userId}`);
       set({ user: response.data });
       return response.data;
     } catch (error) {
@@ -93,7 +94,7 @@ export const useAppState = create<AppState>((set) => ({
     if (!updatedUser.id) return;
 
     try {
-      const response = await axios.put(
+      const response = await axiosInstance.put(
         `${API_URL}/user/${updatedUser.id}`,
         updatedUser
       );
@@ -106,7 +107,7 @@ export const useAppState = create<AppState>((set) => ({
 
   deleteUser: async (userId: number): Promise<void> => {
     try {
-      await axios.delete(`${API_URL}/user/${userId}`);
+      await axiosInstance.delete(`${API_URL}/user/${userId}`);
       set({ user: null });
     } catch (error) {
       console.error("Error deleting user:", error);
@@ -174,7 +175,7 @@ export const useAppState = create<AppState>((set) => ({
   // Order Actions
   fetchOrderById: async (orderId: number): Promise<OrderInterface | null> => {
     try {
-      const response = await axios.get(`${API_URL}/orders/${orderId}`);
+      const response = await axiosInstance.get(`${API_URL}/orders/${orderId}`);
       return response.data;
     } catch (error) {
       console.error("Error fetching order by ID:", error);
@@ -184,7 +185,7 @@ export const useAppState = create<AppState>((set) => ({
 
   fetchOrdersByUserId: async (userId: number): Promise<OrderInterface[]> => {
     try {
-      const response = await axios.get(`${API_URL}/orders/user`);
+      const response = await axiosInstance.get(`${API_URL}/orders/user`);
       set({ orders: response.data });
       return response.data;
     } catch (error) {
@@ -195,7 +196,7 @@ export const useAppState = create<AppState>((set) => ({
 
   fetchOrderByStatus: async (status: string): Promise<OrderInterface[]> => {
     try {
-      const response = await axios.get(`${API_URL}/orders/status/${status}`);
+      const response = await axiosInstance.get(`${API_URL}/orders/status/${status}`);
       return response.data;
     } catch (error) {
       console.error("Error fetching orders by status:", error);
@@ -205,7 +206,7 @@ export const useAppState = create<AppState>((set) => ({
 
   placeOrder: async (userId: number): Promise<void> => {
     try {
-      const response = await axios.post(`${API_URL}/orders/place/${userId}`);
+      const response = await axiosInstance.post(`${API_URL}/orders/place/${userId}`);
       set({ orders: [...useAppState.getState().orders, response.data] });
     } catch (error) {
       console.error("Error placing order:", error);
@@ -215,7 +216,7 @@ export const useAppState = create<AppState>((set) => ({
 
   cancelOrder: async (orderId: number): Promise<void> => {
     try {
-      const response = await axios.put(`${API_URL}/orders/${orderId}`);
+      const response = await axiosInstance.put(`${API_URL}/orders/${orderId}`);
       set((state) => ({
         orders: state.orders.map((order) =>
           order.id === orderId ? response.data : order
@@ -229,7 +230,7 @@ export const useAppState = create<AppState>((set) => ({
 
   deleteOrder: async (orderId: number): Promise<void> => {
     try {
-      await axios.delete(`${API_URL}/orders/${orderId}`);
+      await axiosInstance.delete(`${API_URL}/orders/${orderId}`);
       set((state) => ({
         orders: state.orders.filter((order) => order.id !== orderId),
       }));
@@ -245,7 +246,7 @@ export const useAppState = create<AppState>((set) => ({
   // Wishlist Actions
   fetchWishlist: async (userId: number): Promise<ProductInterface[]> => {
     try {
-      const response = await axios.get(`${API_URL}/user/${userId}`);
+      const response = await axiosInstance.get(`${API_URL}/user/${userId}`);
       set({ wishlist: response.data });
       return response.data;
     } catch (error) {
@@ -256,7 +257,7 @@ export const useAppState = create<AppState>((set) => ({
 
   addToWishlist: async (userId: number, productId: number): Promise<void> => {
     try {
-      const response = await axios.post(`${API_URL}/user/${userId}/product/${productId}`);
+      const response = await axiosInstance.post(`${API_URL}/user/${userId}/product/${productId}`);
       set((state) => ({
         wishlist: [...state.wishlist, response.data],
       }));
@@ -268,7 +269,7 @@ export const useAppState = create<AppState>((set) => ({
   
   removeFromWishlist: async (userId: number, productId: number): Promise<void> => {
     try {
-      await axios.delete(`${API_URL}/user/${userId}/product/${productId}`);
+      await axiosInstance.delete(`${API_URL}/user/${userId}/product/${productId}`);
       set((state) => ({
         wishlist: state.wishlist.filter((item) => item.id !== productId),
       }));
@@ -280,7 +281,7 @@ export const useAppState = create<AppState>((set) => ({
 
   clearWishlist: async (userId: number): Promise<void> => {
     try {
-      await axios.delete(`${API_URL}/user/${userId}/clear`);
+      await axiosInstance.delete(`${API_URL}/user/${userId}/clear`);
       set({ wishlist: [] });
     } catch (error) {
       console.error("Error clearing wishlist:", error);
@@ -295,7 +296,7 @@ export const useAppState = create<AppState>((set) => ({
 // Cart Actions
 fetchCartByUserId: async (userId: number): Promise<CartInterface> => {
     try {
-      const response = await axios.get(`${API_URL}/cart/${userId}`);
+      const response = await axiosInstance.get(`${API_URL}/cart/${userId}`);
       set({ cart: response.data });
       return response.data;
     } catch (error) {
@@ -313,7 +314,7 @@ fetchCartByUserId: async (userId: number): Promise<CartInterface> => {
     }
 
     try {
-        const response = await axios.post(`${API_URL}/cart/add`, {
+        const response = await axiosInstance.post(`${API_URL}/cart/add`, {
             productId: product.id,
             quantity: 1, 
         });
@@ -330,7 +331,7 @@ fetchCartByUserId: async (userId: number): Promise<CartInterface> => {
     if (!userId) return;
 
     try {
-      const response = await axios.delete(`${API_URL}/cart/${userId}/${cartItemId}`);
+      const response = await axiosInstance.delete(`${API_URL}/cart/${userId}/${cartItemId}`);
       set({ cart: response.data });
     } catch (error) {
       console.error("Error removing item from cart:", error);
@@ -343,7 +344,7 @@ fetchCartByUserId: async (userId: number): Promise<CartInterface> => {
     if (!userId) return;
 
     try {
-      const response = await axios.delete(`${API_URL}/cart/${userId}`);
+      const response = await axiosInstance.delete(`${API_URL}/cart/${userId}`);
       set({ cart: response.data });
     } catch (error) {
       console.error("Error clearing cart:", error);
@@ -356,7 +357,7 @@ fetchCartByUserId: async (userId: number): Promise<CartInterface> => {
   // Admin Actions
   fetchAllUsers: async (): Promise<UserInterface[]> => {
     try {
-      const response = await axios.get(`${API_URL}/users`);
+      const response = await axiosInstance.get(`${API_URL}/users`);
       set({ users: response.data });
       return response.data;
     } catch (error) {
@@ -367,45 +368,46 @@ fetchCartByUserId: async (userId: number): Promise<CartInterface> => {
 
   addNewProduct: async (productData: ProductInterface): Promise<void> => {
     try {
-      const response = await axios.post(`${API_URL}/products/new`, productData);
+      const response = await axiosInstance.post(`${API_URL}/products/new`, productData);
       set((state) => ({
-        productList: [...state.productList, response.data],
+        productsList: [...state.productsList, response.data], // Updated to productList
       }));
     } catch (error) {
       console.error("Error adding new product:", error);
       throw error;
     }
   },
-
+  
   editProduct: async (productId: number, productDetails: ProductInterface): Promise<void> => {
     try {
-      const response = await axios.put(`${API_URL}/products/${productId}`, productDetails);
+      const response = await axiosInstance.put(`${API_URL}/products/${productId}`, productDetails);
       set((state) => ({
-        productList: state.productList.map((product) =>
+        productsList: state.productsList.map((product) =>
           product.id === productId ? response.data : product
-        ),
+        ), // Updated to productList
       }));
     } catch (error) {
       console.error("Error editing product:", error);
       throw error;
     }
   },
-
+  
   deleteProduct: async (productId: number): Promise<void> => {
     try {
-      await axios.delete(`${API_URL}/products/${productId}`);
+      await axiosInstance.delete(`${API_URL}/products/${productId}`);
       set((state) => ({
-        products: state.products.filter((product) => product.id !== productId),
+        productsList: state.productsList.filter((product) => product.id !== productId), // Updated to productList
       }));
     } catch (error) {
       console.error("Error deleting product:", error);
       throw error;
     }
   },
+  
 
   fetchAllOrders: async (): Promise<OrderInterface[]> => {
     try {
-      const response = await axios.get(`${API_URL}/orders`);
+      const response = await axiosInstance.get(`${API_URL}/orders`);
       set({ orders: response.data });
       return response.data;
     } catch (error) {
@@ -416,7 +418,7 @@ fetchCartByUserId: async (userId: number): Promise<CartInterface> => {
 
   updateOrderStatus: async (orderId: number, status: string): Promise<void> => {
     try {
-      const response = await axios.put(`${API_URL}/orders/update/${orderId}`, status, {
+      const response = await axiosInstance.put(`${API_URL}/orders/update/${orderId}`, status, {
         headers: {
           'Content-Type': 'text/plain'
         }

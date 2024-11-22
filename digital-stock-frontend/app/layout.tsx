@@ -3,6 +3,7 @@ import localFont from "next/font/local"
 import "./globals.css"
 import Link from "next/link"
 import CustomLink from "./globalComponents/ui-elements/CustomLink"
+import NavBar from "./globalComponents/navBar/NavBar"
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -30,12 +31,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <nav className="">
-          <ul className="flex p-4 text-4xl border-b-2 justify-evenly border-limedSpruce-200">
-            <CustomLink href={"/"} text={"Home"} />
-            <CustomLink href={"/products"} text={"Products"} />
-          </ul>
-        </nav>
+       <NavBar/>
         {children}
       </body>
     </html>

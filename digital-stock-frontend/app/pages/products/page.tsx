@@ -1,7 +1,7 @@
 'use client'
 
 import ProductCard from "./components/ProductCard"
-import {  useAppState } from "../store/BackendAPIState"
+import {  useAppState } from "../../store/BackendAPIState"
 import { useEffect } from "react"
 
 export default function ProductPage() {
