@@ -1,21 +1,17 @@
 import axios from 'axios';
-import { useAuthState } from '../AuthState'; 
-import { API_URL } from "./config";
-
-const getToken = () => {
-  const state = useAuthState(); 
-  return state.token;
-};
+import Cookies from 'js-cookie';
+import { API_URL } from './config';
 
 const axiosInstance = axios.create({
   baseURL: API_URL,
+  withCredentials: true, 
 });
 
 axiosInstance.interceptors.request.use(
   (config) => {
-    const token = getToken();
+    const token = Cookies.get('your_cookie_name'); 
     if (token) {
-      config.headers.Authorization = token;
+      config.headers.Authorization = `Bearer ${token}`;
     }
     return config;
   },

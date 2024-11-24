@@ -8,7 +8,7 @@ const GoBackButton = () => {
   return (
     <button
   onClick={() => router.back()}
-  className="relative group px-8 py-1 text-gray-700 font-medium text-sm uppercase tracking-wide focus:outline-none flex items-center"
+  className="relative group px-7 py-2 text-gray-700 font-medium text-sm uppercase tracking-wide focus:outline-none flex items-center"
 >
   <svg
     className="w-3.5 h-3.5 me-2 rtl:rotate-180"

@@ -1,5 +1,5 @@
 export interface UserInterface {
-    id: number;
+    id: string;
     username: string;
     email: string;
     roles: string[];
@@ -10,14 +10,14 @@ export interface UserInterface {
   
 
 export interface WishlistInterface {
-    id: number,
+    id: string,
     user: UserInterface,
     product: ProductInterface,
     addedAt: EpochTimeStamp
 }
 
 export interface OrderInterface {
-    id: number,
+    id: string,
     user: UserInterface,
     items: OrderItemInterface[],
     status: string,
@@ -26,37 +26,37 @@ export interface OrderInterface {
 }
 
 export interface OrderItemInterface {
-    id: number,
+    id: string,
     product: ProductInterface,
     quantity: number
 }
 
 export interface ProductInterface {
-    id: number,
+    id: string,
     name: string,
     description: string,
     price: number,
-    category: CategoryInterface,
+    categoryName: string,
     colorName: string,
     imageUrl: string,
     stock: number,
 }
 
 export interface CategoryInterface {
-    id: number,
+    id: string,
     name: string,
     products: ProductInterface[]
 }
 
 
 export interface CartInterface {
-    id: number,
+    id: string,
     user: UserInterface,
     cartItems: CartItemInterface[]
 }
 
 export interface CartItemInterface {
-    id: number, 
+    id: string, 
     cart: CartInterface,
     product: ProductInterface,
     quantity: number

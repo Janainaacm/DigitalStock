@@ -1,7 +1,24 @@
+'use client'
 import Image from "next/image"
 import CustomButton from "./globalComponents/ui-elements/CustomButton"
+import { useEffect } from "react"
+import { useAppState } from "./store/BackendAPIState"
+import { useAuthState } from "./store/AuthState"
 
 export default function Home() {
+  const { productList, fetchProducts } = useAppState()
+  const {fetchUser} = useAuthState()
+
+
+  useEffect(() => {
+    if (productList.length == 0) {
+      fetchProducts()
+    }
+      fetchUser(); 
+
+  })
+
+
   return (
     
       <div className="h-screen p-4 pt-12">
