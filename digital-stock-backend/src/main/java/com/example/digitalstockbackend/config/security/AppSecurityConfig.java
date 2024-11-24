@@ -43,7 +43,7 @@ public class AppSecurityConfig {
                 .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/", "/auth/signup", "/auth/signin", "/error").permitAll()
+                        .requestMatchers("/", "/auth/signup", "/auth/signin", "/auth/fetchuser", "/error").permitAll()
                         .requestMatchers(HttpMethod.GET, "/products/**").permitAll()
                         .anyRequest().authenticated());
 

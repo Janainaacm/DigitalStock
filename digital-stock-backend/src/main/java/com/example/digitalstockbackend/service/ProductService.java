@@ -28,7 +28,6 @@ public class ProductService {
             return ResponseEntity.noContent().build();
         }
 
-        // Convert List<Product> to List<ProductDTO>
         List<ProductDTO> productDTOs = allProducts.stream()
                 .map(ProductDTO::new)
                 .toList();
@@ -69,11 +68,17 @@ public class ProductService {
 
         if (product.isPresent()) {
             ProductDTO productDTO = new ProductDTO(product.get());
+            System.out.println("Name: " + productDTO.getName());
+            System.out.println("id: " + productDTO.getId());
+
+
+
             return ResponseEntity.ok(productDTO);
         }
 
         return ResponseEntity.notFound().build();
     }
+
 
 
     //In code
