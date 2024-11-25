@@ -1,9 +1,12 @@
 package com.example.digitalstockbackend.service;
 
+import com.example.digitalstockbackend.dto.CartDTO;
+import com.example.digitalstockbackend.dto.CartItemDTO;
+import com.example.digitalstockbackend.dto.ProductDTO;
 import com.example.digitalstockbackend.model.Cart;
 import com.example.digitalstockbackend.model.CartItem;
-import com.example.digitalstockbackend.model.roles.CustomUser;
 import com.example.digitalstockbackend.model.Product;
+import com.example.digitalstockbackend.model.roles.CustomUser;
 import com.example.digitalstockbackend.repository.CartItemRepository;
 import com.example.digitalstockbackend.repository.CartRepository;
 import com.example.digitalstockbackend.repository.ProductRepository;
@@ -12,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class CartService {
@@ -27,12 +31,15 @@ public class CartService {
         this.productRepository = productRepository;
     }
 
-    public ResponseEntity<Cart> fetchCartByUserId(Long userId) {
+    // Fetch Cart by User ID
+    public ResponseEntity<CartDTO> fetchCartByUserId(Long userId) {
         Cart cart = getCartByUserId(userId);
-        return ResponseEntity.ok(cart);
+        CartDTO cartDTO = convertToCartDTO(cart);
+        return ResponseEntity.ok(cartDTO);
     }
 
-    public ResponseEntity<Cart> addProductToCart(Long productId, Long userId) {
+    // Add Product to Cart
+    public ResponseEntity<CartDTO> addProductToCart(Long productId, Long userId, int quantity) {
         Cart cart = getCartByUserId(userId);
 
         Optional<Product> optionalProduct = productRepository.findById(productId);
@@ -47,18 +54,20 @@ public class CartService {
 
         if (existingCartItem.isPresent()) {
             CartItem cartItem = existingCartItem.get();
-            cartItem.setQuantity(cartItem.getQuantity() + 1);
+            cartItem.setQuantity(cartItem.getQuantity() + quantity);
         } else {
             Product product = optionalProduct.get();
-            CartItem newCartItem = new CartItem(cart, product, 1);
+            CartItem newCartItem = new CartItem(cart, product, quantity);
             cart.getItems().add(newCartItem);
         }
 
         Cart updatedCart = cartRepository.save(cart);
-        return ResponseEntity.ok(updatedCart);
+        CartDTO cartDTO = convertToCartDTO(updatedCart);
+        return ResponseEntity.ok(cartDTO);
     }
 
-    public ResponseEntity<Cart> removeItemFromCart(Long cartItemId, Long userId) {
+    // Remove Item from Cart
+    public ResponseEntity<CartDTO> removeItemFromCart(Long cartItemId, Long userId) {
         Cart cart = getCartByUserId(userId);
         Optional<CartItem> optionalCartItem = cartItemRepository.findById(cartItemId);
 
@@ -69,20 +78,24 @@ public class CartService {
         boolean removed = cart.getItems().removeIf(item -> item.getId().equals(optionalCartItem.get().getId()));
 
         if (!removed) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(cart);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
 
         Cart updatedCart = cartRepository.save(cart);
-        return ResponseEntity.ok(updatedCart);
+        CartDTO cartDTO = convertToCartDTO(updatedCart);
+        return ResponseEntity.ok(cartDTO);
     }
 
-    public ResponseEntity<Cart> clearCart(Long userId) {
+    // Clear Cart
+    public ResponseEntity<CartDTO> clearCart(Long userId) {
         Cart cart = getCartByUserId(userId);
         cart.getItems().clear();
         Cart updatedCart = cartRepository.save(cart);
-        return ResponseEntity.ok(updatedCart);
+        CartDTO cartDTO = convertToCartDTO(updatedCart);
+        return ResponseEntity.ok(cartDTO);
     }
 
+    // Helper: Fetch or Create Cart by User ID
     private Cart getCartByUserId(Long userId) {
         CustomUser user = userService.getUserById(userId);
         return cartRepository.findByUserId(userId)
@@ -91,5 +104,27 @@ public class CartService {
                     newCart.setUser(user);
                     return cartRepository.save(newCart);
                 });
+    }
+
+    // Helper: Convert Cart to CartDTO
+    private CartDTO convertToCartDTO(Cart cart) {
+        return new CartDTO(
+                cart.getId(),
+                cart.getItems().stream()
+                        .map(this::convertToCartItemDTO)
+                        .collect(Collectors.toList())
+        );
+    }
+
+    // Helper: Convert CartItem to CartItemDTO
+    private CartItemDTO convertToCartItemDTO(CartItem cartItem) {
+        Product product = cartItem.getProduct();
+        ProductDTO productDTO = new ProductDTO(product);
+
+        return new CartItemDTO(
+                cartItem.getId(),
+                productDTO,
+                cartItem.getQuantity()
+        );
     }
 }

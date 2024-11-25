@@ -1,6 +1,7 @@
 package com.example.digitalstockbackend.controller;
 
 import com.example.digitalstockbackend.authorities.OrderStatus;
+import com.example.digitalstockbackend.dto.OrderDTO;
 import com.example.digitalstockbackend.model.Order;
 import com.example.digitalstockbackend.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,17 +23,17 @@ public class OrderController {
     }
 
     @GetMapping("/{orderId}")
-    public ResponseEntity<Order> fetchOrderById(@PathVariable Long orderId) {
+    public ResponseEntity<OrderDTO> fetchOrderById(@PathVariable Long orderId) {
         return orderService.fetchOrderById(orderId);
     }
 
     @GetMapping("/user")
-    public ResponseEntity<List<Order>> fetchOrdersByUserId(Principal principal) {
+    public ResponseEntity<List<OrderDTO>> fetchOrdersByUserId(Principal principal) {
         return orderService.fetchOrdersByUserId(principal);
     }
 
     @GetMapping("/status/{status}")
-    public ResponseEntity<List<Order>> fetchOrdersByStatus(@PathVariable String status) {
+    public ResponseEntity<List<OrderDTO>> fetchOrdersByStatus(@PathVariable String status) {
         OrderStatus orderStatus;
         try {
             orderStatus = OrderStatus.valueOf(status.toUpperCase());
@@ -43,12 +44,12 @@ public class OrderController {
     }
 
     @PostMapping("/place/{userId}")
-    public ResponseEntity<Order> placeOrder(@PathVariable Long userId) {
+    public ResponseEntity<OrderDTO> placeOrder(@PathVariable Long userId) {
         return orderService.placeOrder(userId);
     }
 
     @PutMapping("/{orderId}")
-    public ResponseEntity<Order> cancelOrder(@PathVariable Long orderId) {
+    public ResponseEntity<?> cancelOrder(@PathVariable Long orderId) {
         return orderService.cancelOrder(orderId);
     }
 

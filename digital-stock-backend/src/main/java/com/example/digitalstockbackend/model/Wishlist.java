@@ -3,32 +3,31 @@ package com.example.digitalstockbackend.model;
 import com.example.digitalstockbackend.model.roles.CustomUser;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
-@Table(name = "wishlists")
 public class Wishlist {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "user_id")
     private CustomUser user;
 
-    @ManyToOne
-    @JoinColumn(name = "product_id")
-    private Product product;
+    @OneToMany(mappedBy = "wishlist", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<WishlistItem> items;
 
-    private LocalDateTime addedAt = LocalDateTime.now();
 
     public Wishlist () {};
-    public Wishlist(Long id, CustomUser user, Product product, LocalDateTime addedAt) {
+
+    public Wishlist(Long id, CustomUser user, List<WishlistItem> items) {
         this.id = id;
         this.user = user;
-        this.product = product;
-        this.addedAt = addedAt;
+        this.items = items;
     }
+
 
     public Long getId() {
         return id;
@@ -46,20 +45,14 @@ public class Wishlist {
         this.user = user;
     }
 
-    public Product getProduct() {
-        return product;
+    public List<WishlistItem> getItems() {
+        return items;
     }
 
-    public void setProduct(Product product) {
-        this.product = product;
-    }
-
-    public LocalDateTime getAddedAt() {
-        return addedAt;
-    }
-
-    public void setAddedAt(LocalDateTime addedAt) {
-        this.addedAt = addedAt;
+    public void setItems(List<WishlistItem> items) {
+        this.items = items;
     }
 }
+
+
 

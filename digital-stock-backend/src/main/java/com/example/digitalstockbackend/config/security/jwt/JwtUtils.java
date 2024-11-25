@@ -4,8 +4,11 @@ import java.security.Key;
 import java.util.Date;
 
 import com.example.digitalstockbackend.config.security.CustomUserDetails;
+import com.example.digitalstockbackend.model.roles.CustomUser;
+import com.example.digitalstockbackend.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
@@ -14,10 +17,17 @@ import org.springframework.stereotype.Component;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.web.bind.annotation.CookieValue;
 
 @Component
 public class JwtUtils {
     private static final Logger logger = LoggerFactory.getLogger(JwtUtils.class);
+    private final UserService userService;
+
+    @Autowired
+    public JwtUtils(UserService userService) {
+        this.userService = userService;
+    }
 
     @Value("${app.jwtSecret}")
     private String jwtSecret;
@@ -62,4 +72,31 @@ public class JwtUtils {
 
         return false;
     }
+
+
+    public CustomUser getUserFromToken(@CookieValue(value = "authToken", required = false) String token) {
+        if (token == null || token.isEmpty()) {
+            throw new IllegalArgumentException("Token is missing or empty");
+        }
+
+        try {
+            String username = getUserNameFromJwtToken(token);
+
+            if (username == null || username.isEmpty()) {
+                throw new IllegalArgumentException("Invalid token: Username not found");
+            }
+
+            CustomUser userDetails = userService.getUserByUsername(username);
+
+            if (userDetails == null) {
+                throw new IllegalArgumentException("User not found for the given token");
+            }
+
+            return userDetails;
+        } catch (Exception e) {
+            throw new RuntimeException("An error occurred while validating the token or fetching the user", e);
+        }
+    }
+
+
 }

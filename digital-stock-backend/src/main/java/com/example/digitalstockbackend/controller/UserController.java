@@ -1,5 +1,6 @@
 package com.example.digitalstockbackend.controller;
 
+import com.example.digitalstockbackend.dto.UserDTO;
 import com.example.digitalstockbackend.model.roles.CustomUser;
 import com.example.digitalstockbackend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,13 +21,13 @@ public class UserController {
 
 
     @GetMapping("/{userId}")
-    public ResponseEntity<CustomUser> fetchUserById(@PathVariable Long userId) {
+    public ResponseEntity<UserDTO> fetchUserById(@PathVariable Long userId) {
         return userService.fetchUserById(userId);
     }
 
 
     @PutMapping("/{userId}")
-    public ResponseEntity<CustomUser> updateUserProfile(@RequestBody CustomUser userDetails, @PathVariable Long userId) {
+    public ResponseEntity<UserDTO> updateUserProfile(@RequestBody CustomUser userDetails, @PathVariable Long userId) {
         return userService.updateUserProfile(userId, userDetails);
     }
 

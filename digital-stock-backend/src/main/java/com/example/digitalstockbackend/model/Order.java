@@ -27,19 +27,28 @@ public class Order {
     @NotNull(message = "Status is required")
     private OrderStatus status;
 
-    private int pointsEarned;
-
     private LocalDateTime orderDate;
+
+    private String addressLine;
+
+    private String city;
+
+    private String state;
+
+    private String zipCode;
 
     public Order () {};
 
-    public Order(Long id, CustomUser user, List<OrderItem> orderItems, OrderStatus status, int pointsEarned, LocalDateTime orderDate) {
+    public Order(Long id, CustomUser user, List<OrderItem> orderItems, OrderStatus status, LocalDateTime orderDate, String addressLine, String city, String state, String zipCode) {
         this.id = id;
         this.user = user;
         this.orderItems = orderItems;
         this.status = status;
-        this.pointsEarned = pointsEarned;
         this.orderDate = orderDate;
+        this.addressLine = addressLine;
+        this.city = city;
+        this.state = state;
+        this.zipCode = zipCode;
     }
 
     public Long getId() {
@@ -74,20 +83,44 @@ public class Order {
         this.status = status;
     }
 
-    public int getPointsEarned() {
-        return pointsEarned;
-    }
-
-    public void setPointsEarned(int pointsEarned) {
-        this.pointsEarned = pointsEarned;
-    }
-
     public LocalDateTime getOrderDate() {
         return LocalDateTime.now();
     }
 
     public void setOrderDate(LocalDateTime orderDate) {
         this.orderDate = orderDate;
+    }
+
+    public String getAddressLine() {
+        return addressLine;
+    }
+
+    public void setAddressLine(String addressLine) {
+        this.addressLine = addressLine;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+
+    public String getZipCode() {
+        return zipCode;
+    }
+
+    public void setZipCode(String zipCode) {
+        this.zipCode = zipCode;
     }
 }
 

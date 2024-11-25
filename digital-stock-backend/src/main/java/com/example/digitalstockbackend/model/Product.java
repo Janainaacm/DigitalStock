@@ -33,11 +33,14 @@ public class Product {
     @JoinColumn(name = "category_id")
     private Category category;
 
+    @Column(nullable = false)
+    private int sales;
+
 
 
     public Product() {}
 
-    public Product(Long id, String name, String description, String colorName, String imageUrl, int stock, BigDecimal price, Category category) {
+    public Product(Long id, String name, String description, String colorName, String imageUrl, int stock, BigDecimal price, Category category, int sales) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -46,6 +49,7 @@ public class Product {
         this.stock = stock;
         this.price = price;
         this.category = category;
+        this.sales = sales;
     }
 
     public String getColorName() {
@@ -112,5 +116,12 @@ public class Product {
         this.category = category;
     }
 
+    public int getSales() {
+        return sales;
+    }
+
+    public void setSales(int sales) {
+        this.sales = sales;
+    }
 }
 

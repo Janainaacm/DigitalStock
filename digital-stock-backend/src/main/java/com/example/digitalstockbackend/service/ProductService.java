@@ -68,10 +68,6 @@ public class ProductService {
 
         if (product.isPresent()) {
             ProductDTO productDTO = new ProductDTO(product.get());
-            System.out.println("Name: " + productDTO.getName());
-            System.out.println("id: " + productDTO.getId());
-
-
 
             return ResponseEntity.ok(productDTO);
         }
@@ -86,6 +82,13 @@ public class ProductService {
 
         return productRepository.findById(id)
                 .orElse(null);
+    }
+
+    public void sellProduct(Long productId, int quantity) {
+        Product product = productRepository.findById(productId)
+                .orElseThrow();
+
+        product.setSales(product.getSales() + quantity);
     }
 
 }

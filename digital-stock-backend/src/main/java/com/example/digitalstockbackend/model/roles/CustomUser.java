@@ -36,13 +36,19 @@ public class CustomUser {
     private String userRole;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Wishlist> userWishlist;
-
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Order> userOrders;
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private Wishlist wishlist;
 
     @OneToOne
     private Cart cart;
+
+    private String firstName;
+
+    private String lastName;
+
+    private String phoneNo;
 
 
     private boolean isAccountNonExpired = true;
@@ -131,12 +137,12 @@ public class CustomUser {
         this.userRole = userRole;
     }
 
-    public List<Wishlist> getUserWishlist() {
-        return userWishlist;
+    public Wishlist getWishlist() {
+        return wishlist;
     }
 
-    public void setUserWishlist(List<Wishlist> userWishlist) {
-        this.userWishlist = userWishlist;
+    public void setWishlist(Wishlist wishlist) {
+        this.wishlist = wishlist;
     }
 
     public List<Order> getUserOrders() {
