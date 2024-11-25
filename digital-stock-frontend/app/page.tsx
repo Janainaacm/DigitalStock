@@ -7,9 +7,11 @@ import { useAuthState } from "./store/AuthState"
 import React from 'react';
 
 
+
 export default function App() {
-  const { productList, fetchProducts } = useAppState()
-  const { fetchUser, user } = useAuthState()
+  
+  const { productList, fetchProducts, fetchWishlist } = useAppState()
+  const { fetchUser, user, wishlist } = useAuthState()
 
 
   useEffect(() => {
@@ -18,6 +20,11 @@ export default function App() {
     }
     if (!user) {
       fetchUser(); 
+    }
+
+    if (user) {
+      fetchWishlist(user.id)
+      console.log("wishlist: ", wishlist)
     }
   }, [productList])
 
@@ -40,9 +47,9 @@ export default function App() {
               debitis quia? Hic, eius.
             </p>
             <section className="flex gap-8 my-8 justify-evenly md:justify-start ">
-              <CustomButton href={"/pages/products"} text={"products"} />
-              <CustomButton href={"/pages/admin/adminDashboard"} text={"admin"} />
-              <CustomButton href={"/pages/auth/register"} text={"Register user"} />
+              <CustomButton href={"/products"} text={"products"} />
+              <CustomButton href={"/admin/adminDashboard"} text={"admin"} />
+              <CustomButton href={"/auth/register"} text={"Register user"} />
 
 
             </section>

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useAuthState } from "../../../../store/AuthState";
+import { useAuthState } from "../../store/AuthState";
 import GoBackButton from "@/app/globalComponents/Functions/GoBackButton";
 
 export default function RegisterNewUserPage() {

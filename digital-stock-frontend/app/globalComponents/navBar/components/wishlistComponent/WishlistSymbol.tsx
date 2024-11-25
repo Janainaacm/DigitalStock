@@ -1,6 +1,9 @@
+import { useAuthState } from "@/app/store/AuthState";
+import { useAppState } from "@/app/store/BackendAPIState";
 
 
 const WishlistSymbol = () => {
+  const { wishlist } = useAuthState()
 
     return (
         <span className="relative">

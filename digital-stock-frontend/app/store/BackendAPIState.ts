@@ -9,7 +9,8 @@ import {
   OrderItemInterface,
   CategoryInterface,
   CartInterface,
-  CartItemInterface
+  CartItemInterface,
+  WishlistItemsInterface
 } from "../Types";
 import axiosInstance from "./config/axiosConfig";
 import { useAuthState } from "./AuthState";
@@ -21,52 +22,52 @@ interface AppState {
   filteredProductList: ProductInterface[]
   product: ProductInterface | null;
   categories: CategoryInterface[];
-  wishlist: ProductInterface[];
+  wishlist: WishlistItemsInterface[];
   orders: OrderInterface[];
   cart: CartInterface[];
   searchBar: string;
 
 
   // User Actions
-  fetchUserById: (userId: string) => Promise<UserInterface | null>;
+  fetchUserById: (userId: number) => Promise<UserInterface | null>;
   updateUserProfile: (updatedUser: UserInterface) => Promise<void>;
-  deleteUser: (userId: string) => Promise<void>;
+  deleteUser: (userId: number) => Promise<void>;
 
   // Product Actions
   fetchProducts: () => Promise<void>;
   setFilteredProductList: (searchResult: ProductInterface[]) => void;
-  fetchProductById: (productId: string) => Promise<ProductInterface | null>;
+  fetchProductById: (productId: number) => Promise<ProductInterface | null>;
   fetchProductsByCategory: (categoryName: string) => Promise<ProductInterface[]>;
   fetchAllProductColorsByName: (productName: string, currentProductId: string) => Promise<ProductInterface[] | null>;
   setSearchBar: (searchInput: string) => void;
 
   // Order Actions
-  fetchOrderById: (orderId: string) => Promise<OrderInterface | null>;
-  fetchOrdersByUserId: (userId: string) => Promise<OrderInterface[]>;
+  fetchOrderById: (orderId: number) => Promise<OrderInterface | null>;
+  fetchOrdersByUserId: (userId: number) => Promise<OrderInterface[]>;
   fetchOrderByStatus: (status: string) => Promise<OrderInterface[]>;
-  placeOrder: (userId: string) => Promise<void>;
-  cancelOrder: (orderId: string) => Promise<void>;
-  deleteOrder: (orderId: string) => Promise<void>;
+  placeOrder: (userId: number) => Promise<void>;
+  cancelOrder: (orderId: number) => Promise<void>;
+  deleteOrder: (orderId: number) => Promise<void>;
 
   // Wishlist Actions
-  fetchWishlist: (userId: string) => Promise<ProductInterface[]>;
-  addToWishlist: (userId: string, productId: string) => Promise<void>;
-  removeFromWishlist: (userId: string, productId: string) => Promise<void>;
-  clearWishlist: (userId: string) => Promise<void>;
+  fetchWishlist: (userId: number) => Promise<ProductInterface[]>;
+  addToWishlist: (userId: number, productId: number) => Promise<void>;
+  removeFromWishlist: (userId: number, wishlistItemId: number) => Promise<void>;
+  clearWishlist: (userId: number) => Promise<void>;
 
   // Cart Actions
-  fetchCartByUserId: (userId: string) => Promise<CartInterface>;
-  addItemToCart: (product: ProductInterface) => Promise<void>;
-  removeItemFromCart: (cartItemId: string) => Promise<void>;
+  fetchCartByUserId: () => Promise<CartInterface | null>;
+  addItemToCart: (productId: number, quantity: number) => Promise<void>;
+  removeItemFromCart: (cartItemId: number) => Promise<void>;
   clearCart: () => Promise<void>;
 
   // Admin Actions
   fetchAllUsers: () => Promise<UserInterface[]>;
   addNewProduct: (productData: ProductInterface) => Promise<void>;
-  editProduct: (productId: string, productDetails: ProductInterface) => Promise<void>;
-  deleteProduct: (productId: string) => Promise<void>;
+  editProduct: (productId: number, productDetails: ProductInterface) => Promise<void>;
+  deleteProduct: (productId: number) => Promise<void>;
   fetchAllOrders: () => Promise<OrderInterface[]>;
-  updateOrderStatus: (orderId: string, status: string) => Promise<void>;
+  updateOrderStatus: (orderId: number, status: string) => Promise<void>;
 
 }
 
@@ -86,7 +87,7 @@ export const useAppState = create<AppState>((set) => ({
 
 
   // User Actions
-  fetchUserById: async (userId: string): Promise<UserInterface | null> => {
+  fetchUserById: async (userId: number): Promise<UserInterface | null> => {
     try {
       const response = await axiosInstance.get(`/user/${userId}`);
       return response.data;
@@ -111,7 +112,7 @@ export const useAppState = create<AppState>((set) => ({
     }
   },
 
-  deleteUser: async (userId: string): Promise<void> => {
+  deleteUser: async (userId: number): Promise<void> => {
     try {
       await axiosInstance.delete(`${API_URL}/user/${userId}`);
     } catch (error) {
@@ -143,11 +144,10 @@ export const useAppState = create<AppState>((set) => ({
   },
 
 
-  fetchProductById: async (productId: string): Promise<ProductInterface | null> => {
+  fetchProductById: async (productId: number): Promise<ProductInterface | null> => {
     try {
       const response = await axios.get(`${API_URL}/products/id/${productId}`);
       set({ product: response.data });
-      console.log(response.data)
       return response.data;
     } catch (error) {
       console.error("Error fetching product by ID:", error);
@@ -196,7 +196,7 @@ export const useAppState = create<AppState>((set) => ({
 
 
   // Order Actions
-  fetchOrderById: async (orderId: string): Promise<OrderInterface | null> => {
+  fetchOrderById: async (orderId: number): Promise<OrderInterface | null> => {
     try {
       const response = await axiosInstance.get(`${API_URL}/orders/${orderId}`);
       return response.data;
@@ -206,7 +206,7 @@ export const useAppState = create<AppState>((set) => ({
     }
   },
 
-  fetchOrdersByUserId: async (userId: string): Promise<OrderInterface[]> => {
+  fetchOrdersByUserId: async (userId: number): Promise<OrderInterface[]> => {
     try {
       const response = await axiosInstance.get(`${API_URL}/orders/user`);
       set({ orders: response.data });
@@ -227,7 +227,7 @@ export const useAppState = create<AppState>((set) => ({
     }
   },
 
-  placeOrder: async (userId: string): Promise<void> => {
+  placeOrder: async (userId: number): Promise<void> => {
     try {
       const response = await axiosInstance.post(`${API_URL}/orders/place/${userId}`);
       set({ orders: [...useAppState.getState().orders, response.data] });
@@ -237,7 +237,7 @@ export const useAppState = create<AppState>((set) => ({
     }
   },
 
-  cancelOrder: async (orderId: string): Promise<void> => {
+  cancelOrder: async (orderId: number): Promise<void> => {
     try {
       const response = await axiosInstance.put(`${API_URL}/orders/${orderId}`);
       set((state) => ({
@@ -251,7 +251,7 @@ export const useAppState = create<AppState>((set) => ({
     }
   },
 
-  deleteOrder: async (orderId: string): Promise<void> => {
+  deleteOrder: async (orderId: number): Promise<void> => {
     try {
       await axiosInstance.delete(`${API_URL}/orders/${orderId}`);
       set((state) => ({
@@ -267,9 +267,11 @@ export const useAppState = create<AppState>((set) => ({
 
 
   // Wishlist Actions
-  fetchWishlist: async (userId: string): Promise<ProductInterface[]> => {
+  fetchWishlist: async (userId: number): Promise<ProductInterface[]> => {
     try {
-      const response = await axiosInstance.get(`${API_URL}/user/${userId}`);
+      
+      const response = await axiosInstance.get(`${API_URL}/wishlist/user/${userId}`);
+      
       set({ wishlist: response.data });
       return response.data;
     } catch (error) {
@@ -278,23 +280,25 @@ export const useAppState = create<AppState>((set) => ({
     }
   },
 
-  addToWishlist: async (userId: string, productId: string): Promise<void> => {
+  addToWishlist: async (userId: number, productId: number): Promise<void> => {
     try {
-      const response = await axiosInstance.post(`${API_URL}/user/${userId}/product/${productId}`);
+      const response = await axiosInstance.post(`${API_URL}/wishlist/user/${userId}/product/${productId}`);
+
       set((state) => ({
         wishlist: [...state.wishlist, response.data],
       }));
+      console.log("added to wishlist")
     } catch (error) {
       console.error("Error adding product to wishlist:", error);
       throw error;
     }
   },
   
-  removeFromWishlist: async (userId: string, productId: string): Promise<void> => {
+  removeFromWishlist: async (userId: number, wishlistItemId: number): Promise<void> => {
     try {
-      await axiosInstance.delete(`${API_URL}/user/${userId}/product/${productId}`);
+      await axiosInstance.delete(`${API_URL}/wishlist/${userId}/${wishlistItemId}`);
       set((state) => ({
-        wishlist: state.wishlist.filter((item) => item.id !== productId),
+        wishlist: state.wishlist.filter((item) => item.id !== wishlistItemId),
       }));
     } catch (error) {
       console.error("Error removing product from wishlist:", error);
@@ -302,9 +306,9 @@ export const useAppState = create<AppState>((set) => ({
     }
   },
 
-  clearWishlist: async (userId: string): Promise<void> => {
+  clearWishlist: async (userId: number): Promise<void> => {
     try {
-      await axiosInstance.delete(`${API_URL}/user/${userId}/clear`);
+      await axiosInstance.delete(`${API_URL}/wishlist/user/${userId}/clear`);
       set({ wishlist: [] });
     } catch (error) {
       console.error("Error clearing wishlist:", error);
@@ -317,9 +321,16 @@ export const useAppState = create<AppState>((set) => ({
 
 
 // Cart Actions
-fetchCartByUserId: async (userId: string): Promise<CartInterface> => {
+fetchCartByUserId: async (): Promise<CartInterface | null> => {
+  const user = useAuthState.getState().user;
+
+    if (!user) {
+      console.log('User is not authenticated');
+      return null;
+    }
+
     try {
-      const response = await axiosInstance.get(`${API_URL}/cart/${userId}`);
+      const response = await axiosInstance.get(`${API_URL}/cart/${user.id}`);
       set({ cart: response.data });
       return response.data;
     } catch (error) {
@@ -328,13 +339,16 @@ fetchCartByUserId: async (userId: string): Promise<CartInterface> => {
     }
   },
 
-  addItemToCart: async (product: ProductInterface): Promise<void> => {
+  addItemToCart: async ( productId: number, quantity: number): Promise<void> => {
+    const user = useAuthState.getState().user;
+
+    if (!user) {
+      console.log('User is not authenticated');
+      return;
+    }
 
     try {
-        const response = await axiosInstance.post(`${API_URL}/cart/add`, {
-            productId: product.id,
-            quantity: 1, 
-        });
+        const response = await axiosInstance.post(`${API_URL}/cart/${user.id}/add/${productId}/${quantity}`);
         set({ cart: response.data }); 
     } catch (error) {
         console.error("Error adding item to cart:", error);
@@ -343,7 +357,7 @@ fetchCartByUserId: async (userId: string): Promise<CartInterface> => {
 },
 
   
-  removeItemFromCart: async (cartItemId: string): Promise<void> => {
+  removeItemFromCart: async (cartItemId: number): Promise<void> => {
     const user = useAuthState.getState().user;
 
     if (!user) {
@@ -403,7 +417,7 @@ fetchCartByUserId: async (userId: string): Promise<CartInterface> => {
     }
   },
   
-  editProduct: async (productId: string, productDetails: ProductInterface): Promise<void> => {
+  editProduct: async (productId: number, productDetails: ProductInterface): Promise<void> => {
     try {
       const response = await axiosInstance.put(`${API_URL}/products/${productId}`, productDetails);
       set((state) => ({
@@ -417,7 +431,7 @@ fetchCartByUserId: async (userId: string): Promise<CartInterface> => {
     }
   },
   
-  deleteProduct: async (productId: string): Promise<void> => {
+  deleteProduct: async (productId: number): Promise<void> => {
     try {
       await axiosInstance.delete(`${API_URL}/products/${productId}`);
       set((state) => ({
@@ -441,7 +455,7 @@ fetchCartByUserId: async (userId: string): Promise<CartInterface> => {
     }
   },
 
-  updateOrderStatus: async (orderId: string, status: string): Promise<void> => {
+  updateOrderStatus: async (orderId: number, status: string): Promise<void> => {
     try {
       const response = await axiosInstance.put(`${API_URL}/orders/update/${orderId}`, status, {
         headers: {

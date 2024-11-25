@@ -1,10 +1,10 @@
 export interface UserInterface {
-    id: string;
+    id: number;
     username: string;
     email: string;
     role: string;
-    userWishlist: WishlistInterface[] | null; 
-    userOrders: OrderInterface[] | null; 
+    wishlist: WishlistInterface; 
+    orders: OrderInterface[]; 
     cart: CartInterface | null; 
     firstName: string,
     lastName: string,
@@ -13,14 +13,19 @@ export interface UserInterface {
   
 
 export interface WishlistInterface {
-    id: string,
+    id: number,
     user: UserInterface,
-    product: ProductInterface,
-    addedAt: EpochTimeStamp
+    items: WishlistItemsInterface[]
+}
+
+export interface WishlistItemsInterface {
+    id: number,
+    wishlist: WishlistInterface,
+    product: ProductInterface
 }
 
 export interface OrderInterface {
-    id: string,
+    id: number,
     user: UserInterface,
     items: OrderItemInterface[],
     status: string,
@@ -33,13 +38,13 @@ export interface OrderInterface {
 }
 
 export interface OrderItemInterface {
-    id: string,
+    id: number,
     product: ProductInterface,
     quantity: number
 }
 
 export interface ProductInterface {
-    id: string,
+    id: number,
     name: string,
     description: string,
     price: number,
@@ -51,20 +56,20 @@ export interface ProductInterface {
 }
 
 export interface CategoryInterface {
-    id: string,
+    id: number,
     name: string,
     products: ProductInterface[]
 }
 
 
 export interface CartInterface {
-    id: string,
+    id: number,
     user: UserInterface,
     cartItems: CartItemInterface[]
 }
 
 export interface CartItemInterface {
-    id: string, 
+    id: number, 
     cart: CartInterface,
     product: ProductInterface,
     quantity: number

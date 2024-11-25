@@ -11,7 +11,7 @@ const UserProfile = () => {
         console.log("User state in UserProfile: ", user);
         if (!user) {
             console.log("No user found, redirecting to signin");
-            router.push('../auth/signin');
+            router.push('./../auth/signin');
         } else {
             
             console.log("user found")

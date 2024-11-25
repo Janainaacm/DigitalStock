@@ -9,7 +9,7 @@ const axiosInstance = axios.create({
 
 axiosInstance.interceptors.request.use(
   (config) => {
-    const token = Cookies.get('your_cookie_name'); 
+    const token = Cookies.get('authToken'); 
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -19,5 +19,7 @@ axiosInstance.interceptors.request.use(
     return Promise.reject(error);
   }
 );
+
+ 
 
 export default axiosInstance;

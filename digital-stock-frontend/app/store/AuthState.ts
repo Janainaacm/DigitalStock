@@ -1,11 +1,17 @@
 import { create } from 'zustand';
-import { UserInterface } from '../Types';
+import { CartInterface, OrderInterface, UserInterface, WishlistInterface } from '../Types';
 import axios from 'axios';
 import { API_URL } from "./config/config";
+import axiosInstance from './config/axiosConfig';
+import { headers } from 'next/headers';
 
 
 interface AuthState {
   user: UserInterface | null;
+  wishlist: WishlistInterface | null;
+  orders: OrderInterface[];
+  cart: CartInterface | null;
+
   isAuthenticated: boolean;
   signIn: (username: string, password: string) => Promise<void>;
   registerUser: (username: string, email: string, password: string) => Promise<void>;
@@ -13,17 +19,36 @@ interface AuthState {
   fetchUser: () => Promise<void>;
 }
 
+function authHeader() {
+  const userStr = localStorage.getItem("user");
+  let user = null;
+  if (userStr)
+    user = JSON.parse(userStr);
+
+  if (user && user.accessToken) {
+    return { Authorization: 'Bearer ' + user.accessToken };
+  } else {
+    return { Authorization: '' };
+  }
+}
+
 export const useAuthState = create<AuthState>((set) => ({
   user: null,
   isAuthenticated: false,
+  wishlist: null,
+  orders: [],
+  cart: null,
 
   signIn: async (username, password) => {
     try {
-      const response = await axios.post(
+      const response = await axiosInstance.post(
         `${API_URL}/auth/signin`,
         { username, password },
-        { withCredentials: true } 
       );
+     
+        if (response.data.accessToken) {
+          localStorage.setItem("user", JSON.stringify(response.data));
+        }
   
       await useAuthState.getState().fetchUser();
   
@@ -34,6 +59,7 @@ export const useAuthState = create<AuthState>((set) => ({
       throw error;
     }
   },
+  
   
 
   registerUser: async (username, email, password) => {
@@ -56,7 +82,7 @@ export const useAuthState = create<AuthState>((set) => ({
 
   logout: async () => {
     try {
-      await axios.post(`${API_URL}/auth/logout`, {}, { withCredentials: true });
+      await axiosInstance.post(`${API_URL}/auth/logout`);
       set({ user: null, isAuthenticated: false });
     } catch (error) {
       console.error('Error logging out:', error);
@@ -66,20 +92,44 @@ export const useAuthState = create<AuthState>((set) => ({
 
   fetchUser: async () => {
     try {
-      const response = await axios.get(`${API_URL}/auth/fetchUser`, {
-        withCredentials: true, 
-      });
+      const response = await axiosInstance.get(`${API_URL}/auth/fetchUser`, {headers: authHeader()});
+  
+      const { data } = response;
+  
+      const {
+        id,
+        username,
+        email,
+        role,
+        wishlist,
+        orders,
+        cart,
+        firstName,
+        lastName,
+        phoneNo,
+      } = data;
   
       set({
-        user: response.data,
-        isAuthenticated: true,
+        user: {
+          id,
+          username,
+          email,
+          role,
+          wishlist,
+          orders,
+          cart,
+          firstName,
+          lastName,
+          phoneNo,
+        }, 
+        wishlist, 
+        orders, 
+        cart, 
+        isAuthenticated: true, 
       });
     } catch (error) {
       console.error('Error fetching user:', error);
-      set({
-        user: null,
-        isAuthenticated: false,
-      });
+  
     }
   },
   

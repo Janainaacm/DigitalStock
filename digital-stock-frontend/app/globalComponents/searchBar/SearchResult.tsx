@@ -28,7 +28,7 @@ const SearchResult = () => {
         {filteredResults.map((product) => (
           <li key={product.id} className="max-lg:border-b max-lg:px-3 max-lg:py-3 border-b py-3">
             <Link
-              href={`/pages/products/${product.id}`}
+              href={`/products/${product.id}`}
               passHref
               onClick={handleClick}
               className="hover:text-[#007bff] text-gray-700 normal-case block text-[15px]"

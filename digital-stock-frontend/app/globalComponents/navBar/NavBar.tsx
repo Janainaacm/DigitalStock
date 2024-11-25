@@ -25,7 +25,7 @@ export const NavBar = () => {
   };
 
   const searchByCategory = (category: string) => {
-    //router.push("/pages/products")
+    //router.push("/products")
   }
 
   return (
@@ -239,7 +239,7 @@ export const NavBar = () => {
             <WishlistSymbol/>
             <CartSymbol/>
             <button className="inline-block cursor-pointer border-gray-300"
-            onClick={() => router.push("../pages/user/profile")}
+            onClick={() => router.push("../user/profile")}
             >
               <svg
                 width="20px"
