@@ -3,7 +3,6 @@
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useAppState } from "@/app/store/BackendAPIState";
-import { ProductInterface } from "@/app/Types";
 import GoBackButton from "@/app/globalComponents/Functions/GoBackButton";
 
 const ProductDetails = () => {

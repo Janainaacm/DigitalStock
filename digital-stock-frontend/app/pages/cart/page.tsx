@@ -1,0 +1,1 @@
+// https://readymadeui.com/tailwind/ecommerce/shopping-cart-ui-with-table-layout

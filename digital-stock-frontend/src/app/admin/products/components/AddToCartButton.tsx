@@ -1,9 +1,11 @@
-import { ProductInterface } from "@/src/Types";
+import { ProductInterface } from "@/app/Types";
+import { useAuthState } from "@/app/store/AuthState";
 import { useAppState } from "@/app/store/BackendAPIState";
+
 
 const AddToCartButton = ({ product }: { product: ProductInterface }) => {
     const addItemToCart = useAppState((state) => state.addItemToCart);
-    const userId = useAppState.getState().user?.id;
+    const userId = useAuthState.getState().user?.id;
    
 
     const handleClick = () => {

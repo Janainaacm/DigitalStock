@@ -2,10 +2,13 @@ export interface UserInterface {
     id: string;
     username: string;
     email: string;
-    roles: string[];
+    role: string;
     userWishlist: WishlistInterface[] | null; 
     userOrders: OrderInterface[] | null; 
     cart: CartInterface | null; 
+    firstName: string,
+    lastName: string,
+    phoneNo: string
   }
   
 
@@ -22,7 +25,11 @@ export interface OrderInterface {
     items: OrderItemInterface[],
     status: string,
     pointsEarned: number,
-    orderDate: Date
+    orderDate: Date,
+    addressLine: string,
+    city: string,
+    state: string,
+    zipCode: string
 }
 
 export interface OrderItemInterface {
@@ -40,6 +47,7 @@ export interface ProductInterface {
     colorName: string,
     imageUrl: string,
     stock: number,
+    sales: number
 }
 
 export interface CategoryInterface {

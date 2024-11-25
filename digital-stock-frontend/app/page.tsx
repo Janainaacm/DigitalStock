@@ -4,19 +4,22 @@ import CustomButton from "./globalComponents/ui-elements/CustomButton"
 import { useEffect } from "react"
 import { useAppState } from "./store/BackendAPIState"
 import { useAuthState } from "./store/AuthState"
+import React from 'react';
 
-export default function Home() {
+
+export default function App() {
   const { productList, fetchProducts } = useAppState()
-  const {fetchUser} = useAuthState()
+  const { fetchUser, user } = useAuthState()
 
 
   useEffect(() => {
     if (productList.length == 0) {
       fetchProducts()
     }
+    if (!user) {
       fetchUser(); 
-
-  })
+    }
+  }, [productList])
 
 
   return (
@@ -37,8 +40,8 @@ export default function Home() {
               debitis quia? Hic, eius.
             </p>
             <section className="flex gap-8 my-8 justify-evenly md:justify-start ">
-              <CustomButton href={"/store"} text={"Shop"} />
               <CustomButton href={"/pages/products"} text={"products"} />
+              <CustomButton href={"/pages/admin/adminDashboard"} text={"admin"} />
               <CustomButton href={"/pages/auth/register"} text={"Register user"} />
 
 

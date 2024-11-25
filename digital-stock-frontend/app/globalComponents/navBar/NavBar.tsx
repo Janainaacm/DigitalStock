@@ -5,13 +5,13 @@ import CartSymbol from "./components/cartComponent/CartSymbol";
 import WishlistSymbol from "./components/wishlistComponent/WishlistSymbol";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useAppState } from "@/app/store/BackendAPIState";
+import { useAuthState } from "@/app/store/AuthState";
 
 export const NavBar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false); 
   const [categoryName, setCategoryName] = useState("");
-  const { user } = useAppState();
+  const { user } = useAuthState();
   const router = useRouter();
 
   
@@ -29,7 +29,7 @@ export const NavBar = () => {
   }
 
   return (
-    <header className="flex bg-white border-b py-4 sm:px-8 px-6 font-[sans-serif] min-h-[80px] tracking-wide sticky top-0 z-50">
+    <header className="flex bg-white border-b py-4 sm:px-8 px-6 font-[sans-serif] min-h-[80px] tracking-wide z-[110] fixed top-0 w-full">
       <div className="flex flex-wrap items-center lg:gap-y-2 gap-4 w-full">
         
 

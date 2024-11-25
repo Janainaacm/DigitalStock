@@ -70,12 +70,10 @@ export const useAuthState = create<AuthState>((set) => ({
         withCredentials: true, 
       });
   
-      debugger
       set({
         user: response.data,
         isAuthenticated: true,
       });
-      debugger
     } catch (error) {
       console.error('Error fetching user:', error);
       set({

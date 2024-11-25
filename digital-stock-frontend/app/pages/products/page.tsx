@@ -2,9 +2,11 @@
 import { useRouter } from "next/navigation";
 import { useAppState } from "../../store/BackendAPIState";
 import { useEffect } from "react";
+import { useAuthState } from "@/app/store/AuthState";
 
 export default function ProductPage() {
-  const { fetchProducts, productList, wishlist, addToWishlist, user } = useAppState();
+  const { fetchProducts, productList, wishlist, addToWishlist } = useAppState();
+  const {user} = useAuthState();
   const router = useRouter();
 
   useEffect(() => {
