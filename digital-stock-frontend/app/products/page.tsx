@@ -26,10 +26,9 @@ export default function ProductPage() {
     console.log(user.wishlist);
   };
 
-  console.log(wishlist);
   const isInWishlist = (productId: number): boolean => {
-    if (wishlist && Array.isArray(wishlist.items)) {
-      return wishlist.items.some((item) => item.product.id === productId);
+    if (wishlist) {
+      return wishlist.items.some((item) => item.productId === productId);
     }
     return false;
   };

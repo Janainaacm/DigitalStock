@@ -28,6 +28,11 @@ export const NavBar = () => {
     //router.push("/products")
   }
 
+  const redirect = (path: string) => {
+    handleClick()
+    router.push(`${path}`)
+  }
+
   return (
     <header className="flex bg-white border-b py-4 sm:px-8 px-6 font-[sans-serif] min-h-[80px] tracking-wide z-[110] fixed top-0 w-full">
       <div className="flex flex-wrap items-center lg:gap-y-2 gap-4 w-full">
@@ -239,7 +244,7 @@ export const NavBar = () => {
             <WishlistSymbol/>
             <CartSymbol/>
             <button className="inline-block cursor-pointer border-gray-300"
-            onClick={() => router.push("../user/profile")}
+            onClick={() => redirect("../user/profile")}
             >
               <svg
                 width="20px"
@@ -277,13 +282,3 @@ export const NavBar = () => {
 
 export default NavBar;
 
-/*
-
-
-
-
-
-
-
-          
-*/

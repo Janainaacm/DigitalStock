@@ -3,7 +3,6 @@ import { CartInterface, OrderInterface, UserInterface, WishlistInterface } from 
 import axios from 'axios';
 import { API_URL } from "./config/config";
 import axiosInstance from './config/axiosConfig';
-import { headers } from 'next/headers';
 
 
 interface AuthState {
@@ -19,18 +18,6 @@ interface AuthState {
   fetchUser: () => Promise<void>;
 }
 
-function authHeader() {
-  const userStr = localStorage.getItem("user");
-  let user = null;
-  if (userStr)
-    user = JSON.parse(userStr);
-
-  if (user && user.accessToken) {
-    return { Authorization: 'Bearer ' + user.accessToken };
-  } else {
-    return { Authorization: '' };
-  }
-}
 
 export const useAuthState = create<AuthState>((set) => ({
   user: null,
@@ -92,7 +79,7 @@ export const useAuthState = create<AuthState>((set) => ({
 
   fetchUser: async () => {
     try {
-      const response = await axiosInstance.get(`${API_URL}/auth/fetchUser`, {headers: authHeader()});
+      const response = await axiosInstance.get(`${API_URL}/auth/fetchUser`);
   
       const { data } = response;
   

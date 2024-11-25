@@ -20,8 +20,8 @@ export interface WishlistInterface {
 
 export interface WishlistItemsInterface {
     id: number,
-    wishlist: WishlistInterface,
-    product: ProductInterface
+    productId: number,
+    productName: string,
 }
 
 export interface OrderInterface {
