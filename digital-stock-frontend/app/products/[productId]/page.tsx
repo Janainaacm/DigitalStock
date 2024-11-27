@@ -16,11 +16,18 @@ const ProductDetails = () => {
   } = useAppState();
   const [quantity, setQuantity] = useState(1);
 
+
   useEffect(() => {
-    if (typeof productId === "string") {
-      fetchProductById(productId);
+    if (productId) {
+      const idAsNumber = Number(productId); 
+      if (!isNaN(idAsNumber)) { 
+        fetchProductById(idAsNumber);
+      } else {
+        console.error(`Invalid productId: ${productId}`);
+      }
     }
   }, [productId, fetchProductById]);
+
 
   useEffect(() => {
     if (product) {
@@ -35,7 +42,7 @@ const ProductDetails = () => {
 
 
   return (
-    <div className="font-sans tracking-wide max-md:mx-auto">
+    <div className="font-sans tracking-wide max-md:mx-auto mt-20">
       <div className="bg-white md:min-h-[600px] grid items-start grid-cols-1 lg:grid-cols-5 md:grid-cols-2">
         <div className="lg:col-span-3 h-full ">
           <div className="mt-4 ml-6 relative">
@@ -78,7 +85,7 @@ const ProductDetails = () => {
                       backgroundPosition: "center",
                     }}
                     className="w-20 h-20 mr-3 border-2 border-white hover:border-gray-800 rounded-full shrink-0"
-                    onClick={() => router.push(`/pages/products/${product.id}`)}
+                    onClick={() => router.push(`/products/${product.id}`)}
                   />
                   <p className="absolute top-24 left-1/2 -translate-x-1/2 text-gray-700 text-sm">
                     {product.colorName}
@@ -155,7 +162,6 @@ const ProductDetails = () => {
 
           <div className="flex flex-wrap items-center text-sm text-gray-800 mt-8">
             <svg
-              xmlns="http://www.w3.org/2000/svg"
               className="fill-current w-6 mr-3"
               viewBox="0 0 48 48"
             >
@@ -174,7 +180,7 @@ const ProductDetails = () => {
         </div>
       </div>
 
-      <div className="mt-8 mb-16 max-w-2xl px-6">
+      <div className="mt-8 mb-16 max-w-2x px-6">
 
       <div className="mt-8 mb-6">
           <h3 className="text-lg font-bold text-gray-800">

@@ -3,6 +3,8 @@ import { CartInterface, OrderInterface, UserInterface, WishlistInterface } from 
 import axios from 'axios';
 import { API_URL } from "./config/config";
 import axiosInstance from './config/axiosConfig';
+import Cookies from "js-cookie";
+
 
 
 interface AuthState {
@@ -10,21 +12,38 @@ interface AuthState {
   wishlist: WishlistInterface | null;
   orders: OrderInterface[];
   cart: CartInterface | null;
-
   isAuthenticated: boolean;
+
+  initializeState: () => void; 
   signIn: (username: string, password: string) => Promise<void>;
   registerUser: (username: string, email: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
-  fetchUser: () => Promise<void>;
+  fetchUser: () => Promise<UserInterface | null> ;
+  //fetchWishlistProducts: () => Promise<WishlistInterface | null>;
+
 }
 
 
 export const useAuthState = create<AuthState>((set) => ({
   user: null,
-  isAuthenticated: false,
   wishlist: null,
   orders: [],
   cart: null,
+  isAuthenticated: false,
+
+
+
+  initializeState: async () => {
+    const user = await useAuthState.getState().fetchUser();
+  
+    if (user) {
+      console.log("User found and state initialized.");
+    } else {
+      console.log("No user found. State remains unauthenticated.");
+    }
+  },
+  
+  
 
   signIn: async (username, password) => {
     try {
@@ -71,53 +90,55 @@ export const useAuthState = create<AuthState>((set) => ({
     try {
       await axiosInstance.post(`${API_URL}/auth/logout`);
       set({ user: null, isAuthenticated: false });
+
+      Cookies.remove("user");
     } catch (error) {
       console.error('Error logging out:', error);
     }
   },
   
 
-  fetchUser: async () => {
-    try {
-      const response = await axiosInstance.get(`${API_URL}/auth/fetchUser`);
-  
-      const { data } = response;
-  
-      const {
-        id,
-        username,
-        email,
-        role,
-        wishlist,
-        orders,
-        cart,
-        firstName,
-        lastName,
-        phoneNo,
-      } = data;
-  
-      set({
-        user: {
-          id,
-          username,
-          email,
-          role,
-          wishlist,
-          orders,
-          cart,
-          firstName,
-          lastName,
-          phoneNo,
-        }, 
-        wishlist, 
-        orders, 
-        cart, 
-        isAuthenticated: true, 
-      });
-    } catch (error) {
-      console.error('Error fetching user:', error);
-  
-    }
-  },
+  fetchUser: async (): Promise<UserInterface | null> => {
+  try {
+    const response = await axiosInstance.get(`${API_URL}/auth/fetchUser`);
+    const user = response.data;
+
+    set({
+      user,
+      wishlist: user.wishlist || null,
+      orders: user.orders || [],
+      cart: user.cart || null,
+      isAuthenticated: true,
+    });
+
+    Cookies.set("user", JSON.stringify(user));
+
+    return user;
+  } catch (error) {
+    console.error("Error fetching user:", error);
+    return null;
+  }
+},
+/* 
+fetchWishlistProducts: async (): Promise<WishlistInterface | null> => {
+  const user = useAuthState.getState().user;
+
+  if (!user) {
+    return null;
+  }
+
+  try {
+    const response = await axiosInstance.get(`${API_URL}/user/${user.id}/wishlist/${user.wishlist.id}`)
+    set({ wishlist: {
+      ...user.wishlist,
+      items: response.data,
+    }})
+    return user.wishlist;
+  } catch (error) {
+    console.error("Error fetching Wishlist items:", error);
+    return null;
+  }
+}, */
+
   
 }));

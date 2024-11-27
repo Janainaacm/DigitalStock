@@ -5,28 +5,20 @@ import { useEffect } from "react"
 import { useAppState } from "./store/BackendAPIState"
 import { useAuthState } from "./store/AuthState"
 import React from 'react';
+import { useUserState } from "./store/UserState"
 
 
 
-export default function App() {
-  
-  const { productList, fetchProducts, fetchWishlist } = useAppState()
-  const { fetchUser, user, wishlist } = useAuthState()
+export default function Home() {
+  const initializeState = useAuthState((state) => state.initializeState);
+  const { user } = useAuthState()
 
 
   useEffect(() => {
-    if (productList.length == 0) {
-      fetchProducts()
-    }
     if (!user) {
-      fetchUser(); 
+      initializeState()
     }
-
-    if (user) {
-      fetchWishlist(user.id)
-      console.log("wishlist: ", wishlist)
-    }
-  }, [productList])
+  });
 
 
   return (

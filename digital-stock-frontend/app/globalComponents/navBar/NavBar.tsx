@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import { useState } from "react";
 import SearchBar from "../searchBar/SearchBar";
 import CartSymbol from "./components/cartComponent/CartSymbol";
@@ -9,69 +9,48 @@ import { useAuthState } from "@/app/store/AuthState";
 
 export const NavBar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isExpanded, setIsExpanded] = useState(false); 
+  const [isExpanded, setIsExpanded] = useState(false);
   const [categoryName, setCategoryName] = useState("");
   const { user } = useAuthState();
   const router = useRouter();
 
-  
   const handleToggle = () => {
     setIsExpanded((prev) => !prev);
   };
 
   const handleClick = () => {
-    console.log("klicking", isMenuOpen)
+    console.log("klicking", isMenuOpen);
     setIsMenuOpen(!isMenuOpen);
   };
 
   const searchByCategory = (category: string) => {
     //router.push("/products")
-  }
+  };
 
   const redirect = (path: string) => {
-    handleClick()
-    router.push(`${path}`)
-  }
+    if (isMenuOpen) {
+          handleClick();
+    }
+    router.push(`${path}`);
+  };
 
   return (
-    <header className="flex bg-white border-b py-4 sm:px-8 px-6 font-[sans-serif] min-h-[80px] tracking-wide z-[110] fixed top-0 w-full">
+    <div className="flex bg-white border-b py-4 sm:px-8 px-6 font-[sans-serif] min-h-[80px] tracking-wide z-[110] fixed top-0 w-full">
       <div className="flex flex-wrap items-center lg:gap-y-2 gap-4 w-full">
-        
-
-      <div
+        <div
           id="collapseMenu"
-          style={{ display: isMenuOpen ? "block" : "none" }}
-          className="lg:ml-10 max-lg:hidden lg:!block max-lg:before:fixed max-lg:before:bg-black max-lg:before:opacity-50 max-lg:before:inset-0 max-lg:before:z-50"
+          className={`lg:ml-10 lg:block z-50 transition-transform duration-500 ease-in-out ${
+            isMenuOpen ? "max-lg:translate-x-0" : "max-lg:-translate-x-full"
+          }  max-lg:min-w-[300px] max-lg:fixed max-lg:top-0 max-lg:left-0 max-lg:h-full max-lg:shadow-md max-lg:bg-white`}
         >
-          <button
-            id="toggleClose"
-            className="lg:hidden fixed top-2 right-4 z-[100] rounded-full bg-white p-3"
-            onClick={() => handleClick()}
-          >
-            <svg
-              className="w-4 fill-black"
-              viewBox="0 0 320.591 320.591"
-            >
-              <path
-                d="M30.391 318.583a30.37 30.37 0 0 1-21.56-7.288c-11.774-11.844-11.774-30.973 0-42.817L266.643 10.665c12.246-11.459 31.462-10.822 42.921 1.424 10.362 11.074 10.966 28.095 1.414 39.875L51.647 311.295a30.366 30.366 0 0 1-21.256 7.288z"
-                data-original="#000000"
-              ></path>
-              <path
-                d="M287.9 318.583a30.37 30.37 0 0 1-21.257-8.806L8.83 51.963C-2.078 39.225-.595 20.055 12.143 9.146c11.369-9.736 28.136-9.736 39.504 0l259.331 257.813c12.243 11.462 12.876 30.679 1.414 42.922-.456.487-.927.958-1.414 1.414a30.368 30.368 0 0 1-23.078 7.288z"
-                data-original="#000000"
-              ></path>
-            </svg>
-          </button>
-
           <ul className="lg:flex lg:gap-x-10 max-lg:space-y-3 max-lg:fixed max-lg:bg-white max-lg:w-2/3 max-lg:min-w-[300px] max-lg:top-0 max-lg:left-0 max-lg:p-4 max-lg:h-full max-lg:shadow-md max-lg:overflow-auto z-50">
             <li className="max-lg:border-b max-lg:px-3 max-lg:py-3">
-              <Link
-                href="/"
+              <button
+                onClick={() => redirect("/")}
                 className="hover:text-[#007bff] text-[#007bff] font-semibold block text-[15px]"
               >
                 Home
-              </Link>
-
+              </button>
             </li>
             <li className="group max-lg:border-b max-lg:px-3 max-lg:py-3 relative">
               <button
@@ -93,20 +72,17 @@ export const NavBar = () => {
                 </svg>
               </button>
 
-              <ul className={` top-5 max-lg:top-8 left-0 z-50 block space-y-2 bg-white overflow-hidden min-w-[250px] max-h-0 transition-all duration-500
+              <ul
+                className={`top-5 max-lg:top-8 left-0 z-50 block space-y-2 bg-white overflow-hidden min-w-[250px] max-h-0 transition-all duration-500
               ${
-                isMenuOpen 
-                ? "" 
-                : "absolute shadow-lg group-hover:opacity-100 group-hover:max-h-[700px] px-6 group-hover:pb-4 group-hover:pt-6"
-              } ${
-                isExpanded && isMenuOpen
-                ? "max-h-[700px]"
-                : ""
-              } `}>
-                
+                isMenuOpen
+                  ? ""
+                  : "absolute shadow-lg group-hover:opacity-100 group-hover:max-h-[700px] px-6 group-hover:pb-4 group-hover:pt-6"
+              } ${isExpanded && isMenuOpen ? "py-3 max-h-[700px]" : ""} `}
+              >
                 <li className="border-b py-3">
                   <button
-                  onClick={() => searchByCategory("")}
+                    onClick={() => searchByCategory("")}
                     className="hover:text-[#007bff] hover:fill-[#007bff] text-gray-600 font-semibold text-[15px] block"
                   >
                     <svg
@@ -141,83 +117,100 @@ export const NavBar = () => {
                 </li>
 
                 <li className="border-b py-3">
-                <button
-                  onClick={() => searchByCategory("Computers")}
+                  <button
+                    onClick={() => searchByCategory("Computers")}
                     className="hover:text-[#007bff] hover:fill-[#007bff] text-gray-600 font-semibold text-[15px] block"
                   >
-                    <svg 
-                    fill="none" 
-                    viewBox="0 0 24 24" 
-                    width="20px" 
-                    height="20px"
-                    stroke="currentColor" 
-                    className="mr-4 inline-block">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 17.25v1.007a3 3 0 0 1-.879 2.122L7.5 21h9l-.621-.621A3 3 0 0 1 15 18.257V17.25m6-12V15a2.25 2.25 0 0 1-2.25 2.25H5.25A2.25 2.25 0 0 1 3 15V5.25m18 0A2.25 2.25 0 0 0 18.75 3H5.25A2.25 2.25 0 0 0 3 5.25m18 0V12a2.25 2.25 0 0 1-2.25 2.25H5.25A2.25 2.25 0 0 1 3 12V5.25" />
+                    <svg
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      width="20px"
+                      height="20px"
+                      stroke="currentColor"
+                      className="mr-4 inline-block"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M9 17.25v1.007a3 3 0 0 1-.879 2.122L7.5 21h9l-.621-.621A3 3 0 0 1 15 18.257V17.25m6-12V15a2.25 2.25 0 0 1-2.25 2.25H5.25A2.25 2.25 0 0 1 3 15V5.25m18 0A2.25 2.25 0 0 0 18.75 3H5.25A2.25 2.25 0 0 0 3 5.25m18 0V12a2.25 2.25 0 0 1-2.25 2.25H5.25A2.25 2.25 0 0 1 3 12V5.25"
+                      />
                     </svg>
                     Computers
                   </button>
                 </li>
 
                 <li className="border-b py-3">
-                <button
-                  onClick={() => searchByCategory("Smartphones")}
+                  <button
+                    onClick={() => searchByCategory("Smartphones")}
                     className="hover:text-[#007bff] hover:fill-[#007bff] text-gray-600 font-semibold text-[15px] block"
                   >
-                    <svg 
-                    fill="none" 
-                    width="20px"
-                    height="20px"
-                    viewBox="0 0 24 24" 
-                    stroke="currentColor" 
-                    className="mr-4 inline-block">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 1.5H8.25A2.25 2.25 0 0 0 6 3.75v16.5a2.25 2.25 0 0 0 2.25 2.25h7.5A2.25 2.25 0 0 0 18 20.25V3.75a2.25 2.25 0 0 0-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3m-3 18.75h3" />
+                    <svg
+                      fill="none"
+                      width="20px"
+                      height="20px"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      className="mr-4 inline-block"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M10.5 1.5H8.25A2.25 2.25 0 0 0 6 3.75v16.5a2.25 2.25 0 0 0 2.25 2.25h7.5A2.25 2.25 0 0 0 18 20.25V3.75a2.25 2.25 0 0 0-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3m-3 18.75h3"
+                      />
                     </svg>
                     Smartphones
                   </button>
                 </li>
                 <li className="border-b py-3">
-                <button
-                  onClick={() => searchByCategory("Headphones")}
+                  <button
+                    onClick={() => searchByCategory("Headphones")}
                     className="hover:text-[#007bff] hover:fill-[#007bff] text-gray-600 font-semibold text-[15px] block"
                   >
-                    <svg 
-                    className="mr-4 inline-block"  
-                    viewBox="0 0 24 24"  
-                    fill="none"  
-                    width="20px"
-                    height="20px"
-                    stroke="currentColor"  
-                    strokeLinecap="round"  
-                    strokeLinejoin="round">  
-                    <path d="M3 18v-6a9 9 0 0 1 18 0v6" />  
-                    <path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z" />
+                    <svg
+                      className="mr-4 inline-block"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      width="20px"
+                      height="20px"
+                      stroke="currentColor"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <path d="M3 18v-6a9 9 0 0 1 18 0v6" />
+                      <path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z" />
                     </svg>
                     Headphones
                   </button>
                 </li>
-                <li className="border-b py-3">
-                <button
-                  onClick={() => searchByCategory("Watches")}
+                <li className={` ${
+                  isMenuOpen
+                  ? "pt-3"
+                  : "border-b py-3"
+                }`}>
+                  <button
+                    onClick={() => searchByCategory("Watches")}
                     className="hover:text-[#007bff] hover:fill-[#007bff] text-gray-600 font-semibold text-[15px] block"
                   >
-                    <svg 
-                    className="mr-4 inline-block"  
-                    width="24" 
-                    height="24" 
-                    viewBox="0 0 24 24" 
-                    stroke="currentColor" 
-                    fill="none" 
-                    strokeLinecap="round" 
-                    strokeLinejoin="round">  
-                    <path stroke="none" d="M0 0h24v24H0z"/>  <rect x="6" y="6" width="12" height="12" rx="3" />  <path d="M9 18v3h6v-3" />  <path d="M9 6v-3h6v3" />
+                    <svg
+                      className="mr-4 inline-block"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      fill="none"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <path stroke="none" d="M0 0h24v24H0z" />{" "}
+                      <rect x="6" y="6" width="12" height="12" rx="3" />{" "}
+                      <path d="M9 18v3h6v-3" /> <path d="M9 6v-3h6v3" />
                     </svg>
                     Watches
                   </button>
                 </li>
               </ul>
-              
             </li>
-            
+
             <li className="max-lg:border-b max-lg:px-3 max-lg:py-3">
               <Link
                 href="javascript:void(0)"
@@ -238,13 +231,14 @@ export const NavBar = () => {
         </div>
 
         <div className="flex gap-x-6 gap-y-4 ml-auto">
-            <SearchBar/>
+          <SearchBar />
 
           <div className="flex items-center space-x-8 ml-12">
-            <WishlistSymbol/>
-            <CartSymbol/>
-            <button className="inline-block cursor-pointer border-gray-300"
-            onClick={() => redirect("../user/profile")}
+            <WishlistSymbol />
+            <CartSymbol />
+            <button
+              className="inline-block cursor-pointer border-gray-300"
+              onClick={() => redirect("../user/profile")}
             >
               <svg
                 width="20px"
@@ -260,25 +254,52 @@ export const NavBar = () => {
               </svg>
             </button>
 
-            <button 
-            id="toggleOpen" 
-            className="lg:hidden"
-            onClick={() => handleClick()}
+            <button
+              id="toggleClose"
+              className="lg:hidden z-[100] rounded-full  bg-transparent"
+              onClick={handleClick}
             >
-              <svg className="w-7 h-7" fill="#333" viewBox="0 0 20 20">
-                <path
-                  fillRule="evenodd"
-                  d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
-                  clipRule="evenodd"
-                ></path>
-              </svg>
+              <div
+                className={`transition-transform -ml-2 duration-300 ease-in-out ${
+                  isMenuOpen ? "rotate-180 opacity-100" : "rotate-0 opacity-100"
+                }`}
+              >
+                {isMenuOpen ? (
+                  <svg
+                    className="h-7 w-7 text-gray-900"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <line x1="18" y1="6" x2="6" y2="18" />{" "}
+                    <line x1="6" y1="6" x2="18" y2="18" />
+                  </svg>
+                ) : (
+                  <svg
+                    className="w-7 h-7 fill-current text-gray-900 transform"
+                    viewBox="0 0 20 20"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
+                      clipRule="evenodd"
+                    ></path>
+                  </svg>
+                )}
+              </div>
             </button>
           </div>
         </div>
       </div>
-    </header>
+    </div>
   );
-}
+};
 
 export default NavBar;
 
+/**
+ 
+ */

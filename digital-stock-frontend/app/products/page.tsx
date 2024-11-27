@@ -1,45 +1,78 @@
 "use client";
 import { useRouter } from "next/navigation";
 import { useAppState } from "../store/BackendAPIState";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useAuthState } from "@/app/store/AuthState";
+import { ProductInterface } from "../Types";
+import { useUserState } from "../store/UserState";
+import FilterButton from "./components/FilterButton";
 
 export default function ProductPage() {
-  const { fetchProducts, productList, addToWishlist } = useAppState();
+  const { fetchProducts, productList } = useAppState();
+  const { addToWishlist, removeFromWishlist, isProductInWishlist, clearWishlist } = useUserState()
   const { user, wishlist } = useAuthState();
   const router = useRouter();
+  const [wishlistState, setWishlistState] = useState<{ [productId: number]: boolean }>({});
 
   useEffect(() => {
-    if (productList.length == 0) {
+    if (productList.length === 0) {
       fetchProducts();
     }
-  });
+  }, [productList]);
 
-  const handleAddToWishlist = (productId: number) => {
+  useEffect(() => {
+    async function initializeWishlistState() {
+      const state: { [productId: number]: boolean } = {};
+      for (const product of productList) {
+        state[product.id] = await isProductInWishlist(product.id);
+      }
+      setWishlistState(state);
+    }
+
+    if (productList.length > 0) {
+      initializeWishlistState();
+    }
+  }, [productList]);
+
+  const handleAddToWishlist = async (productId: number) => {
     if (!user) {
-      console.log("no user");
+      alert("Please log in to add products to your wishlist.");
       return;
     }
 
-    addToWishlist(user.id, productId);
-    console.log(wishlist);
-    console.log(user.wishlist);
-  };
+    const inWishlist = await isProductInWishlist(productId);
 
-  const isInWishlist = (productId: number): boolean => {
-    if (wishlist) {
-      return wishlist.items.some((item) => item.productId === productId);
+    if (inWishlist) {
+      console.log(productId)
+      await removeFromWishlist(productId);
+    } else {
+      await addToWishlist(productId);
     }
-    return false;
+
+    setWishlistState((prevState) => ({
+      ...prevState,
+      [productId]: !prevState[productId],
+    }));
+    
   };
 
+  const clear = () => {
+    clearWishlist();
+    setWishlistState({});
+  };
+
+  
   return (
     <div>
       <div className="bg-white shadow-lg border h-screen fixed min-w-[200px] py-6 px-4 font-[sans-serif] overflow-auto">
         <div className="mt-6">
           <h6 className="text-blue-600 text-md font-bold px-4">Filter</h6>
+          <FilterButton/>
           <ul className="mt-3">
             <li>
+              <button onClick={() =>clear()}>
+                Clear wishlist
+              </button>
               <a
                 href="javascript:void(0)"
                 className="text-black hover:text-blue-600 text-sm flex items-center hover:bg-blue-50 rounded px-4 py-3 transition-all"
@@ -84,10 +117,11 @@ export default function ProductPage() {
                   <svg
                     width="27px"
                     className={`text-red-600 ${
-                      isInWishlist(product.id)
+                      wishlistState[product.id]
                         ? "fill-red-600"
                         : "fill-none hover:fill-red-200 hover:scale-[1.05] hover:opacity-80 transition-all duration-600"
                     }`}
+                    
                     viewBox="0 0 24 24"
                     stroke="currentColor"
                   >
