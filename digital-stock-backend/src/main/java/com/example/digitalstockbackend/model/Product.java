@@ -1,6 +1,9 @@
 package com.example.digitalstockbackend.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import org.hibernate.annotations.ColumnDefault;
+
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -40,7 +43,7 @@ public class Product {
 
     public Product() {}
 
-    public Product(Long id, String name, String description, String colorName, String imageUrl, int stock, BigDecimal price, Category category, int sales) {
+    public Product(Long id, String name, String description, String colorName, String imageUrl, int stock, BigDecimal price, Category category, int sales, boolean isInWishlist) {
         this.id = id;
         this.name = name;
         this.description = description;

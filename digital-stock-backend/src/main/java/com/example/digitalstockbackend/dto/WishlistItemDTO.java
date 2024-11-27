@@ -2,13 +2,11 @@ package com.example.digitalstockbackend.dto;
 
 public class WishlistItemDTO {
     private Long id;
-    private Long productId;
-    private String productName;
+    private ProductDTO product;
 
-    public WishlistItemDTO(Long id, Long productId, String productName) {
+    public WishlistItemDTO(Long id, ProductDTO product) {
         this.id = id;
-        this.productId = productId;
-        this.productName = productName;
+        this.product = product;
     }
 
     public Long getId() {
@@ -19,19 +17,11 @@ public class WishlistItemDTO {
         this.id = id;
     }
 
-    public Long getProductId() {
-        return productId;
+    public ProductDTO getProduct() {
+        return product;
     }
 
-    public void setProductId(Long productId) {
-        this.productId = productId;
-    }
-
-    public String getProductName() {
-        return productName;
-    }
-
-    public void setProductName(String productName) {
-        this.productName = productName;
+    public void setProduct(ProductDTO product) {
+        this.product = product;
     }
 }

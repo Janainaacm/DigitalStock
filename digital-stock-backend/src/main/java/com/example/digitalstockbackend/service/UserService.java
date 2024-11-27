@@ -98,8 +98,7 @@ public class UserService {
         List<WishlistItemDTO> items = wishlist.getItems().stream()
                 .map(item -> new WishlistItemDTO(
                         item.getId(),
-                        item.getProduct().getId(),
-                        item.getProduct().getName()))
+                        new ProductDTO(item.getProduct())))
                 .collect(Collectors.toList());
         return new WishlistDTO(wishlist.getId(), items);
     }
@@ -119,6 +118,6 @@ public class UserService {
     }
 
     public OrderDTO getOrderDTO(Order order) {
-        return getOrderDTO(order);
+        return convertToOrderDTO(order);
     }
 }

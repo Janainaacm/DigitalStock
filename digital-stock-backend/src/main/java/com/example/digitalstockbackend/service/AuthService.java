@@ -185,8 +185,7 @@ public class AuthService {
         List<WishlistItemDTO> items = wishlist.getItems().stream()
                 .map(item -> new WishlistItemDTO(
                         item.getId(),
-                        item.getProduct().getId(),
-                        item.getProduct().getName()))
+                        new ProductDTO(item.getProduct())))
                 .collect(Collectors.toList());
         return new WishlistDTO(wishlist.getId(), items);
     }
@@ -205,7 +204,7 @@ public class AuthService {
         return getOrderDTO(order);
     }
 
-    static OrderDTO getOrderDTO(Order order) {
+    private OrderDTO getOrderDTO(Order order) {
         List<OrderItemDTO> items = order.getOrderItems().stream()
                 .map(item -> new OrderItemDTO(
                         item.getId(),
@@ -224,5 +223,7 @@ public class AuthService {
                 items
         );
     }
+
+
 
 }
