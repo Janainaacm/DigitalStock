@@ -31,9 +31,9 @@ public class ProductController {
         return productService.fetchProductById(id);
     }
 
-    @GetMapping("/category/{category}")
-    public ResponseEntity<List<ProductDTO>> fetchProductsByCategory(@PathVariable Category category) {
-        return productService.fetchProductsByCategory(category);
+    @GetMapping("/category/{categoryName}")
+    public ResponseEntity<List<ProductDTO>> fetchProductsByCategory(@PathVariable String categoryName) {
+        return productService.fetchProductsByCategory(categoryName);
     }
 
     @GetMapping("/name/{productName}/colors")

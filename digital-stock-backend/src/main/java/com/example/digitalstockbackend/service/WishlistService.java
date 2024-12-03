@@ -64,22 +64,18 @@ public class WishlistService {
     public ResponseEntity<WishlistDTO> removeItemFromWishlist(Long userId, Long productId) {
         Wishlist wishlist = findOrCreateWishlistByUserId(userId);
 
-        System.out.println("Before remove: " + wishlist.getItems());
         boolean removed = wishlist.getItems().removeIf(item ->
                 item.getProduct().getId().equals(productId)
         );
-        System.out.println("After remove: " + wishlist.getItems());
 
         if (!removed) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
 
         Wishlist updatedWishlist = wishlistRepository.save(wishlist);
-        System.out.println("Saved Wishlist: " + updatedWishlist.getItems());
 
 
         WishlistDTO wishlistDTO = convertToWishlistDTO(updatedWishlist);
-        System.out.println("Returning WishlistDTO: " + wishlistDTO.getItems());
         return ResponseEntity.ok(wishlistDTO);
 
     }

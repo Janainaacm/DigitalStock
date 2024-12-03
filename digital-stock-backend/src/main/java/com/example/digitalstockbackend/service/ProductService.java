@@ -35,8 +35,8 @@ public class ProductService {
         return ResponseEntity.ok(productDTOs);
     }
 
-    public ResponseEntity<List<ProductDTO>> fetchProductsByCategory(Category category) {
-        List<Product> list = productRepository.findByCategory(category);
+    public ResponseEntity<List<ProductDTO>> fetchProductsByCategory(String categoryName) {
+        List<Product> list = productRepository.findByCategoryName(categoryName);
 
         if (list.isEmpty()) {
             return ResponseEntity.notFound().build();

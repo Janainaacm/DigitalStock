@@ -6,6 +6,7 @@ import com.example.digitalstockbackend.dto.ProductDTO;
 import com.example.digitalstockbackend.model.Cart;
 import com.example.digitalstockbackend.model.CartItem;
 import com.example.digitalstockbackend.model.Product;
+import com.example.digitalstockbackend.model.Wishlist;
 import com.example.digitalstockbackend.model.roles.CustomUser;
 import com.example.digitalstockbackend.repository.CartItemRepository;
 import com.example.digitalstockbackend.repository.CartRepository;
@@ -33,14 +34,14 @@ public class CartService {
 
     // Fetch Cart by User ID
     public ResponseEntity<CartDTO> fetchCartByUserId(Long userId) {
-        Cart cart = getCartByUserId(userId);
+        Cart cart = findOrCreateCartByUserId(userId);
         CartDTO cartDTO = convertToCartDTO(cart);
         return ResponseEntity.ok(cartDTO);
     }
 
     // Add Product to Cart
     public ResponseEntity<CartDTO> addProductToCart(Long productId, Long userId, int quantity) {
-        Cart cart = getCartByUserId(userId);
+        Cart cart = findOrCreateCartByUserId(userId);
 
         Optional<Product> optionalProduct = productRepository.findById(productId);
 
@@ -67,43 +68,44 @@ public class CartService {
     }
 
     // Remove Item from Cart
-    public ResponseEntity<CartDTO> removeItemFromCart(Long cartItemId, Long userId) {
-        Cart cart = getCartByUserId(userId);
-        Optional<CartItem> optionalCartItem = cartItemRepository.findById(cartItemId);
+    public ResponseEntity<CartDTO> removeItemFromCart(Long productId, Long userId, int quantity) {
+        Cart cart = findOrCreateCartByUserId(userId);
 
-        if (optionalCartItem.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
+        Optional<CartItem> optionalItem = cart.getItems().stream()
+                .filter(item -> item.getProduct().getId().equals(productId))
+                .findFirst();
 
-        boolean removed = cart.getItems().removeIf(item -> item.getId().equals(optionalCartItem.get().getId()));
+        if (optionalItem.isPresent()) {
+            CartItem item = optionalItem.get();
 
-        if (!removed) {
+            int originalQuantity = item.getQuantity();
+
+            if (originalQuantity > quantity) {
+                item.setQuantity(originalQuantity - quantity);
+            } else {
+                cart.getItems().remove(item);
+                cartItemRepository.delete(item);
+            }
+        } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
 
         Cart updatedCart = cartRepository.save(cart);
+
         CartDTO cartDTO = convertToCartDTO(updatedCart);
         return ResponseEntity.ok(cartDTO);
     }
 
+
+
+
     // Clear Cart
     public ResponseEntity<CartDTO> clearCart(Long userId) {
-        Cart cart = getCartByUserId(userId);
+        Cart cart = findOrCreateCartByUserId(userId);
         cart.getItems().clear();
         Cart updatedCart = cartRepository.save(cart);
         CartDTO cartDTO = convertToCartDTO(updatedCart);
         return ResponseEntity.ok(cartDTO);
-    }
-
-    // Helper: Fetch or Create Cart by User ID
-    private Cart getCartByUserId(Long userId) {
-        CustomUser user = userService.getUserById(userId);
-        return cartRepository.findByUserId(userId)
-                .orElseGet(() -> {
-                    Cart newCart = new Cart();
-                    newCart.setUser(user);
-                    return cartRepository.save(newCart);
-                });
     }
 
     // Helper: Convert Cart to CartDTO
@@ -126,5 +128,15 @@ public class CartService {
                 productDTO,
                 cartItem.getQuantity()
         );
+    }
+
+    private Cart findOrCreateCartByUserId(Long userId) {
+        CustomUser user = userService.getUserById(userId);
+        return cartRepository.findByUserId(userId)
+                .orElseGet(() -> {
+                    Cart newCart = new Cart();
+                    newCart.setUser(user);
+                    return cartRepository.save(newCart);
+                });
     }
 }
