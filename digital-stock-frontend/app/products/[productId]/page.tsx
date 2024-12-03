@@ -42,7 +42,7 @@ const ProductDetails = () => {
 
 
   return (
-    <div className="font-sans tracking-wide max-md:mx-auto mt-20">
+    <div className="font-sans tracking-wide max-md:mx-auto">
       <div className="bg-white md:min-h-[600px] grid items-start grid-cols-1 lg:grid-cols-5 md:grid-cols-2">
         <div className="lg:col-span-3 h-full ">
           <div className="mt-4 ml-6 relative">

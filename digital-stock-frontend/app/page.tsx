@@ -10,7 +10,7 @@ import { useUserState } from "./store/UserState"
 
 
 export default function Home() {
-  const initializeState = useAuthState((state) => state.initializeState);
+  const { initializeState } = useAuthState();
   const { user } = useAuthState()
 
 

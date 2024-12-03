@@ -6,12 +6,14 @@ import WishlistSymbol from "./components/wishlistComponent/WishlistSymbol";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useAuthState } from "@/app/store/AuthState";
+import DisplaySearchBar from "../searchBar/DisplaySearchBar";
+import { useAppState } from "@/app/store/BackendAPIState";
 
 export const NavBar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
-  const [categoryName, setCategoryName] = useState("");
   const { user } = useAuthState();
+  const { fetchProductsByCategory } = useAppState();
   const router = useRouter();
 
   const handleToggle = () => {
@@ -24,7 +26,8 @@ export const NavBar = () => {
   };
 
   const searchByCategory = (category: string) => {
-    //router.push("/products")
+    fetchProductsByCategory(category)
+    router.push("/products")
   };
 
   const redirect = (path: string) => {
@@ -78,11 +81,11 @@ export const NavBar = () => {
                 isMenuOpen
                   ? ""
                   : "absolute shadow-lg group-hover:opacity-100 group-hover:max-h-[700px] px-6 group-hover:pb-4 group-hover:pt-6"
-              } ${isExpanded && isMenuOpen ? "py-3 max-h-[700px]" : ""} `}
+              } ${isExpanded && isMenuOpen ? "py-3 max-h-[700px] before:bg-[rgba(0,0,0,0.5)]" : ""} `}
               >
                 <li className="border-b py-3">
                   <button
-                    onClick={() => searchByCategory("")}
+                    onClick={() => redirect("/products")}
                     className="hover:text-[#007bff] hover:fill-[#007bff] text-gray-600 font-semibold text-[15px] block"
                   >
                     <svg
@@ -163,7 +166,7 @@ export const NavBar = () => {
                 </li>
                 <li className="border-b py-3">
                   <button
-                    onClick={() => searchByCategory("Headphones")}
+                    onClick={() => searchByCategory("Earphones")}
                     className="hover:text-[#007bff] hover:fill-[#007bff] text-gray-600 font-semibold text-[15px] block"
                   >
                     <svg
@@ -231,7 +234,7 @@ export const NavBar = () => {
         </div>
 
         <div className="flex gap-x-6 gap-y-4 ml-auto">
-          <SearchBar />
+          <DisplaySearchBar />
 
           <div className="flex items-center space-x-8 ml-12">
             <WishlistSymbol />
@@ -256,7 +259,7 @@ export const NavBar = () => {
 
             <button
               id="toggleClose"
-              className="lg:hidden z-[100] rounded-full  bg-transparent"
+              className="lg:hidden z-[90] rounded-full  bg-transparent"
               onClick={handleClick}
             >
               <div

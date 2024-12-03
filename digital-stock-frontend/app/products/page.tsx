@@ -3,62 +3,53 @@ import { useRouter } from "next/navigation";
 import { useAppState } from "../store/BackendAPIState";
 import { useEffect, useState } from "react";
 import { useAuthState } from "@/app/store/AuthState";
-import { ProductInterface } from "../Types";
+import { ProductInterface } from "../utils/Types";
 import { useUserState } from "../store/UserState";
 import FilterButton from "./components/FilterButton";
+import SearchBar from "../globalComponents/searchBar/SearchBar";
+import AddToCartButton from "./components/AddToCartButton";
 
 export default function ProductPage() {
-  const { fetchProducts, productList } = useAppState();
+  const { fetchAllProducts, productList, displayProducts, fetchDisplayProducts, filteredProductList, searchKeyword } = useAppState();
   const { addToWishlist, removeFromWishlist, isProductInWishlist, clearWishlist } = useUserState()
   const { user, wishlist } = useAuthState();
   const router = useRouter();
-  const [wishlistState, setWishlistState] = useState<{ [productId: number]: boolean }>({});
+  const [title, setTitle] = useState("Products")
 
   useEffect(() => {
     if (productList.length === 0) {
-      fetchProducts();
+      fetchAllProducts()
     }
   }, [productList]);
 
   useEffect(() => {
-    async function initializeWishlistState() {
-      const state: { [productId: number]: boolean } = {};
-      for (const product of productList) {
-        state[product.id] = await isProductInWishlist(product.id);
-      }
-      setWishlistState(state);
-    }
+    fetchDisplayProducts();
 
-    if (productList.length > 0) {
-      initializeWishlistState();
+    if (searchKeyword) {
+      setTitle(`Products found in ${searchKeyword}`)
     }
-  }, [productList]);
+  }, [productList, filteredProductList]);
 
-  const handleAddToWishlist = async (productId: number) => {
+
+  const handleAddToWishlist = (productId: number) => {
     if (!user) {
       alert("Please log in to add products to your wishlist.");
       return;
     }
 
-    const inWishlist = await isProductInWishlist(productId);
+    const inWishlist = isProductInWishlist(productId);
 
     if (inWishlist) {
       console.log(productId)
-      await removeFromWishlist(productId);
+      removeFromWishlist(productId);
     } else {
-      await addToWishlist(productId);
+      addToWishlist(productId);
     }
-
-    setWishlistState((prevState) => ({
-      ...prevState,
-      [productId]: !prevState[productId],
-    }));
     
   };
 
   const clear = () => {
     clearWishlist();
-    setWishlistState({});
   };
 
   
@@ -95,12 +86,13 @@ export default function ProductPage() {
       </div>
 
       <div className="font-sans p-4 mx-auto lg:max-w-5xl md:max-w-3xl  sm:max-w-full">
+        
         <h2 className="text-4xl font-extrabold text-gray-800 mb-12">
           Products
         </h2>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {productList.map((product) => (
+          {displayProducts.map((product) => (
             <div
               key={product.id}
               className="bg-white rounded overflow-hidden shadow-md cursor-pointer hover:shadow-lg transition-all duration-400"
@@ -117,7 +109,7 @@ export default function ProductPage() {
                   <svg
                     width="27px"
                     className={`text-red-600 ${
-                      wishlistState[product.id]
+                      isProductInWishlist(product.id)
                         ? "fill-red-600"
                         : "fill-none hover:fill-red-200 hover:scale-[1.05] hover:opacity-80 transition-all duration-600"
                     }`}
@@ -149,17 +141,8 @@ export default function ProductPage() {
                     ${product.price}
                   </h4>
 
-                  <div className="bg-gray-100 w-10 h-10 flex items-center justify-center rounded-full cursor-pointer ml-auto">
-                    <svg
-                      width="16px"
-                      className="fill-gray-800 inline-block"
-                      viewBox="0 0 64 64"
-                    >
-                      <path
-                        d="M45.5 4A18.53 18.53 0 0 0 32 9.86 18.5 18.5 0 0 0 0 22.5C0 40.92 29.71 59 31 59.71a2 2 0 0 0 2.06 0C34.29 59 64 40.92 64 22.5A18.52 18.52 0 0 0 45.5 4ZM32 55.64C26.83 52.34 4 36.92 4 22.5a14.5 14.5 0 0 1 26.36-8.33 2 2 0 0 0 3.27 0A14.5 14.5 0 0 1 60 22.5c0 14.41-22.83 29.83-28 33.14Z"
-                        data-original="#000000"
-                      ></path>
-                    </svg>
+                  <div className="relative w-full aspect-w-16 p-2">
+                    <AddToCartButton productId={product.id} quantity={1}/>
                   </div>
                 </div>
               </div>

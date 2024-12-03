@@ -5,7 +5,7 @@ import {
   UserInterface,
   ProductInterface,
   OrderInterface,
-} from "../Types";
+} from "../utils/Types";
 
 interface AdminState {
   users: UserInterface[];

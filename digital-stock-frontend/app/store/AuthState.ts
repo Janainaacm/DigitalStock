@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { CartInterface, OrderInterface, UserInterface, WishlistInterface } from '../Types';
+import { CartInterface, OrderInterface, UserInterface, WishlistInterface } from '../utils/Types';
 import axios from 'axios';
 import { API_URL } from "./config/config";
 import axiosInstance from './config/axiosConfig';
@@ -19,7 +19,6 @@ interface AuthState {
   registerUser: (username: string, email: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
   fetchUser: () => Promise<UserInterface | null> ;
-  //fetchWishlistProducts: () => Promise<WishlistInterface | null>;
 
 }
 
@@ -111,6 +110,8 @@ export const useAuthState = create<AuthState>((set) => ({
       isAuthenticated: true,
     });
 
+    console.log(user)
+
     Cookies.set("user", JSON.stringify(user));
 
     return user;
@@ -119,26 +120,7 @@ export const useAuthState = create<AuthState>((set) => ({
     return null;
   }
 },
-/* 
-fetchWishlistProducts: async (): Promise<WishlistInterface | null> => {
-  const user = useAuthState.getState().user;
 
-  if (!user) {
-    return null;
-  }
-
-  try {
-    const response = await axiosInstance.get(`${API_URL}/user/${user.id}/wishlist/${user.wishlist.id}`)
-    set({ wishlist: {
-      ...user.wishlist,
-      items: response.data,
-    }})
-    return user.wishlist;
-  } catch (error) {
-    console.error("Error fetching Wishlist items:", error);
-    return null;
-  }
-}, */
 
   
 }));
