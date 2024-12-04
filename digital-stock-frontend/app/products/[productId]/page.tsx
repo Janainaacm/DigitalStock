@@ -3,7 +3,7 @@
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useAppState } from "@/app/store/BackendAPIState";
-import GoBackButton from "@/app/globalComponents/Functions/GoBackButton";
+import GoBackButton from "@/app/components/buttons/GoBackButton";
 
 const ProductDetails = () => {
   const { productId } = useParams();

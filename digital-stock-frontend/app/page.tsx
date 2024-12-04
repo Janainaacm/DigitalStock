@@ -1,63 +1,66 @@
-'use client'
-import Image from "next/image"
-import CustomButton from "./globalComponents/ui-elements/CustomButton"
-import { useEffect } from "react"
-import { useAppState } from "./store/BackendAPIState"
-import { useAuthState } from "./store/AuthState"
-import React from 'react';
-import { useUserState } from "./store/UserState"
-
-
+"use client";
+import Image from "next/image";
+import CustomButton from "./globalComponents/ui-elements/CustomButton";
+import { useEffect } from "react";
+import { useAppState } from "./store/BackendAPIState";
+import { useAuthState } from "./store/AuthState";
+import React from "react";
+import { useUserState } from "./store/UserState";
+import Header from "./components/navBar/Header";
+import Slideshow from "./components/heroSection/SlideShow";
 
 export default function Home() {
   const { initializeState } = useAuthState();
-  const { user } = useAuthState()
-
+  const { user } = useAuthState();
 
   useEffect(() => {
     if (!user) {
-      initializeState()
+      initializeState();
     }
   });
-
-
+/**
+ https://images.unsplash.com/photo-1517502474097-f9b30659dadb?q=80&w=3027&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D
+ https://images.unsplash.com/photo-1535957998253-26ae1ef29506?q=80&w=2836&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D
+ https://images.unsplash.com/photo-1628202926206-c63a34b1618f?q=80&w=2787&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D
+ 
+ */
   return (
-    
-      <div className="h-screen p-4 pt-12">
-        <main className="flex flex-col items-center px-4 justify-evenly md:flex-row md:justify-center md:h-5/6 ">
-          <section className=" md:max-w-md lg:max-w-lg">
-            <h1 className="flex flex-col items-center md:items-start text-[max(4vw,32px)] font-extrabold tracking-wide font-mono leading-snug ">
-              Welcome to
-              <span className="text-transparent bg-gradient-to-r from-limedSpruce-500 via-bismark-600 to-jetStream-400 bg-clip-text">
-                DigitalStock
-              </span>
-            </h1>
-            <p className="max-w-sm my-8 tracking-tight text-center md:text-left">
-              Lorem ipsum dolor sit amet consectetur, adipisicing elit.
-              Voluptate sit illum quisquam. Quia nostrum neque quod praesentium
-              numquam magnam rem aliquid laboriosam vero libero? Quo commodi
-              debitis quia? Hic, eius.
-            </p>
-            <section className="flex gap-8 my-8 justify-evenly md:justify-start ">
-              <CustomButton href={"/products"} text={"products"} />
-              <CustomButton href={"/admin/adminDashboard"} text={"admin"} />
-              <CustomButton href={"/auth/register"} text={"Register user"} />
+    <>
 
+      {/* ===== Carousel Section ===== */}
+      <Slideshow />
 
-            </section>
+      <main className="flex flex-col items-center px-4 justify-evenly md:flex-row md:justify-center md:h-5/6 ">
+        <section className=" md:max-w-md lg:max-w-lg">
+          <h1 className="flex flex-col items-center md:items-start text-[max(4vw,32px)] font-extrabold tracking-wide font-mono leading-snug ">
+            Welcome to
+            <span className="text-transparent bg-gradient-to-r from-limedSpruce-500 via-bismark-600 to-jetStream-400 bg-clip-text">
+              DigitalStock
+            </span>
+          </h1>
+          <p className="max-w-sm my-8 tracking-tight text-center md:text-left">
+            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Voluptate
+            sit illum quisquam. Quia nostrum neque quod praesentium numquam
+            magnam rem aliquid laboriosam vero libero? Quo commodi debitis quia?
+            Hic, eius.
+          </p>
+          <section className="flex gap-8 my-8 justify-evenly md:justify-start ">
+            <CustomButton href={"/products"} text={"products"} />
+            <CustomButton href={"/admin/adminDashboard"} text={"admin"} />
+            <CustomButton href={"/auth/register"} text={"Register user"} />
           </section>
+        </section>
 
-          <div className="p-4 md:max-w-xl ">
-            <Image
-              src={"/images/electronic-device-collection.jpg"}
-              alt={"Electronic Device Image"}
-              width={700}
-              height={500}
-              className=""
-            />
-          </div>
-        </main>
-      </div>
-    
-  )
+        <div className="p-4 md:max-w-xl ">
+          <Image
+            src={"/images/electronic-device-collection.jpg"}
+            alt={"Electronic Device Image"}
+            width={700}
+            height={500}
+            className=""
+          />
+        </div>
+      </main>
+    </>
+  );
 }

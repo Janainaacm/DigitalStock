@@ -86,10 +86,21 @@ const config: Config = {
           950: "#302d3e",
         },
       },
+    
+      animation: {
+        scroll: 'scroll 40s linear infinite',
+      },
+      keyframes: {
+        scroll: {
+          '0%': { transform: 'translateX(0)' },
+          '100%': { transform: 'translateX(calc(-250px * 14))' },
+        },
+      },
     },
   },
   
   plugins: [],
+  
   
 }
 export default config

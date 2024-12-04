@@ -19,10 +19,21 @@
   }
 
   .no-scrollbar {
-    -ms-overflow-style: none; /* IE and Edge */
-    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; 
+    scrollbar-width: none; 
   }
 }
+
+
+@layer components {
+  .app-x-padding {
+    @apply px-4 sm:px-8 md:px-12;
+  }
+  .app-max-width {
+    @apply max-w-7xl mx-auto;
+  }
+}
+
 
 body {
   color: var(--foreground);

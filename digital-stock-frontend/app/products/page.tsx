@@ -6,7 +6,7 @@ import { useAuthState } from "@/app/store/AuthState";
 import { ProductInterface } from "../utils/Types";
 import { useUserState } from "../store/UserState";
 import FilterButton from "./components/FilterButton";
-import SearchBar from "../globalComponents/searchBar/SearchBar";
+import SearchBar from "../components/searchBar/SearchBar";
 import AddToCartButton from "./components/AddToCartButton";
 
 export default function ProductPage() {
