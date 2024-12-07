@@ -4,6 +4,8 @@ import axios from 'axios';
 import { API_URL } from "./config/config";
 import axiosInstance from './config/axiosConfig';
 import Cookies from "js-cookie";
+import { useCookies } from 'react-cookie';
+
 
 
 
@@ -19,7 +21,8 @@ interface AuthState {
   registerUser: (username: string, email: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
   fetchUser: () => Promise<UserInterface | null> ;
-
+  verifyPassword: (password: string) => Promise<boolean>;
+  getUserRoleFromToken: () => Promise<string[]>;
 }
 
 
@@ -46,14 +49,11 @@ export const useAuthState = create<AuthState>((set) => ({
 
   signIn: async (username, password) => {
     try {
+      debugger
       const response = await axiosInstance.post(
         `${API_URL}/auth/signin`,
         { username, password },
       );
-     
-        if (response.data.accessToken) {
-          localStorage.setItem("user", JSON.stringify(response.data));
-        }
   
       await useAuthState.getState().fetchUser();
   
@@ -118,6 +118,45 @@ export const useAuthState = create<AuthState>((set) => ({
   } catch (error) {
     console.error("Error fetching user:", error);
     return null;
+  }
+},
+
+verifyPassword: async (password: string): Promise<boolean> => {
+  const userId = useAuthState.getState().user?.id;
+
+  if (!userId) {
+    console.error("User ID not found.");
+    return false;
+  }
+
+  try {
+    const response = await axiosInstance.put(`${API_URL}/auth/verifyPassword`, {
+      userId,
+      password,
+    });
+
+    return response.data === true;
+  } catch (error) {
+    console.error("Error verifying password:", error);
+    return false;
+  }
+},
+
+getUserRoleFromToken: async (): Promise<string[]> => {
+  try {
+    const response = await axiosInstance.get(`${API_URL}/auth/role`);
+
+    const roles = response.data;
+
+    if (!roles || roles.length === 0) {
+      console.warn('No roles found for the given token.');
+      return [];
+    }
+
+    return roles;
+  } catch (error) {
+    console.error('Error fetching roles from token:', error);
+    return [];
   }
 },
 

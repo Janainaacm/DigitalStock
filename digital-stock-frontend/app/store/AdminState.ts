@@ -6,6 +6,8 @@ import {
   ProductInterface,
   OrderInterface,
 } from "../utils/Types";
+import { useUserState } from "./UserState";
+import { useAppState } from "./BackendAPIState";
 
 interface AdminState {
   users: UserInterface[];
@@ -19,6 +21,8 @@ interface AdminState {
   deleteProduct: (productId: number) => Promise<void>;
   fetchAllOrders: () => Promise<OrderInterface[]>;
   updateOrderStatus: (orderId: number, status: string) => Promise<void>;
+  addNewCategory: (categoryName: string) => Promise<void>;
+  deleteCategory: (categoryId: number) => Promise<void>;
 }
 
 export const useAdminState = create<AdminState>((set) => ({
@@ -107,4 +111,34 @@ export const useAdminState = create<AdminState>((set) => ({
       throw error;
     }
   },
+
+  addNewCategory: async (categoryName: string): Promise<void> => {
+    try {
+
+      const categoryDTO = { name: categoryName };
+
+      const response = await axiosInstance.post(`${API_URL}/admin/categories/add`, categoryDTO)
+
+      useAppState.setState((state) => ({
+        categories: [...state.categories, response.data], 
+      }));
+      
+    } catch (error) {
+      
+    }
+  },
+
+  deleteCategory: async (categoryId: number): Promise<void> => {
+    try {
+      await axiosInstance.delete(`${API_URL}/admin/categories/delete/${categoryId}`);
+  
+      useAppState.setState((state) => ({
+        categories: state.categories.filter((category) => category.id !== categoryId),
+      }));
+    } catch (error) {
+      console.error("Error deleting category:", error);
+      throw error; 
+    }
+  },
+  
 }));

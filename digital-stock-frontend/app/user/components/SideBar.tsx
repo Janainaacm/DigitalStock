@@ -1,11 +1,14 @@
 "use client";
 import { useAuthState } from "@/app/store/AuthState";
+import { useRouter } from "next/navigation";
 
 const SideBar = () => {
   const { logout } = useAuthState();
+  const router = useRouter();
 
   const handleLogOut = () => {
     logout();
+    router.push("/")
   };
 
   return (

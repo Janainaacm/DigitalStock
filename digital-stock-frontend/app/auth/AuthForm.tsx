@@ -1,5 +1,5 @@
 import { Fragment, useEffect, useState } from "react";
-import { Dialog, Transition } from "@headlessui/react";
+import { Dialog, DialogPanel, Transition, TransitionChild } from "@headlessui/react";
 import Login from "./Login";
 import Register from "./Register";
 import ForgotPassword from "./ForgotPassword";
@@ -11,20 +11,25 @@ type CurrentPage = "login" | "register" | "forgot-password";
 type Props = {
     extraClass?: string;
     children: any;
+    auth: boolean;
   };
 
-export default function AuthForm({extraClass, children}: Props) {
+export default function AuthForm({extraClass, children, auth}: Props) {
   const [currentPage, setCurrentPage] = useState<CurrentPage>("login");
   const {user} = useAuthState()
   const router = useRouter()
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(auth);
 
   const toggleModal = () => setOpen((prev) => !prev);
   
   useEffect(() => {
     if (user && open) {
       setOpen(false); 
-      router.push("/user/profile"); 
+      if (user.role === "ROLE_ADMIN") {
+        router.push("/admin/dashboard");
+      } else {
+        router.push("/user/profile"); 
+      }
     }
   }, [user, open, router]);
 
@@ -47,14 +52,14 @@ export default function AuthForm({extraClass, children}: Props) {
 
   return (
     <>
-      <button onClick={toggleModal} className="btn">
+      <button onClick={toggleModal} className={`btn ${extraClass}`}>
         {children}
       </button>
       <Transition show={open} as={Fragment}>
-        <Dialog onClose={toggleModal} className="relative z-50">
+        <Dialog onClose={toggleModal} className="relative z-[999]">
           <div className="fixed inset-0 bg-black-300 bg-opacity-50" />
           <div className="fixed inset-0 flex items-center justify-center">
-            <Transition.Child
+            <TransitionChild
             as={Fragment}
             enter="ease-out duration-300"
             enterFrom="opacity-0 scale-95"
@@ -62,10 +67,10 @@ export default function AuthForm({extraClass, children}: Props) {
             leave="ease-in duration-200"
             leaveFrom="opacity-100 scale-100"
             leaveTo="opacity-0 scale-95">
-              <Dialog.Panel className="w-full max-w-md p-6 bg-white rounded-md">
+              <DialogPanel className="w-full max-w-md p-6 bg-white rounded-md">
                 {renderComponent()}
-              </Dialog.Panel>
-            </Transition.Child>
+              </DialogPanel>
+            </TransitionChild>
           </div>
         </Dialog>
       </Transition>

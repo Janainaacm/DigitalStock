@@ -60,6 +60,12 @@ export default function Login({ onRegister, onForgotPassword }: LoginProps) {
             e.preventDefault();
             handleLogin();
           }}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              e.preventDefault(); 
+              handleLogin(); 
+            }
+          }}
           className="md:col-span-2 w-full py-3 sm:px-16 bg-[#F5F5F5]"
         >
           <div className="mb-7">
@@ -145,7 +151,7 @@ export default function Login({ onRegister, onForgotPassword }: LoginProps) {
 
           <div className="mt-3">
             <button
-              type="button"
+              type="submit"
               onClick={() => handleLogin()}
               className="w-full py-3 px-4 tracking-wider text-sm rounded-md text-white bg-gray-700 hover:bg-gray-800 focus:outline-none transition-all duration-800"
             >
@@ -160,8 +166,6 @@ export default function Login({ onRegister, onForgotPassword }: LoginProps) {
               
             </div>
         </form>
-      <div>
-      </div>
     </div>
   );
 }

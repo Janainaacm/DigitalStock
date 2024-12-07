@@ -1,14 +1,22 @@
-'use client'
+"use client";
 import { useAppState } from "@/app/store/BackendAPIState";
+import DeleteProductButton from "./components/DeleteProductButton";
+import LoadingIconText from "@/public/icons/LoadingIconText";
 
 const ProductManagementPage = () => {
   const { productList } = useAppState();
 
-  return (
-    <div className="relative font-[sans-serif] pt-[80px] h-screen">
+  const handleEdit = () => {}
+
+
+
+   return (
+    <div className="relative font-[sans-serif] h-screen">
       <h1 className="px-6 py-6 text-4xl font-extrabold text-gray-800">
-        Product management
+        Products
       </h1>
+
+      <p>filter?</p>
 
       <div className=" px-6 overflow-x-auto font-[sans-serif]">
         <table className="min-w-full bg-white">
@@ -37,7 +45,7 @@ const ProductManagementPage = () => {
 
           <tbody className="whitespace-nowrap divide-y divide-gray-200">
             {productList.map((product) => (
-                <tr key={product.id}>
+              <tr key={product.id}>
                 <td className="p-4 text-sm">
                   <div className="flex items-center cursor-pointer">
                     <img
@@ -54,21 +62,28 @@ const ProductManagementPage = () => {
                 <td className="p-4 text-sm">{product.sales}</td>
                 <td className="p-4 text-sm">{product.colorName}</td>
                 <td className="p-4 text-sm">
-                  <button title="Edit">
+                  <button
+                  onClick={handleEdit}>
                     <svg
-                      className="w-4 h-4 fill-gray-500"
-                      viewBox="0 0 32 32"
+                      className="h-5 w-5 text-gray-900 mr-1.5 hover:text-green-600 hover:scale-[1.2] transition-all duration-200"
+                      viewBox="0 0 24 24"
+                      strokeWidth="1.4"
+                      stroke="currentColor"
+                      fill="none"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
                     >
-                      <path
-                        d="M13 16c0 1.654 1.346 3 3 3s3-1.346 3-3-1.346-3-3-3-3 1.346-3 3zm0 10c0 1.654 1.346 3 3 3s3-1.346 3-3-1.346-3-3-3-3 1.346-3 3zm0-20c0 1.654 1.346 3 3 3s3-1.346 3-3-1.346-3-3-3-3 1.346-3 3z"
-                        data-original="#000000"
-                      />
+                      
+                      <path stroke="none" d="M0 0h24v24H0z" />
+                      <path d="M9 7 h-3a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-3" />
+                      <path d="M9 15h3l8.5 -8.5a1.5 1.5 0 0 0 -3 -3l-8.5 8.5v3" />
+                      <line x1="16" y1="5" x2="19" y2="8" />
                     </svg>
                   </button>
+                  <DeleteProductButton product={product}/>
                 </td>
               </tr>
             ))}
-            
           </tbody>
         </table>
 

@@ -20,6 +20,7 @@ interface AppState {
   setProductIdState: (productId: number) => void;
   fetchDisplayProducts: () => void;
   fetchAllProducts: () => Promise<void>;
+  fetchAllCategories: () => Promise<void>;
   fetchProductsBySearch: () => Promise<void>;
   setFilteredProductList: (searchResult: ProductInterface[]) => void;
   fetchProductById: (productId: number) => Promise<ProductInterface | null>;
@@ -117,6 +118,20 @@ export const useAppState = create<AppState>((set) => ({
 
     } catch (error) {
       console.error("Error fetching products:", error);
+      throw error;
+    }
+  },
+
+  fetchAllCategories: async (): Promise<void> => {
+    try {
+      const response = await axios.get(`${API_URL}/products/categories`)
+
+      set({
+        categories: response.data
+      });
+      
+    } catch (error) {
+      console.error("Error fetching categories:", error);
       throw error;
     }
   },

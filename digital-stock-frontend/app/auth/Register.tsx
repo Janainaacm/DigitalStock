@@ -74,6 +74,12 @@ export default function Register({ onLogin }: RegisterProps) {
             e.preventDefault();
             handleRegister();
           }}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              e.preventDefault(); 
+              handleRegister(); 
+            }
+          }}
           className="md:col-span-2 w-full py-3 sm:px-16 bg-[#F5F5F5]"
         >
           <div className="mb-7">

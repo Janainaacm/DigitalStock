@@ -32,7 +32,7 @@ export default function SlideShow() {
         className="mySwiper"
       >
         <SwiperSlide>
-          <div className="relative w-full h-screen">
+          <div className="relative w-full h-[90vh]">
             <Image
               src={image1.src}
               alt="slider image"
@@ -42,7 +42,7 @@ export default function SlideShow() {
           </div>
         </SwiperSlide>
         <SwiperSlide>
-          <div className="relative w-full h-screen">
+          <div className="relative w-full h-[90vh]">
             <Image
               src={image2.src}
               alt="slider image"
@@ -52,7 +52,7 @@ export default function SlideShow() {
           </div>
         </SwiperSlide>
         <SwiperSlide>
-          <div className="relative w-full h-screen">
+          <div className="relative w-full h-[90vh]">
             <Image
               src={image3.src}
               alt="slider image"

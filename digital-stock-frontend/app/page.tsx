@@ -6,7 +6,7 @@ import { useAppState } from "./store/BackendAPIState";
 import { useAuthState } from "./store/AuthState";
 import React from "react";
 import { useUserState } from "./store/UserState";
-import Header from "./components/navBar/Header";
+import Header from "./components/header/Header";
 import Slideshow from "./components/heroSection/SlideShow";
 
 export default function Home() {
@@ -18,12 +18,7 @@ export default function Home() {
       initializeState();
     }
   });
-/**
- https://images.unsplash.com/photo-1517502474097-f9b30659dadb?q=80&w=3027&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D
- https://images.unsplash.com/photo-1535957998253-26ae1ef29506?q=80&w=2836&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D
- https://images.unsplash.com/photo-1628202926206-c63a34b1618f?q=80&w=2787&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D
- 
- */
+
   return (
     <>
 

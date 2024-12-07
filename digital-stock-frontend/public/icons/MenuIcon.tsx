@@ -1,6 +1,6 @@
-const UserIcon = ({ extraClass = "" }) => (
+const MenuIcon = ({ size = "md", extraClass = "" }) => (
     <svg
-      className={`h-6 w-6 ${extraClass}`}
+      className="h-8 w-8 sm:h-6 sm:w-6"
       fill="none"
       viewBox="0 0 24 24"
       stroke="currentColor"
@@ -9,9 +9,9 @@ const UserIcon = ({ extraClass = "" }) => (
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth={2}
-        d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+        d="M4 6h16M4 12h8m-8 6h16"
       />
     </svg>
   );
   
-  export default UserIcon;
+  export default MenuIcon;

@@ -6,7 +6,7 @@ import SearchResultsList from "./SearchResultsList";
 import { useEffect, useState } from "react";
 import { ProductInterface } from "@/app/utils/Types";
 
-const DisplaySearchBar = () => {
+const DisplaySearchBar = ({inSideBar = false}) => {
   const {
     searchBar,
     productList,
@@ -14,8 +14,6 @@ const DisplaySearchBar = () => {
     setFilteredProductList,
   } = useAppState();
   const [searchResult, setSearchResult] = useState<ProductInterface[]>([]);
-  const [isVisible, setIsVisible] = useState(false);
-  const [open, isOpen] = useState(false)
 
 
   const setResults = () => {
@@ -53,7 +51,7 @@ const DisplaySearchBar = () => {
 
   return (
     <div className="w-full">
-      <SearchBar setSearchResult={() => setSearchResult([])}/>
+      <SearchBar setSearchResult={() => setSearchResult([])} inSideBar={inSideBar}/>
       <div className="relative">
       <SearchResultsList results={searchResult} />
       </div>

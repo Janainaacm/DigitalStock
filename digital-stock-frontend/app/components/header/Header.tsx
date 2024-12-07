@@ -13,7 +13,10 @@ import { useAuthState } from "@/app/store/AuthState";
 import CartSymbol from "./components/cartComponent/CartSymbol";
 import WishlistSymbol from "./components/wishlistComponent/WishlistSymbol";
 import { useAppState } from "@/app/store/BackendAPIState";
-import { useRouter } from "next/navigation";
+import { useRouter as useNavRouter } from "next/navigation";
+import HeaderSidebar from "./components/sidebar/HeaderSidebar";
+import { useRouter } from 'next/compat/router'
+import { useSearchParams } from 'next/navigation'
 
 type Props = {
   title?: string;
@@ -22,10 +25,12 @@ type Props = {
 const Header = ({ title }: Props) => {
   const [scrolled, setScrolled] = useState<boolean>(false);
   const [didMount, setDidMount] = useState<boolean>(false);
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isExpanded, setIsExpanded] = useState(false);
   const { fetchProductsByCategory } = useAppState();
-  const router = useRouter();
+  const router = useNavRouter();
+  const Rrouter = useRouter();
+  const searchParams = useSearchParams()
+  const [showAuthForm, setShowAuthForm] = useState(false);
+
 
   const handleScroll = useCallback(() => {
     const offset = window.scrollY;
@@ -37,6 +42,21 @@ const Header = ({ title }: Props) => {
   }, [setScrolled]);
 
   useEffect(() => {
+    if (Rrouter && !Rrouter.isReady) {
+      return
+    }
+
+    const search = searchParams.get('auth')
+    if (search === "true") {
+      setShowAuthForm(true)
+    } else {
+      setShowAuthForm(false)
+    }
+    
+    
+  }, [router, searchParams])
+
+  useEffect(() => {
     setDidMount(true);
     window.addEventListener("scroll", handleScroll);
     return () => setDidMount(false);
@@ -46,24 +66,12 @@ const Header = ({ title }: Props) => {
     return null;
   }
 
-  const handleToggle = () => {
-    setIsExpanded((prev) => !prev);
-  };
-
-  const handleClick = () => {
-    console.log("klicking", isMenuOpen);
-    setIsMenuOpen(!isMenuOpen);
-  };
-
   const searchByCategory = (category: string) => {
     fetchProductsByCategory(category)
     router.push("/products")
   };
 
   const redirect = (path: string) => {
-    if (isMenuOpen) {
-          handleClick();
-    }
     router.push(`${path}`);
   };
 
@@ -78,28 +86,26 @@ const Header = ({ title }: Props) => {
           <div
             className={`flex justify-between align-baseline app-x-padding ${styles.mainMenu}`}
           >
-            {/* Hamburger Menu and Mobile Nav 
+            {/* Hamburger Menu and Mobile Nav*/}
             <div className="flex-1 lg:flex-0 lg:hidden">
-              <Menu />
+              <HeaderSidebar />
             </div>
             
-            */}
-
 
             {/* Left Nav */}
             <ul className={`flex-0 pt-1 lg:flex-1 flex ${styles.leftMenu}`}>
             <li className="max-lg:border-b max-lg:px-3 max-lg:py-3">
               <button
                 onClick={() => redirect("/")}
-                className="hover:text-white text-gray-600 transition-all duration-300 font-semibold block text-[15px]"
+                className="hover:text-gray-600 text-gray-800 transition-all duration-300 font-semibold block text-[15px]"
               >
                 Home
               </button>
             </li>
             <li className="group max-lg:border-b max-lg:px-3 max-lg:py-3 relative">
               <button
-                className="hover:text-white text-gray-600 transition-all duration-300 hover:fill-white fill-gray-600 text-gray-600 font-semibold text-[15px] block"
-                onClick={() => handleToggle()}
+                className="hover:text-gray-600 text-gray-800 transition-all duration-300 group-hover:fill-gray-600 fill-gray-800 font-semibold text-[15px] block"
+                onClick={() => redirect("/products")}
               >
                 Store
                 <svg
@@ -116,15 +122,8 @@ const Header = ({ title }: Props) => {
                 </svg>
               </button>
 
-              <ul
-                className={`top-5 max-lg:top-8 left-0 z-50 block space-y-2 bg-white overflow-hidden w-[200px] max-h-0 transition-all duration-500
-              ${
-                isMenuOpen
-                  ? ""
-                  : "absolute shadow-lg group-hover:opacity-100 group-hover:max-h-[700px] px-6 group-hover:pb-4 group-hover:pt-6"
-              } ${isExpanded && isMenuOpen ? "py-3 max-h-[700px] before:bg-[rgba(0,0,0,0.5)]" : ""} `}
-              >
-                <li className="border-b w-full pb-3">
+              <ul className="top-5 left-0 z-50 block space-y-2 bg-white overflow-hidden w-[200px] max-h-0 absolute shadow-lg group-hover:opacity-100 group-hover:max-h-[700px] px-6 group-hover:pb-4 group-hover:pt-6 transition-all duration-500">
+                <li className="border-b border-gray-300 w-full pb-3">
                   <button
                     onClick={() => redirect("/products")}
                     className="hover:text-blue-400 hover:fill-blue-400 transition-all duration-300 text-gray-600 font-semibold text-[15px] block"
@@ -160,7 +159,7 @@ const Header = ({ title }: Props) => {
                   </button>
                 </li>
 
-                <li className="border-b w-full py-3">
+                <li className="border-b border-gray-300 w-full py-3">
                   <button
                     onClick={() => searchByCategory("Computers")}
                     className="hover:text-blue-400 hover:fill-blue-400 transition-all duration-300 text-gray-600 font-semibold text-[15px] block"
@@ -183,7 +182,7 @@ const Header = ({ title }: Props) => {
                   </button>
                 </li>
 
-                <li className="border-b w-full py-3">
+                <li className="border-b border-gray-300 w-full py-3">
                   <button
                     onClick={() => searchByCategory("Smartphones")}
                     className="hover:text-blue-400 hover:fill-blue-400 transition-all duration-300 text-gray-600 font-semibold text-[15px] block"
@@ -205,7 +204,7 @@ const Header = ({ title }: Props) => {
                     Smartphones
                   </button>
                 </li>
-                <li className="border-b w-full py-3">
+                <li className="border-b border-gray-300 w-full py-3">
                   <button
                     onClick={() => searchByCategory("Earphones")}
                     className="hover:text-blue-400 hover:fill-blue-400 transition-all duration-300 text-gray-600 font-semibold text-[15px] block"
@@ -226,11 +225,7 @@ const Header = ({ title }: Props) => {
                     Headphones
                   </button>
                 </li>
-                <li className={` ${
-                  isMenuOpen
-                  ? "pt-3"
-                  : "border-b w-full py-3"
-                }`}>
+                <li className="border-b border-gray-300 w-full py-3">
                   <button
                     onClick={() => searchByCategory("Watches")}
                     className="hover:text-blue-400 hover:fill-blue-400 transition-all duration-300 text-gray-600 font-semibold text-[15px] block"
@@ -258,7 +253,7 @@ const Header = ({ title }: Props) => {
             <li className="max-lg:border-b max-lg:px-3 max-lg:py-3">
               <Link
                 href="javascript:void(0)"
-                className="hover:text-white text-gray-600 transition-all duration-300  text-gray-600 font-semibold text-[15px] block"
+                className="hover:text-gray-600 text-gray-800 transition-all duration-300  text-gray-600 font-semibold text-[15px] block"
               >
                 About
               </Link>
@@ -266,7 +261,7 @@ const Header = ({ title }: Props) => {
             <li className="max-lg:border-b max-lg:px-3 max-lg:py-3">
               <Link
                 href="javascript:void(0)"
-                className="hover:text-white text-gray-600 transition-all duration-300 text-gray-600 font-semibold text-[15px] block"
+                className="hover:text-gray-600 text-gray-800 transition-all duration-300 text-gray-600 font-semibold text-[15px] block"
               >
                 Contact
               </Link>
@@ -288,11 +283,11 @@ const Header = ({ title }: Props) => {
             </div>
 
             <ul className={`flex-1 flex justify-end ${styles.rightMenu}`}>
-              <li className="max-w-28">
+              <li className="max-w-38">
                 <DisplaySearchBar />
               </li>
               <li>
-                <AuthForm>
+                <AuthForm auth={showAuthForm}>
                   <UserIcon />
                 </AuthForm>
               </li>

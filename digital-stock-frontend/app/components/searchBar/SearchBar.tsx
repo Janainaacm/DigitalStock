@@ -7,13 +7,14 @@ import { useEffect, useRef, useState } from "react";
 
 interface Props {
   setSearchResult: () => void;
+  inSideBar: boolean;
 }
-const SearchBar = ({setSearchResult}: Props) => {
+
+const SearchBar = ({setSearchResult, inSideBar}: Props) => {
   const { searchBar, setSearchBar, productList } = useAppState();
   const router = useRouter();
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = useState(inSideBar)
   const inputRef = useRef<HTMLInputElement>(null); 
-
 
 
   const getSearchResult = () => {
@@ -21,7 +22,9 @@ const SearchBar = ({setSearchResult}: Props) => {
       product.name.toLowerCase().includes(searchBar.toLowerCase())
     );
     console.log(filteredList);
-    setOpen(!open)
+    if (!inSideBar) {
+      setOpen(!open)
+    }
     setSearchResult()
     router.push("/products");
   };
@@ -35,20 +38,24 @@ const SearchBar = ({setSearchResult}: Props) => {
     if (open && inputRef.current) {
       inputRef.current.focus(); 
     }
+
+    if (!open) {
+      setSearchResult()
+    }
   }, [open]);
 
   
   return (
     <div 
     onBlur={(e) => {
-      if (!e.currentTarget.contains(e.relatedTarget)) {
+      if (!e.currentTarget.contains(e.relatedTarget) && !inSideBar) {
         setOpen(false); 
       }
     }}
     tabIndex={-1} 
     className="relative w-full flex items-center">
       {open ? (
-           <div className="relative group px-2 py-2 text-gray-700 font-medium text-sm uppercase w-full flex items-center focus-within:border-none">
+           <div className="relative group px-2 py-3 text-gray-700 font-medium text-sm uppercase w-full flex items-center focus-within:border-none">
            <svg
              className="h-4 w-6 text-slate-600 mr-5"
              fill="none"
