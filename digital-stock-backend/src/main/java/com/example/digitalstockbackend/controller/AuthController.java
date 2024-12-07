@@ -1,13 +1,17 @@
 package com.example.digitalstockbackend.controller;
 
+import com.example.digitalstockbackend.dto.PasswordDTO;
 import com.example.digitalstockbackend.service.AuthService;
 import com.example.digitalstockbackend.dto.LoginRequest;
 import com.example.digitalstockbackend.dto.SignupRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 
 @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
@@ -41,4 +45,20 @@ public class AuthController {
     public ResponseEntity<?> fetchUser(@CookieValue(value = "authToken", required = false) String token) {
         return authService.fetchUser(token);
     }
+
+    @PutMapping("/verifyPassword")
+    public ResponseEntity<Boolean> verifyPasswordIsCorrect(@RequestBody PasswordDTO passwordDTO) {
+        return authService.verifyPassword(passwordDTO);
+    }
+
+    @DeleteMapping("/delete/user/{userId}")
+    public ResponseEntity<Boolean> deleteUser(@PathVariable Long userId) {
+        return authService.deleteUserById(userId);
+    }
+
+    @GetMapping("/role")
+    public ResponseEntity<List<String>> getUserRoleByToken(HttpServletRequest request) {
+        return authService.getUserRoleByToken(request);
+    }
+
 }

@@ -10,7 +10,7 @@ public class AppPasswordConfig {
 
     @Bean
     public PasswordEncoder bcryptPasswordEncoder() {
-        return new BCryptPasswordEncoder(15);
+        return new BCryptPasswordEncoder();
     }
 }
 

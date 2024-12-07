@@ -1,14 +1,19 @@
 package com.example.digitalstockbackend.service;
 
 import com.example.digitalstockbackend.authorities.OrderStatus;
+import com.example.digitalstockbackend.dto.CategoryDTO;
+import com.example.digitalstockbackend.dto.ProductDTO;
+import com.example.digitalstockbackend.model.Category;
 import com.example.digitalstockbackend.model.roles.CustomUser;
 import com.example.digitalstockbackend.model.Order;
 import com.example.digitalstockbackend.model.Product;
+import com.example.digitalstockbackend.repository.CategoryRepository;
 import com.example.digitalstockbackend.repository.OrderRepository;
 import com.example.digitalstockbackend.repository.ProductRepository;
 import com.example.digitalstockbackend.repository.UserRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 
@@ -18,11 +23,13 @@ public class AdminService {
     private final OrderRepository orderRepository;
     private final ProductRepository productRepository;
     private final UserRepository userRepository;
+    private final CategoryRepository categoryRepository;
 
-    public AdminService(OrderRepository orderRepository, ProductRepository productRepository, UserRepository userRepository) {
+    public AdminService(OrderRepository orderRepository, ProductRepository productRepository, UserRepository userRepository, CategoryRepository categoryRepository) {
         this.orderRepository = orderRepository;
         this.productRepository = productRepository;
         this.userRepository = userRepository;
+        this.categoryRepository = categoryRepository;
     }
 
     //Users
@@ -90,4 +97,26 @@ public class AdminService {
         return ResponseEntity.noContent().build();
     }
 
+    public ResponseEntity<CategoryDTO> addCategory(CategoryDTO categoryDTO) {
+        Category category = new Category();
+        category.setName(categoryDTO.getName());
+
+        Category savedCategory = categoryRepository.save(category);
+
+        CategoryDTO createdCategoryDTO = new CategoryDTO();
+        createdCategoryDTO.setId(savedCategory.getId());
+        createdCategoryDTO.setName(savedCategory.getName());
+
+        return ResponseEntity.ok(createdCategoryDTO);
+    }
+
+    public ResponseEntity<Void> deleteCategory(Long categoryId) {
+        if (!categoryRepository.existsById(categoryId)) {
+            return ResponseEntity.notFound().build();
+        }
+        categoryRepository.deleteById(categoryId);
+        return ResponseEntity.noContent().build();
+    }
 }
+
+

@@ -9,7 +9,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 public class CustomUserDetails implements UserDetails {
     private static final long serialVersionUID = 1L;
@@ -35,14 +34,15 @@ public class CustomUserDetails implements UserDetails {
     }
 
     public static CustomUserDetails build(CustomUser user) {
-        List<GrantedAuthority> authorities = List.of( new SimpleGrantedAuthority(user.getUserRole()));
+        GrantedAuthority authority = new SimpleGrantedAuthority(user.getRole().getName().name());
 
         return new CustomUserDetails(user.getId(),
                 user.getUsername(),
                 user.getEmail(),
                 user.getPassword(),
-                authorities);
+                List.of(authority));
     }
+
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

@@ -1,5 +1,7 @@
 package com.example.digitalstockbackend.controller;
 
+import com.example.digitalstockbackend.dto.CategoryDTO;
+import com.example.digitalstockbackend.dto.ProductDTO;
 import com.example.digitalstockbackend.model.Order;
 import com.example.digitalstockbackend.model.Product;
 import com.example.digitalstockbackend.model.roles.CustomUser;
@@ -24,6 +26,10 @@ public class AdminController {
         this.adminService = adminService;
     }
 
+    @GetMapping("/test")
+    public ResponseEntity<String> testAdmin() {
+        return ResponseEntity.ok("Admin access verified");
+    }
 
     // Handle user management
     @GetMapping("/users")
@@ -46,6 +52,16 @@ public class AdminController {
     @DeleteMapping("/products/{productId}")
     public ResponseEntity<Void> deleteProduct(@PathVariable Long productId) {
         return adminService.deleteProduct(productId);
+    }
+
+    @PostMapping("/categories/add")
+    public ResponseEntity<CategoryDTO> addCategory(@RequestBody CategoryDTO categoryDTO) {
+        return adminService.addCategory(categoryDTO);
+    }
+
+    @DeleteMapping("/categories/delete/{categoryId}")
+    public ResponseEntity<Void> deleteCategory(@PathVariable Long categoryId) {
+        return adminService.deleteCategory(categoryId);
     }
 
 

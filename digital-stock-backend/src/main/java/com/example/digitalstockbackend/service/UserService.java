@@ -85,7 +85,7 @@ public class UserService {
                 user.getId(),
                 user.getUsername(),
                 user.getEmail(),
-                user.getUserRole(),
+                user.getRole().getName().name(),
                 user.getWishlist() != null ? convertToWishlistDTO(user.getWishlist()) : null,
                 user.getCart() != null ? convertToCartDTO(user.getCart()) : null,
                 user.getUserOrders().stream()
@@ -102,6 +102,7 @@ public class UserService {
                 .collect(Collectors.toList());
         return new WishlistDTO(wishlist.getId(), items);
     }
+
 
     private CartDTO convertToCartDTO(Cart cart) {
         List<CartItemDTO> items = cart.getItems().stream()

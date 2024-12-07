@@ -12,6 +12,8 @@ import com.example.digitalstockbackend.model.Order;
 
 import com.example.digitalstockbackend.repository.RoleRepository;
 import com.example.digitalstockbackend.repository.UserRepository;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -21,15 +23,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import java.util.HashMap;
+import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -61,11 +63,10 @@ public class AuthService {
         String jwt = jwtUtils.generateJwtToken(authentication);
 
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
-        List<String> roles = userDetails.getAuthorities().stream()
-                .map(item -> item.getAuthority())
+        List<String> role = userDetails.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.toList());
 
-        // Create the cookie
         ResponseCookie cookie = ResponseCookie.from("authToken", jwt)
                 .httpOnly(true)
                 .secure(true)
@@ -79,13 +80,27 @@ public class AuthService {
                 userDetails.getId(),
                 userDetails.getUsername(),
                 userDetails.getEmail(),
-                roles
+                role
         );
 
         return ResponseEntity.ok()
                 .header(HttpHeaders.SET_COOKIE, cookie.toString())
                 .body(jwtResponse);
     }
+
+    public ResponseEntity<Boolean> deleteUserById(Long userId) {
+        if (!userRepository.existsById(userId)) {
+            throw new RuntimeException("User with ID " + userId + " does not exist.");
+        }
+
+        try {
+            userRepository.deleteById(userId);
+            return ResponseEntity.ok(true);
+        } catch (Exception e) {
+            throw new RuntimeException("Error deleting user with ID " + userId + ": " + e.getMessage(), e);
+        }
+    }
+
 
 
     public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
@@ -97,29 +112,56 @@ public class AuthService {
             return ResponseEntity.badRequest().body(new MessageResponse("Error: Email is already in use!"));
         }
 
-        // Create new user's account
         CustomUser user = new CustomUser(
                 signUpRequest.getEmail(),
                 signUpRequest.getUsername(),
                 encoder.encode(signUpRequest.getPassword())
         );
 
-        String role;
-        if (signUpRequest.getRole() == null) {
-            role = ERole.ROLE_USER.name();
-        } else {
-            role = switch (signUpRequest.getRole()) {
-                case "ROLE_ADMIN" -> ERole.ROLE_ADMIN.name();
-                case "ROLE_GUEST" -> ERole.ROLE_GUEST.name();
-                default -> ERole.ROLE_USER.name();
-            };
+        ERole roleEnum = ERole.ROLE_USER;
+        if ("ROLE_ADMIN".equals(signUpRequest.getRole())) {
+            roleEnum = ERole.ROLE_ADMIN;
         }
 
-        user.setUserRole(role);
+        Role role = roleRepository.findByName(roleEnum)
+                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+
+        user.setRole(role);
+
         userRepository.save(user);
 
         return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
     }
+
+
+
+    public ResponseEntity<List<String>> getUserRoleByToken(HttpServletRequest request) {
+        String token = extractTokenFromCookie(request);
+
+        if (token == null || token.isEmpty()) {
+            return ResponseEntity.badRequest().body(Collections.emptyList());
+        }
+
+        List<String> roles = jwtUtils.getRolesFromJwtToken(token);
+
+        if (roles.isEmpty()) {
+            return ResponseEntity.badRequest().body(roles);
+        }
+        return ResponseEntity.ok(roles);
+    }
+
+    private String extractTokenFromCookie(HttpServletRequest request) {
+        if (request.getCookies() != null) {
+            for (Cookie cookie : request.getCookies()) {
+                if ("authToken".equals(cookie.getName())) {
+                    return cookie.getValue();
+                }
+            }
+        }
+        return null;
+    }
+
+
 
 
     public ResponseEntity<?> logoutUser() {
@@ -163,6 +205,20 @@ public class AuthService {
         }
     }
 
+
+    public ResponseEntity<Boolean> verifyPassword(PasswordDTO passwordDTO) {
+        CustomUser user = userService.getUserById(passwordDTO.getUserId());
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(false);
+        }
+
+        boolean isPasswordValid = encoder.matches(passwordDTO.getPassword(), user.getPassword());
+        return isPasswordValid ? ResponseEntity.ok(true) : ResponseEntity.badRequest().body(false);
+    }
+
+
+
+
     private UserDTO convertToUserDTO(CustomUser user) {
         WishlistDTO wishlistDTO = user.getWishlist() != null ? convertToWishlistDTO(user.getWishlist()) : null;
         CartDTO cartDTO = user.getCart() != null ? convertToCartDTO(user.getCart()) : null;
@@ -174,7 +230,7 @@ public class AuthService {
                 user.getId(),
                 user.getUsername(),
                 user.getEmail(),
-                user.getUserRole(),
+                user.getRole().getName().name(),
                 wishlistDTO,
                 cartDTO,
                 orderDTOs

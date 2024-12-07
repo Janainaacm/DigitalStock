@@ -43,27 +43,32 @@ public class AppSecurityConfig {
                 .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/", "/auth/signup", "/auth/signin", "/auth/fetchuser", "/error").permitAll()
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/user/**").hasRole("USER")
+                        .requestMatchers("/auth/role").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers( "/auth/signup", "/auth/signin", "/products/**", "/error").permitAll()
                         .requestMatchers(HttpMethod.GET, "/products/**").permitAll()
-                        .anyRequest().authenticated());
+                        .anyRequest().authenticated()
+                );
 
         http.authenticationProvider(authenticationProvider());
 
         http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
 
        http
-               .formLogin(login -> login
-                        .loginPage("/login")
+               /*.formLogin(login -> login
+                        .loginPage("/auth/signin")
                         .defaultSuccessUrl("/")
-                        .failureUrl("/login?error=true")
+                        .failureUrl("/")
                         .permitAll()
                 )
                 .logout(logout -> logout
-                        .logoutUrl("/custom-logout")
+                        .logoutUrl("/auth/logout")
+                        .logoutSuccessUrl("/")
                         .invalidateHttpSession(true)
                         .clearAuthentication(true)
-                        .deleteCookies("remember-me", "JSESSIONID")
-                )
+                        .deleteCookies("accessToken", "JSESSIONID")
+                )*/
                 .rememberMe(rememberMe -> rememberMe
                         .key("secureKeyForRememberMe")
                         .tokenValiditySeconds((int) TimeUnit.DAYS.toSeconds(21))
@@ -84,7 +89,6 @@ public class AppSecurityConfig {
 
         authProvider.setUserDetailsService(customUserDetailsService);
         authProvider.setPasswordEncoder(appPasswordConfig.bcryptPasswordEncoder());
-
         return authProvider;
     }
 

@@ -11,6 +11,7 @@ public class CartItemDTO {
         this.quantity = quantity;
     }
 
+
     public Long getId() {
         return id;
     }
@@ -34,4 +35,5 @@ public class CartItemDTO {
     public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
+
 }

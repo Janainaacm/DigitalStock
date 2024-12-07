@@ -1,5 +1,6 @@
 package com.example.digitalstockbackend.controller;
 
+import com.example.digitalstockbackend.dto.CategoryDTO;
 import com.example.digitalstockbackend.dto.ProductDTO;
 import com.example.digitalstockbackend.model.Category;
 import com.example.digitalstockbackend.model.Product;
@@ -39,6 +40,11 @@ public class ProductController {
     @GetMapping("/name/{productName}/colors")
     public ResponseEntity<List<ProductDTO>> fetchProductsByProductName(@PathVariable String productName) {
         return productService.fetchAllByName(productName);
+    }
+
+    @GetMapping("/categories")
+    public ResponseEntity<List<CategoryDTO>> fetchCategories() {
+        return productService.fetchCategories();
     }
 
 }

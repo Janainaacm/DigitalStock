@@ -15,6 +15,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -35,6 +37,10 @@ public class CartService {
     // Fetch Cart by User ID
     public ResponseEntity<CartDTO> fetchCartByUserId(Long userId) {
         Cart cart = findOrCreateCartByUserId(userId);
+        List<CartItem> sortedItems = cart.getItems().stream()
+                .sorted(Comparator.comparing(CartItem::getAddedAt))
+                .collect(Collectors.toList());
+        cart.setItems(sortedItems);
         CartDTO cartDTO = convertToCartDTO(cart);
         return ResponseEntity.ok(cartDTO);
     }

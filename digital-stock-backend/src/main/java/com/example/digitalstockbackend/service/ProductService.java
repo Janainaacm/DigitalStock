@@ -1,9 +1,11 @@
 package com.example.digitalstockbackend.service;
 
 
+import com.example.digitalstockbackend.dto.CategoryDTO;
 import com.example.digitalstockbackend.dto.ProductDTO;
 import com.example.digitalstockbackend.model.Category;
 import com.example.digitalstockbackend.model.Product;
+import com.example.digitalstockbackend.repository.CategoryRepository;
 import com.example.digitalstockbackend.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -15,10 +17,12 @@ import java.util.Optional;
 @Service
 public class ProductService {
     private final ProductRepository productRepository;
+    private final CategoryRepository categoryRepository;
 
     @Autowired
-    public ProductService(ProductRepository productRepository) {
+    public ProductService(ProductRepository productRepository, CategoryRepository categoryRepository) {
         this.productRepository = productRepository;
+        this.categoryRepository = categoryRepository;
     }
 
     public ResponseEntity<List<ProductDTO>> fetchAllProducts() {
@@ -73,6 +77,19 @@ public class ProductService {
         }
 
         return ResponseEntity.notFound().build();
+    }
+
+    public ResponseEntity<List<CategoryDTO>> fetchCategories() {
+        List<Category> allCategories = categoryRepository.findAll();
+
+        if (allCategories.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        List<CategoryDTO> categoriesDTO = allCategories.stream()
+                .map(CategoryDTO::new)
+                .toList();
+        return ResponseEntity.ok(categoriesDTO);
     }
 
 
