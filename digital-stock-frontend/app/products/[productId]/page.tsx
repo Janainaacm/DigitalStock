@@ -193,7 +193,7 @@ const ProductDetails = () => {
         <p className="text-sm text-gray-600 mb-6">{product.stock} units available.</p>
 
         <h3 className="text-lg font-bold text-gray-800">Category</h3>
-        <p className="text-sm text-gray-600">'{product.categoryName}'</p>
+        <p className="text-sm text-gray-600">{product.categoryName}</p>
 
       </div>
     </div>

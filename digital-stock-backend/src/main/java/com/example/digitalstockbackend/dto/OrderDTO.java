@@ -1,5 +1,7 @@
 package com.example.digitalstockbackend.dto;
 
+import com.example.digitalstockbackend.model.Order;
+
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -13,15 +15,15 @@ public class OrderDTO {
     private String zipCode;
     private List<OrderItemDTO> orderItems;
 
-    public OrderDTO(Long id, String status, LocalDateTime orderDate, String addressLine, String city, String state, String zipCode, List<OrderItemDTO> orderItems) {
-        this.id = id;
-        this.status = status;
-        this.orderDate = orderDate;
-        this.addressLine = addressLine;
-        this.city = city;
-        this.state = state;
-        this.zipCode = zipCode;
-        this.orderItems = orderItems;
+    public OrderDTO(Order order) {
+        this.id = order.getId();
+        this.status = order.getStatus().toString();
+        this.orderDate = order.getOrderDate();
+        this.addressLine = order.getAddressLine();
+        this.city = order.getCity();
+        this.state = order.getState();
+        this.zipCode = order.getZipCode();
+        this.orderItems = order.getOrderItems().stream().map(OrderItemDTO::new).toList();
     }
 
     public Long getId() {

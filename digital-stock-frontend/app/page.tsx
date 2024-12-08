@@ -2,11 +2,8 @@
 import Image from "next/image";
 import CustomButton from "./globalComponents/ui-elements/CustomButton";
 import { useEffect } from "react";
-import { useAppState } from "./store/BackendAPIState";
 import { useAuthState } from "./store/AuthState";
 import React from "react";
-import { useUserState } from "./store/UserState";
-import Header from "./components/header/Header";
 import Slideshow from "./components/heroSection/SlideShow";
 
 export default function Home() {

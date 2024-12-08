@@ -3,16 +3,14 @@ import { useRouter } from "next/navigation";
 import { useAppState } from "../store/BackendAPIState";
 import { useEffect, useState } from "react";
 import { useAuthState } from "@/app/store/AuthState";
-import { ProductInterface } from "../utils/Types";
 import { useUserState } from "../store/UserState";
 import FilterButton from "./components/FilterButton";
-import SearchBar from "../components/searchBar/SearchBar";
 import AddToCartButton from "./components/AddToCartButton";
 
 export default function ProductPage() {
   const { fetchAllProducts, productList, displayProducts, fetchDisplayProducts, filteredProductList, searchKeyword } = useAppState();
   const { addToWishlist, removeFromWishlist, isProductInWishlist, clearWishlist } = useUserState()
-  const { user, wishlist } = useAuthState();
+  const { user } = useAuthState();
   const router = useRouter();
   const [title, setTitle] = useState("Products")
 
@@ -88,7 +86,7 @@ export default function ProductPage() {
       <div className="font-sans p-4 mx-auto lg:max-w-5xl md:max-w-3xl  sm:max-w-full">
         
         <h2 className="text-4xl font-extrabold text-gray-800 mb-12">
-          Products
+          {title}
         </h2>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">

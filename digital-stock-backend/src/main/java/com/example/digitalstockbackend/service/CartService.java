@@ -116,24 +116,7 @@ public class CartService {
 
     // Helper: Convert Cart to CartDTO
     private CartDTO convertToCartDTO(Cart cart) {
-        return new CartDTO(
-                cart.getId(),
-                cart.getItems().stream()
-                        .map(this::convertToCartItemDTO)
-                        .collect(Collectors.toList())
-        );
-    }
-
-    // Helper: Convert CartItem to CartItemDTO
-    private CartItemDTO convertToCartItemDTO(CartItem cartItem) {
-        Product product = cartItem.getProduct();
-        ProductDTO productDTO = new ProductDTO(product);
-
-        return new CartItemDTO(
-                cartItem.getId(),
-                productDTO,
-                cartItem.getQuantity()
-        );
+        return new CartDTO(cart);
     }
 
     private Cart findOrCreateCartByUserId(Long userId) {

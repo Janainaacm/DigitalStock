@@ -11,7 +11,6 @@ export default function Login({ onRegister, onForgotPassword }: LoginProps) {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const { signIn } = useAuthState();
 
 
@@ -39,7 +38,6 @@ export default function Login({ onRegister, onForgotPassword }: LoginProps) {
 
     try {
       await signIn(username, password);
-      setSuccessMessage("Logged in user successfully!");
       setUsername("");
       setPassword("");
     } catch (err) {
@@ -159,7 +157,7 @@ export default function Login({ onRegister, onForgotPassword }: LoginProps) {
             </button>
           </div>
           <div className="mt-5">
-              <p className="text-gray-800 text-sm text-center">Don't have an account? 
+              <p className="text-gray-800 text-sm text-center">Don´t have an account? 
               <button
                 onClick={onRegister}
               className="text-blue-600 font-semibold hover:underline ml-1 whitespace-nowrap">Register here</button></p>

@@ -1,7 +1,11 @@
 import SideBar from "./components/SideBar";
 import AdminBanner from "./components/AdminBanner";
 
-export default function AdminLayout({ children }) {
+export default function AdminLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
       <section className="h-screen w-full">
         <AdminBanner />

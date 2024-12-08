@@ -1,10 +1,5 @@
 "use client";
 import { useEffect, useState } from "react";
-import Image from "next/image";
-import UploadIcon from "@/public/icons/UploadIcon";
-import LoadingIcon from "@/public/icons/LoadingIcon";
-import ErrorIcon from "@/public/icons/ErrorIcon";
-import SuccessIcon from "@/public/icons/SuccessIcon";
 import CategoryDropdown from "./components/CategoryDropdown";
 import CreateNewCategory from "./components/CreateNewCategory";
 import RenderImage from "./components/RenderImage";
@@ -14,10 +9,10 @@ const AddProductPage = () => {
   const [description, setDescription] = useState("");
   const [imageUrl, setImageUrl] = useState("");
 
-  const [colorName, setColorName] = useState("");
-  const [price, setPrice] = useState(0);
+  //const [colorName, setColorName] = useState("");
+  //const [price, setPrice] = useState(0);
   const [category, setCategory] = useState("");
-  const [stock, setStock] = useState(0);
+  //const [stock, setStock] = useState(0);
   const [createNewCategory, setCreateNewCategory] = useState(false);
 
   useEffect(() => {
@@ -126,6 +121,7 @@ const AddProductPage = () => {
             </div>
             <div className="border-2 border-gray-200 rounded-lg bg-gray-100 shadow-lg h-auto">
               <RenderImage setChosenImageUrl={setImageUrl} />
+              <p>{imageUrl}</p>
             </div>
           </div>
         </div>

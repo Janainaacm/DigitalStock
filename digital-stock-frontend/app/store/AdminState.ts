@@ -6,16 +6,15 @@ import {
   ProductInterface,
   OrderInterface,
 } from "../utils/Types";
-import { useUserState } from "./UserState";
 import { useAppState } from "./BackendAPIState";
 
 interface AdminState {
-  users: UserInterface[];
+  userList: UserInterface[];
   productList: ProductInterface[];
   orders: OrderInterface[];
 
   // Admin Actions
-  fetchAllUsers: () => Promise<UserInterface[]>;
+  fetchAllUsers: () => Promise<void>;
   addNewProduct: (productData: ProductInterface) => Promise<void>;
   editProduct: (productId: number, productDetails: ProductInterface) => Promise<void>;
   deleteProduct: (productId: number) => Promise<void>;
@@ -26,15 +25,14 @@ interface AdminState {
 }
 
 export const useAdminState = create<AdminState>((set) => ({
-  users: [],
+  userList: [],
   productList: [],
   orders: [],
 
-  fetchAllUsers: async (): Promise<UserInterface[]> => {
+  fetchAllUsers: async (): Promise<void> => {
     try {
-      const response = await axiosInstance.get(`${API_URL}/users`);
-      set({ users: response.data });
-      return response.data;
+      const response = await axiosInstance.get(`${API_URL}/admin/users`);
+      set({ userList: response.data });
     } catch (error) {
       console.error("Error fetching all users:", error);
       throw error;
@@ -124,7 +122,7 @@ export const useAdminState = create<AdminState>((set) => ({
       }));
       
     } catch (error) {
-      
+      throw error
     }
   },
 

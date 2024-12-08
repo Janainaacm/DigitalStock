@@ -2,6 +2,7 @@ package com.example.digitalstockbackend.controller;
 
 import com.example.digitalstockbackend.dto.CategoryDTO;
 import com.example.digitalstockbackend.dto.ProductDTO;
+import com.example.digitalstockbackend.dto.UserDTO;
 import com.example.digitalstockbackend.model.Order;
 import com.example.digitalstockbackend.model.Product;
 import com.example.digitalstockbackend.model.roles.CustomUser;
@@ -14,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/admin")
+@RequestMapping("/api/admin")
 @PreAuthorize("hasRole('ADMIN')")
 public class AdminController {
 
@@ -26,14 +27,9 @@ public class AdminController {
         this.adminService = adminService;
     }
 
-    @GetMapping("/test")
-    public ResponseEntity<String> testAdmin() {
-        return ResponseEntity.ok("Admin access verified");
-    }
-
     // Handle user management
     @GetMapping("/users")
-    public ResponseEntity<List<CustomUser>> getAllUsers() {
+    public ResponseEntity<List<UserDTO>> getAllUsers() {
         return adminService.fetchAllUsers();
     }
 

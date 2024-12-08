@@ -1,14 +1,11 @@
 import { WishlistItemsInterface } from "@/app/utils/Types";
 import { useUserState } from "@/app/store/UserState";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
 
 interface WishlistDropdownProps {
   wishlistItems: WishlistItemsInterface[];
 }
 
 const WishlistDropdown = ({ wishlistItems }: WishlistDropdownProps) => {
-  const router = useRouter();
   const { removeFromWishlist, addItemToCart } = useUserState();
 
   const removeItemFromWishlist = (productId: number) => {

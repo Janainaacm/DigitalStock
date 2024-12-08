@@ -2,36 +2,26 @@ package com.example.digitalstockbackend.service;
 
 import com.example.digitalstockbackend.dto.*;
 import com.example.digitalstockbackend.exception.UserNotFoundException;
-import com.example.digitalstockbackend.model.Cart;
 import com.example.digitalstockbackend.model.Order;
-import com.example.digitalstockbackend.model.Wishlist;
 import com.example.digitalstockbackend.model.roles.CustomUser;
-import com.example.digitalstockbackend.repository.CartRepository;
 import com.example.digitalstockbackend.repository.UserRepository;
-import com.example.digitalstockbackend.repository.WishlistRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private final CartRepository cartRepository;
-    private final WishlistRepository wishlistRepository;
 
     @Autowired
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, CartRepository cartRepository, WishlistRepository wishlistRepository) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
-        this.cartRepository = cartRepository;
-        this.wishlistRepository = wishlistRepository;
     }
 
     // Fetch User by ID
@@ -81,38 +71,9 @@ public class UserService {
     }
 
     private UserDTO convertToUserDTO(CustomUser user) {
-        return new UserDTO(
-                user.getId(),
-                user.getUsername(),
-                user.getEmail(),
-                user.getRole().getName().name(),
-                user.getWishlist() != null ? convertToWishlistDTO(user.getWishlist()) : null,
-                user.getCart() != null ? convertToCartDTO(user.getCart()) : null,
-                user.getUserOrders().stream()
-                        .map(this::convertToOrderDTO)
-                        .collect(Collectors.toList())
-        );
+        return new UserDTO(user);
     }
 
-    private WishlistDTO convertToWishlistDTO(Wishlist wishlist) {
-        List<WishlistItemDTO> items = wishlist.getItems().stream()
-                .map(item -> new WishlistItemDTO(
-                        item.getId(),
-                        new ProductDTO(item.getProduct())))
-                .collect(Collectors.toList());
-        return new WishlistDTO(wishlist.getId(), items);
-    }
-
-
-    private CartDTO convertToCartDTO(Cart cart) {
-        List<CartItemDTO> items = cart.getItems().stream()
-                .map(item -> new CartItemDTO(
-                        item.getId(),
-                        new ProductDTO(item.getProduct()),
-                        item.getQuantity()))
-                .collect(Collectors.toList());
-        return new CartDTO(cart.getId(), items);
-    }
 
     private OrderDTO convertToOrderDTO(Order order) {
         return getOrderDTO(order);

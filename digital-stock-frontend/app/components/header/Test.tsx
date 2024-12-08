@@ -1,18 +1,15 @@
 "use client";
 import { useState } from "react";
-import SearchBar from "../searchBar/SearchBar";
 import CartSymbol from "./components/cartComponent/CartSymbol";
 import WishlistSymbol from "./components/wishlistComponent/WishlistSymbol";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useAuthState } from "@/app/store/AuthState";
 import DisplaySearchBar from "../searchBar/DisplaySearchBar";
 import { useAppState } from "@/app/store/BackendAPIState";
 
 export const NavBar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
-  const { user } = useAuthState();
   const { fetchProductsByCategory } = useAppState();
   const router = useRouter();
 

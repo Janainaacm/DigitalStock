@@ -34,37 +34,36 @@ public class AuthTokenFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
-        try {
-            String jwt = parseJwt(request);
-            if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
-                String username = jwtUtils.getUserNameFromJwtToken(jwt);
-                logger.info("Token info: {}", jwt);
 
-                List<GrantedAuthority> authorities = jwtUtils.getRolesFromJwtToken(jwt).stream()
-                        .map(role -> (GrantedAuthority) () -> role)
-                        .collect(Collectors.toList());
+            try {
+                String jwt = parseJwt(request);
+                if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
+                    String username = jwtUtils.getUserNameFromJwtToken(jwt);
+                    logger.info("Token info: {}", jwt);
 
-                UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+                    List<GrantedAuthority> authorities = jwtUtils.getRolesFromJwtToken(jwt).stream()
+                            .map(role -> (GrantedAuthority) () -> role)
+                            .collect(Collectors.toList());
 
-                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
-                        userDetails, null, authorities);
+                    UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
-                authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                    UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
+                            userDetails, null, authorities);
 
-                SecurityContextHolder.getContext().setAuthentication(authentication);
+                    authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
-                logger.info("Authentication set for user: {}", username);
-                logger.info("User roles: {}", userDetails.getAuthorities());
-                logger.info("Authentication: {}", SecurityContextHolder.getContext().getAuthentication());
-                List<String> roles = jwtUtils.getRolesFromJwtToken(jwt);
-                logger.info("Roles from JWT: {}", roles);
+                    SecurityContextHolder.getContext().setAuthentication(authentication);
 
-
+                    logger.info("Authentication set for user: {}", username);
+                    logger.info("User roles: {}", userDetails.getAuthorities());
+                    logger.info("Authentication: {}", SecurityContextHolder.getContext().getAuthentication());
+                    List<String> roles = jwtUtils.getRolesFromJwtToken(jwt);
+                    logger.info("Roles from JWT: {}", roles);
+                }
+            } catch (Exception e) {
+                logger.error("Cannot set user authentication: {}", e);
             }
 
-        } catch (Exception e) {
-            logger.error("Cannot set user authentication: {}", e);
-        }
 
         filterChain.doFilter(request, response);
     }
@@ -88,4 +87,6 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 
         return null;
     }
+
+
 }

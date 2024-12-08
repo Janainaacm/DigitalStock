@@ -1,17 +1,14 @@
 "use client";
 import { useAuthState } from "@/app/store/AuthState";
 import { useUserState } from "@/app/store/UserState";
-import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import colorClasses from "../utils/ColorClasses";
 
 const Cart = () => {
-  const router = useRouter();
   const { cart } = useAuthState();
   const {
     addItemToCart,
     removeItemFromCart,
-    clearCart,
     isProductInWishlist,
     addToWishlist,
     removeFromWishlist,
@@ -34,9 +31,9 @@ const Cart = () => {
   const handleRemoveFromCart = (productId: number, quantity: number) => {
     removeItemFromCart(productId, quantity);
   };
-  const handleClearCart = () => {
+/*   const handleClearCart = () => {
     clearCart();
-  };
+  }; */
 
   const handleAddToWishlist = (productId: number) => {
     const inWishlist = isProductInWishlist(productId);

@@ -7,28 +7,21 @@ import UserIcon from "@/public/icons/UserIcon";
 import AuthForm from "@/app/auth/AuthForm";
 
 import styles from "./components/styles/Header.module.css";
-import SearchBar from "../searchBar/SearchBar";
 import DisplaySearchBar from "../searchBar/DisplaySearchBar";
-import { useAuthState } from "@/app/store/AuthState";
 import CartSymbol from "./components/cartComponent/CartSymbol";
 import WishlistSymbol from "./components/wishlistComponent/WishlistSymbol";
 import { useAppState } from "@/app/store/BackendAPIState";
 import { useRouter as useNavRouter } from "next/navigation";
 import HeaderSidebar from "./components/sidebar/HeaderSidebar";
 import { useRouter } from 'next/compat/router'
-import { useSearchParams } from 'next/navigation'
 
-type Props = {
-  title?: string;
-};
 
-const Header = ({ title }: Props) => {
+const Header = () => {
   const [scrolled, setScrolled] = useState<boolean>(false);
   const [didMount, setDidMount] = useState<boolean>(false);
   const { fetchProductsByCategory } = useAppState();
   const router = useNavRouter();
   const Rrouter = useRouter();
-  const searchParams = useSearchParams()
   const [showAuthForm, setShowAuthForm] = useState(false);
 
 
@@ -46,7 +39,8 @@ const Header = ({ title }: Props) => {
       return
     }
 
-    const search = searchParams.get('auth')
+    const search = new URLSearchParams(window.location.search).get('auth');
+
     if (search === "true") {
       setShowAuthForm(true)
     } else {
@@ -54,7 +48,7 @@ const Header = ({ title }: Props) => {
     }
     
     
-  }, [router, searchParams])
+  }, [router])
 
   useEffect(() => {
     setDidMount(true);

@@ -1,6 +1,5 @@
-import { CartItemInterface, WishlistItemsInterface } from "@/app/utils/Types";
+import { CartItemInterface } from "@/app/utils/Types";
 import { useAuthState } from "@/app/store/AuthState";
-import { useRouter } from "next/navigation";
 import { useState, useEffect, useCallback } from "react";
 import CartDropdown from "./CartDropdown";
 import BagIcon from "@/public/icons/BagIcon";

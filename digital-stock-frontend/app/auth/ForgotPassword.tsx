@@ -7,23 +7,18 @@ type ForgotPasswordProps = {
 
 export default function ForgotPassword({ onLogin }: ForgotPasswordProps) {
   const [email, setEmail] = useState("");
-  const [error, setError] = useState<string | null>(null);
-  const [successMessage, setSuccessMessage] = useState<string | null>(null);
-  const [touched, setTouched] = useState(false);
   const [validation, setValidation] = useState({
     email: true,
   });
   const router = useRouter();
 
   const handleResetPassword = () => {
-    setTouched(true);
-
+    
     setValidation({
       email: Boolean(email),
     });
 
     if (!email) {
-      setError("Email is required.");
       return;
     }
 

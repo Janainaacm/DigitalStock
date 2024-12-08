@@ -220,40 +220,15 @@ public class AuthService {
 
 
     private UserDTO convertToUserDTO(CustomUser user) {
-        WishlistDTO wishlistDTO = user.getWishlist() != null ? convertToWishlistDTO(user.getWishlist()) : null;
-        CartDTO cartDTO = user.getCart() != null ? convertToCartDTO(user.getCart()) : null;
-        List<OrderDTO> orderDTOs = user.getUserOrders().stream()
-                .map(this::convertToOrderDTO)
-                .collect(Collectors.toList());
-
-        return new UserDTO(
-                user.getId(),
-                user.getUsername(),
-                user.getEmail(),
-                user.getRole().getName().name(),
-                wishlistDTO,
-                cartDTO,
-                orderDTOs
-        );
+        return new UserDTO(user);
     }
 
     private WishlistDTO convertToWishlistDTO(Wishlist wishlist) {
-        List<WishlistItemDTO> items = wishlist.getItems().stream()
-                .map(item -> new WishlistItemDTO(
-                        item.getId(),
-                        new ProductDTO(item.getProduct())))
-                .collect(Collectors.toList());
-        return new WishlistDTO(wishlist.getId(), items);
+        return new WishlistDTO(wishlist);
     }
 
     private CartDTO convertToCartDTO(Cart cart) {
-        List<CartItemDTO> items = cart.getItems().stream()
-                .map(item -> new CartItemDTO(
-                        item.getId(),
-                        new ProductDTO( item.getProduct()),
-                        item.getQuantity()))
-                .collect(Collectors.toList());
-        return new CartDTO(cart.getId(), items);
+        return new CartDTO(cart);
     }
 
     private OrderDTO convertToOrderDTO(Order order) {
@@ -261,23 +236,7 @@ public class AuthService {
     }
 
     private OrderDTO getOrderDTO(Order order) {
-        List<OrderItemDTO> items = order.getOrderItems().stream()
-                .map(item -> new OrderItemDTO(
-                        item.getId(),
-                        new ProductDTO(item.getProduct()),
-                        item.getQuantity()))
-                .collect(Collectors.toList());
-
-        return new OrderDTO(
-                order.getId(),
-                order.getStatus().toString(),
-                order.getOrderDate(),
-                order.getAddressLine(),
-                order.getCity(),
-                order.getState(),
-                order.getZipCode(),
-                items
-        );
+        return new OrderDTO(order);
     }
 
 

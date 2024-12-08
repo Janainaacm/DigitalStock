@@ -4,7 +4,6 @@ import { Dialog, Transition, TransitionChild } from "@headlessui/react";
 import { useRouter } from "next/navigation";
 import { useState, Fragment, useEffect } from "react";
 import { useAuthState } from "@/app/store/AuthState";
-import Link from "next/link";
 import Image from "next/image";
 import MenuIcon from "@/public/icons/MenuIcon";
 import UserIcon from "@/public/icons/UserIcon";
@@ -18,7 +17,6 @@ export default function HeaderSidebar() {
   const [open, setOpen] = useState(false);
   const [extended, setExtended] = useState(false);
 
-  const [searchValue, setSearchValue] = useState("");
   const [WishlistNumber, setWishlistNumber] = useState(0);
   const { fetchProductsByCategory } = useAppState();
 
@@ -94,13 +92,12 @@ export default function HeaderSidebar() {
                     </div>
                     <ul className="space-y-3 min-w-[300px] h-full overflow-auto z-50">
                       <li className="group w-full text-xl border-b py-4 my-3 flex justify-between">
-                        <Link
-                          href="/"
-                          onClick={toggleModal}
+                        <button
+                          onClick={() => redirect("/")}
                           className="group-hover:text-blue-400 text-gray-600 block"
                         >
                           Home
-                        </Link>
+                        </button>
                       </li>
                       <li className="group relative w-full text-xl border-b py-4 my-3">
                         <button
@@ -132,7 +129,7 @@ export default function HeaderSidebar() {
                         >
                           <li className="border-b py-3">
                             <button
-                              onClick={() => router.push("/products")}
+                              onClick={() => redirect("/products")}
                               className="hover:text-[#007bff] text-gray-600 text-[15px] block"
                             >
                               <svg
@@ -262,24 +259,24 @@ export default function HeaderSidebar() {
                         </ul>
                       </li>
                       <li className="w-full group text-xl border-b py-4 my-3 flex justify-between">
-                        <Link
-                          href="/about"
-                          onClick={toggleModal}
+                      <button
+                          onClick={() => redirect("/")}
                           className="group-hover:text-blue-400 text-gray-600 block"
                         >
                           About
-                        </Link>
+                        </button>
                       </li>
                       <li className="w-full group text-xl border-b py-4 my-3 flex justify-between">
-                        <Link
-                          href="/contact"
-                          onClick={toggleModal}
+                      <button
+                          onClick={() => redirect("/")}
                           className="group-hover:text-blue-400 text-gray-600 block"
                         >
                           Contact
-                        </Link>
+                        </button>
                       </li>
-                      <li className="w-full group text-xl border-b py-4 my-3">
+                      <li 
+                      onClick={toggleModal}
+                      className="w-full group text-xl border-b py-4 my-3">
                         <AuthForm extraClass="w-full">
                           <div className="flex group-hover:text-blue-400 text-gray-600 block justify-between items-center w-full">
                             <span>{user ? "Profile" : "Login"}</span>
@@ -291,10 +288,9 @@ export default function HeaderSidebar() {
                       </li>
 
                       <li className="w-full group text-xl border-b py-4 my-3 flex justify-between">
-                        <Link
-                          href="/wishlist"
+                        <button
+                          onClick={() => redirect("/wishlist")}
                           className="group-hover:text-blue-400 text-gray-600 block w-full flex justify-between"
-                          onClick={toggleModal}
                         >
                           <span>Wishlist</span>
                           <div className="relative">
@@ -307,11 +303,12 @@ export default function HeaderSidebar() {
                               </span>
                             )}
                           </div>
-                        </Link>
+                        </button>
                       </li>
                     </ul>
                     <div className="mt-14">
-                    <Link href="/">
+                    <button
+                          onClick={() => redirect("/")}>
                     <Image
                       className="justify-center scale-[2]"
                       src="/logo-with-text.svg"
@@ -319,7 +316,7 @@ export default function HeaderSidebar() {
                       width={85}
                       height={22}
                     />
-                  </Link>
+                  </button>
                     </div>
                   </div>
                 </div>

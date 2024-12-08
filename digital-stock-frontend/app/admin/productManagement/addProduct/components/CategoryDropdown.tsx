@@ -1,7 +1,6 @@
 import { useAppState } from "@/app/store/BackendAPIState";
 import { CategoryInterface } from "@/app/utils/Types";
 import SuccessIcon from "@/public/icons/SuccessIcon";
-import { DialogTitle } from "@headlessui/react";
 import { useEffect, useState } from "react";
 
 interface Props {
@@ -25,7 +24,7 @@ const CategoryDropdown = ({ chosenCategory, setCategory, setCreateNewCategory }:
     if (categories) {
       setCategoryList(categories);
     }
-  }, [categories]);
+  }, [categories, , fetchAllCategories]);
 
   useEffect(() => {
     if (chosenCategory === "") {

@@ -1,6 +1,4 @@
-import { ProductInterface } from "@/app/utils/Types";
 import { useAuthState } from "@/app/store/AuthState";
-import { useAppState } from "@/app/store/BackendAPIState";
 import { useUserState } from "@/app/store/UserState";
 
 interface AddToCartButtonProps {

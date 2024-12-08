@@ -12,7 +12,6 @@ export default function Register({ onLogin }: RegisterProps) {
   const [checkbox, setCheckbox] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [touched, setTouched] = useState(false);
   const { registerUser } = useAuthState();
 
@@ -52,7 +51,6 @@ export default function Register({ onLogin }: RegisterProps) {
 
     try {
       await registerUser(username, email, password);
-      setSuccessMessage("User registered successfully!");
       setUsername("");
       setPassword("");
       setEmail("");

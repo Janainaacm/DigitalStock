@@ -1,6 +1,17 @@
+'use client'
+import { useAuthState } from "@/app/store/AuthState";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 const SideBar = () => {
+  const { logout } = useAuthState();
+  const router = useRouter();
+
+  const handleLogOut = () => {
+    logout();
+    router.push("/")
+  };
+  
   return (
     <div className="absolute left-0 w-full bg-blue-500">
       <nav
@@ -270,8 +281,8 @@ const SideBar = () => {
                 </Link>
               </li>
               <li>
-                <Link
-                  href="javascript:void(0)"
+                <button
+                  onClick={handleLogOut}
                   className="text-gray-800 text-sm mb-20 flex items-center hover:bg-gray-100 rounded-md px-4 py-2 transition-all"
                 >
                   <svg
@@ -285,7 +296,7 @@ const SideBar = () => {
                     />
                   </svg>
                   <span>Logout</span>
-                </Link>
+                </button>
               </li>
             </ul>
           </div>

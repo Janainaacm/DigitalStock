@@ -1,14 +1,11 @@
 import { useAuthState } from "@/app/store/AuthState";
-import { useAppState } from "@/app/store/BackendAPIState";
 import { useCallback, useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
 import { WishlistItemsInterface } from "@/app/utils/Types";
 import WishlistDropdown from "./WishlistDropdown";
 import WhistlistIcon from "@/public/icons/WishlistIcon";
 
 const WishlistSymbol = () => {
   const { wishlist } = useAuthState();
-  const router = useRouter();
   const [wishlistItems, setWishlistItems] = useState<WishlistItemsInterface[]>(
     []
   );

@@ -8,6 +8,7 @@ import {
 } from "../utils/Types";
 import { useAuthState } from "./AuthState";
 import { useAppState } from "./BackendAPIState";
+import axios from "axios";
 
 interface UserState {
   // User Actions
@@ -37,7 +38,7 @@ interface UserState {
   deleteOrder: (orderId: number) => Promise<void>;
 }
 
-export const useUserState = create<UserState>((set, get) => ({
+export const useUserState = create<UserState>(() => ({
  
   // User Actions
   fetchUserById: async (): Promise<void> => {
@@ -164,11 +165,16 @@ export const useUserState = create<UserState>((set, get) => ({
       }));
   
       console.log(`Wishlist item ${productId} removed`);
-    } catch (error: any) {
-      if (error.response?.status === 404) {
-        console.warn(`Product ${productId} not found in wishlist.`);
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        if (error.response?.status === 404) {
+          console.warn(`Product ${productId} not found in wishlist.`);
+        } else {
+          console.error("Error removing product from wishlist:", error);
+          throw error;
+        }
       } else {
-        console.error("Error removing product from wishlist:", error);
+        console.error("Unexpected error:", error);
         throw error;
       }
     }

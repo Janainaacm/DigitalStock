@@ -1,8 +1,7 @@
 "use client";
 import { useAppState } from "@/app/store/BackendAPIState";
 import DeleteProductButton from "./components/DeleteProductButton";
-import LoadingIconText from "@/public/icons/LoadingIconText";
-
+ 
 const ProductManagementPage = () => {
   const { productList } = useAppState();
 

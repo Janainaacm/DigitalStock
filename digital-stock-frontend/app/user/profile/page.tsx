@@ -1,11 +1,9 @@
 'use client'
 import { useAuthState } from "@/app/store/AuthState";
-import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+
 
 const UserProfile = () => {
     const { user } = useAuthState();
-    const router = useRouter();
 
     
     

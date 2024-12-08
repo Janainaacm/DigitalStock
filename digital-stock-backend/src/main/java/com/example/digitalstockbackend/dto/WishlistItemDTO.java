@@ -1,12 +1,14 @@
 package com.example.digitalstockbackend.dto;
 
+import com.example.digitalstockbackend.model.WishlistItem;
+
 public class WishlistItemDTO {
     private Long id;
     private ProductDTO product;
 
-    public WishlistItemDTO(Long id, ProductDTO product) {
-        this.id = id;
-        this.product = product;
+    public WishlistItemDTO(WishlistItem wishlistItem) {
+        this.id = wishlistItem.getId();
+        this.product = new ProductDTO(wishlistItem.getProduct());
     }
 
     public Long getId() {

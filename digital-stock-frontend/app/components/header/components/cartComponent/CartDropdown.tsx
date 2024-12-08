@@ -1,7 +1,7 @@
 import { CartItemInterface } from "@/app/utils/Types";
 import { useUserState } from "@/app/store/UserState";
 import { useRouter } from "next/navigation";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 interface CartItemProps {
   cartItems: CartItemInterface[];

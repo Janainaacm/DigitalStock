@@ -1,0 +1,49 @@
+services:
+  backend:
+    build:
+      context: ./digital-stock-backend
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/digital-stock-db
+      SPRING_DATASOURCE_USERNAME: janaina
+      SPRING_DATASOURCE_PASSWORD: enzo
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+    depends_on:
+      - db
+    networks:
+      - app-network
+
+  frontend:
+    build:
+      context: ./digital-stock-frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    networks:
+      - app-network
+
+
+  db:
+    image: postgres:16
+    container_name: postgres-db
+    restart: "no"
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_USER: janaina
+      POSTGRES_PASSWORD: enzo
+      POSTGRES_DB: digital-stock-db
+    volumes:
+      - digital-stock-db:/var/lib/postgresql/data
+    networks:
+      - app-network
+
+networks:
+  app-network:
+
+volumes:
+  digital-stock-db: {}

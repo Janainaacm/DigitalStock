@@ -12,7 +12,7 @@ import java.util.List;
 
 
 @RestController
-@RequestMapping("/wishlist")
+@RequestMapping("/api/wishlist")
 public class WishlistController {
 
     private final WishlistService wishlistService;

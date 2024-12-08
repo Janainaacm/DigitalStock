@@ -1,14 +1,16 @@
 package com.example.digitalstockbackend.dto;
 
+import com.example.digitalstockbackend.model.OrderItem;
+
 public class OrderItemDTO {
     private Long id;
     private ProductDTO product;
     private int quantity;
 
-    public OrderItemDTO(Long id, ProductDTO product, int quantity) {
-        this.id = id;
-        this.product = product;
-        this.quantity = quantity;
+    public OrderItemDTO(OrderItem orderItem) {
+        this.id = orderItem.getId();
+        this.product = new ProductDTO(orderItem.getProduct());
+        this.quantity = orderItem.getQuantity();
     }
 
     public Long getId() {

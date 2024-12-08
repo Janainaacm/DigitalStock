@@ -1,14 +1,16 @@
 package com.example.digitalstockbackend.dto;
 
+import com.example.digitalstockbackend.model.CartItem;
+
 public class CartItemDTO {
     private Long id;
     private ProductDTO product;
     private int quantity;
 
-    public CartItemDTO(Long id, ProductDTO product, int quantity) {
-        this.id = id;
-        this.product = product;
-        this.quantity = quantity;
+    public CartItemDTO(CartItem cartItem) {
+        this.id = cartItem.getId();
+        this.product = new ProductDTO(cartItem.getProduct());
+        this.quantity = cartItem.getQuantity();
     }
 
 

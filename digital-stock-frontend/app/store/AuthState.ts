@@ -4,7 +4,6 @@ import axios from 'axios';
 import { API_URL } from "./config/config";
 import axiosInstance from './config/axiosConfig';
 import Cookies from "js-cookie";
-import { useCookies } from 'react-cookie';
 
 
 
@@ -49,8 +48,7 @@ export const useAuthState = create<AuthState>((set) => ({
 
   signIn: async (username, password) => {
     try {
-      debugger
-      const response = await axiosInstance.post(
+       await axiosInstance.post(
         `${API_URL}/auth/signin`,
         { username, password },
       );

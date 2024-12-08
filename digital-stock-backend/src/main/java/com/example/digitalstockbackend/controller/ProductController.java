@@ -2,8 +2,7 @@ package com.example.digitalstockbackend.controller;
 
 import com.example.digitalstockbackend.dto.CategoryDTO;
 import com.example.digitalstockbackend.dto.ProductDTO;
-import com.example.digitalstockbackend.model.Category;
-import com.example.digitalstockbackend.model.Product;
+import com.example.digitalstockbackend.dto.UserDTO;
 import com.example.digitalstockbackend.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -12,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/products")
+@RequestMapping("/api/products")
 public class ProductController {
 
     private final ProductService productService;

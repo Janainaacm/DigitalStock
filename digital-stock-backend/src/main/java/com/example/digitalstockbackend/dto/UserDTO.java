@@ -1,5 +1,7 @@
 package com.example.digitalstockbackend.dto;
 
+import com.example.digitalstockbackend.model.roles.CustomUser;
+
 import java.util.List;
 
 public class UserDTO {
@@ -11,14 +13,14 @@ public class UserDTO {
     private CartDTO cart;
     private List<OrderDTO> orders;
 
-    public UserDTO(Long id, String username, String email, String role, WishlistDTO wishlist, CartDTO cart, List<OrderDTO> orders) {
-        this.id = id;
-        this.username = username;
-        this.email = email;
-        this.role = role;
-        this.wishlist = wishlist;
-        this.cart = cart;
-        this.orders = orders;
+    public UserDTO(CustomUser user) {
+        this.id = user.getId();
+        this.username = user.getUsername();
+        this.email = user.getEmail();
+        this.role = user.getRole().getName().name();
+        this.wishlist = user.getWishlist() != null ? new WishlistDTO(user.getWishlist()) : null;
+        this.cart = user.getCart() != null ? new CartDTO(user.getCart()) : null;
+        this.orders = user.getUserOrders().stream().map(OrderDTO::new).toList();
     }
 
     // Getters and setters

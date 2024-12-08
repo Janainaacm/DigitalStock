@@ -10,15 +10,15 @@ type CurrentPage = "login" | "register" | "forgot-password";
 
 type Props = {
     extraClass?: string;
-    children: any;
-    auth: boolean;
+    children: React.ReactNode;
+    auth?: boolean;
   };
 
 export default function AuthForm({extraClass, children, auth}: Props) {
   const [currentPage, setCurrentPage] = useState<CurrentPage>("login");
   const {user} = useAuthState()
   const router = useRouter()
-  const [open, setOpen] = useState(auth);
+  const [open, setOpen] = useState(auth || false);
 
   const toggleModal = () => setOpen((prev) => !prev);
   

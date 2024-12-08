@@ -56,7 +56,7 @@ export const useAppState = create<AppState>((set) => ({
 
   fetchDisplayProducts: () => {
     console.log("inside fetch")
-    const { chosenCategory, searchBar, productList, filteredProductList } = useAppState.getState();
+    const {  productList, filteredProductList } = useAppState.getState();
     const user = useAuthState.getState().user;
     const wishlist = useAuthState.getState().wishlist;
       
@@ -107,6 +107,7 @@ export const useAppState = create<AppState>((set) => ({
   
 
   fetchAllProducts: async (): Promise<void> => {
+    debugger
     try {
       console.log("Fetching products...");
 
