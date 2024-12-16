@@ -1,6 +1,8 @@
+import { useAdminState } from "@/app/store/AdminState";
 import { useAuthState } from "@/app/store/AuthState";
+import { useAppState } from "@/app/store/BackendAPIState";
 import { ProductInterface } from "@/app/utils/Types";
-import LoadingIconText from "@/public/icons/LoadingIconText";
+import LoadingIcon from "@/public/icons/LoadingIcon";
 import {
   Transition,
   Dialog,
@@ -14,6 +16,7 @@ interface Props {
 }
 
 export default function DeleteProductButton({ product }: Props) {
+  const { fetchAllProducts } = useAppState();
   const [open, setOpen] = useState(false);
   const [validated, setValidated] = useState(false);
   const [verified, setVerified] = useState(false);
@@ -25,67 +28,68 @@ export default function DeleteProductButton({ product }: Props) {
     password: true,
   });
   const [isLoading, setIsLoading] = useState(false);
+  const { deleteProduct } = useAdminState();
+  const [success, setSuccess] = useState(false);
 
   const toggleModal = () => setOpen((prev) => !prev);
 
   const validateInput = async (password: string) => {
-    setIsLoading(true)
+    setIsLoading(true);
 
-    setValidation({
-        password: Boolean(password),
-      });
-  
-
-    if (!password) {
-     setError("Password cannot be empty.");
-     setIsLoading(false)
-     return;
-    }
-
-    try {
-      const response = await verifyPassword(password);
-      setValidated(response);
-    } catch (error) {
-      setIsLoading(false)
-      console.error("Error during password validation:", error);
-      setValidated(false);
-    }
-  };
-
-
-
-  const togglePasswordVisibility = () => {
-    setShowPassword(!showPassword);
-  };
-
-/*   const handledelete = () => {
     setValidation({
       password: Boolean(password),
     });
 
     if (!password) {
-      setError("Password is incorrect.");
+      setError("Password cannot be empty.");
+      setIsLoading(false);
       return;
     }
-  }; */
+
+    try {
+      const response = await verifyPassword(password);
+      setValidated(response);
+      if (product.id) {
+        try {
+          await deleteProduct(product.id);
+          setSuccess(true);
+
+          setTimeout(() => {
+            setSuccess(false);
+            fetchAllProducts()
+            toggleModal()
+          }, 3000);
+        } catch (error) {}
+      }
+    } catch (error) {
+      setIsLoading(false);
+      console.error("Error during password validation:", error);
+      setValidated(false);
+    }
+  };
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
 
   const renderComponent = () => {
     if (!verified) {
       return (
         <div className="bg-[#F5F5F5] p-8 flex flex-col items-center">
-            
           <h3 className="text-xl pt-2 font-bold">Do you want to delete:</h3>
           <p className="text-sm pb-6 text-gray-600">{product.name}</p>
           <div className="flex justify-between w-full px-14">
             <button
-            className="border-2 py-3 px-8 text-lg rounded-md text-gray-700 font-semibold bg-gray-300 hover:bg-gray-700 hover:text-gray-300 hover:scale-[1.1] transition-all duration-400"
-            onClick={() => setVerified(true)}
-            >YES</button>
-            <button
-            className="border-2 py-3 px-8 text-lg rounded-md text-white font-semibold bg-gray-700 hover:bg-gray-600 hover:scale-[1.1] transition-all duration-400"
-            onClick={toggleModal}
+              className="border-2 py-3 px-8 text-lg rounded-md text-gray-700 font-semibold bg-gray-300 hover:bg-gray-700 hover:text-gray-300 hover:scale-[1.1] transition-all duration-400"
+              onClick={() => setVerified(true)}
             >
-            NO
+              YES
+            </button>
+            <button
+              className="border-2 py-3 px-8 text-lg rounded-md text-white font-semibold bg-gray-700 hover:bg-gray-600 hover:scale-[1.1] transition-all duration-400"
+              onClick={toggleModal}
+            >
+              NO
             </button>
           </div>
         </div>
@@ -131,16 +135,33 @@ export default function DeleteProductButton({ product }: Props) {
               onClick={() => validateInput(password)}
               className="w-full py-3 px-4 tracking-wider flex justify-center text-sm rounded-md text-white bg-gray-700 hover:bg-gray-800 focus:outline-none transition-all duration-800"
             >
-              {isLoading ? <LoadingIconText/> : "Delete"}
+              {isLoading ? <LoadingIcon /> : "Delete"}
             </button>
           </div>
         </div>
       );
-    } else if (isLoading){
+    } else if (success) {
       return (
-      <div>
-         <LoadingIconText/>
-      </div>
+        <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-[rgba(0,0,0,0.5)]">
+          <div className="bg-white p-6 rounded-lg shadow-lg flex flex-col items-center">
+            <svg
+              className="h-12 w-12 text-green-500 mb-4"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={2}
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M5 13l4 4L19 7"
+              />
+            </svg>
+            <p className="text-lg font-semibold text-gray-700">
+              Product deleted successfully!
+            </p>
+          </div>
+        </div>
       );
     }
   };

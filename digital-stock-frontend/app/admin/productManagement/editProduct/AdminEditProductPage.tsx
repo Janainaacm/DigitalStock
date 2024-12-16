@@ -1,4 +1,8 @@
-const EditProductPage = () => {
+type Props = {
+  onProducts: () => void;
+};
+
+const EditProductPage = ({onProducts}: Props) => {
   return (
     <>
       <div className="p-6">

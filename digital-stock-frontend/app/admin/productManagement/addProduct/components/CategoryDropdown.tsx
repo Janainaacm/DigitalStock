@@ -7,9 +7,10 @@ interface Props {
   chosenCategory: string;
   setCategory: (name: string) => void;
   setCreateNewCategory: () => void;
+  error: string[];
 }
 
-const CategoryDropdown = ({ chosenCategory, setCategory, setCreateNewCategory }: Props) => {
+const CategoryDropdown = ({ error, chosenCategory, setCategory, setCreateNewCategory }: Props) => {
   const { categories, fetchAllCategories } = useAppState();
   const [extended, setExtended] = useState(false);
   const [categoryList, setCategoryList] = useState<CategoryInterface[]>([]);
@@ -43,14 +44,19 @@ const CategoryDropdown = ({ chosenCategory, setCategory, setCreateNewCategory }:
     toggleExtend()
   };
 
+  const isError = error.includes("category");
+
   return (
     <div className="">
       <div className="relative rounded-lg font-[sans-serif] w-full">
-        <button
+        <div className="flex">
+      <button
           onClick={toggleExtend}
           type="button"
           id="dropdownToggle"
-          className="pr-2 flex items-center ml-0 pt-2.5 text-[#333] text-md tracking-wider border-b border-gray-400 outline-none"
+          className={`pr-2 flex items-center ml-0 pt-2.5 text-md tracking-wider border-b outline-none
+            ${isError ? "border-red-500 text-red-500" : "border-gray-400 text-[#333]"}
+          `}
         >
           <span className=" px-2">{title}</span>
           {chosenCategory ? <SuccessIcon/> : null}
@@ -66,6 +72,10 @@ const CategoryDropdown = ({ chosenCategory, setCategory, setCreateNewCategory }:
             <polyline points="6 9 12 15 18 9" />
           </svg>
         </button>
+        {isError && (
+          <p className="text-red-500 text-sm ml-6 mt-2">Please select a category.</p>
+        )}
+        </div>
         <div className="w-full">
           <ul
             className={`absolute z-50 block bg-white overflow-scroll max-h-0 transition-all duration-500
@@ -88,7 +98,9 @@ const CategoryDropdown = ({ chosenCategory, setCategory, setCreateNewCategory }:
         </div>
         <button 
         onClick={setCreateNewCategory}
-        className="text-white bg-blue-400 px-4 mt-3 rounded-xl hover:bg-blue-600 transition-all duration-400 font-semibold">Or create new category</button>
+        className="text-white bg-blue-400 px-4 mt-3 rounded-xl hover:bg-blue-600 transition-all duration-400 font-semibold">Or create new category
+        </button>
+        
       </div>
     </div>
   );

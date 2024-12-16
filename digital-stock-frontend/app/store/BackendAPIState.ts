@@ -107,7 +107,7 @@ export const useAppState = create<AppState>((set) => ({
   
 
   fetchAllProducts: async (): Promise<void> => {
-    debugger
+    
     try {
       console.log("Fetching products...");
 

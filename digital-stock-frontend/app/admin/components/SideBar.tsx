@@ -1,17 +1,33 @@
-'use client'
+"use client";
 import { useAuthState } from "@/app/store/AuthState";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
-const SideBar = () => {
+type Props = {
+  onUsers: () => void;
+  onProducts: () => void;
+  onAddProduct: () => void;
+  onOrders: () => void;
+  onDashboard: () => void;
+  onProfile: () => void;
+};
+
+const SideBar = ({
+  onUsers,
+  onProducts,
+  onAddProduct,
+  onOrders,
+  onDashboard,
+  onProfile
+}: Props) => {
   const { logout } = useAuthState();
   const router = useRouter();
 
   const handleLogOut = () => {
     logout();
-    router.push("/")
+    router.push("/");
   };
-  
+
   return (
     <div className="absolute left-0 w-full bg-blue-500">
       <nav
@@ -25,8 +41,8 @@ const SideBar = () => {
           <h6 className="text-blue-600 mt-4 text-sm font-bold px-4">Main</h6>
           <ul className="space-y-2 mt-3">
             <li>
-              <Link
-                href="./"
+              <button
+                onClick={onDashboard}
                 className="text-gray-800 text-sm flex items-center hover:bg-gray-100 rounded-md px-4 py-2 transition-all"
               >
                 <svg
@@ -49,11 +65,11 @@ const SideBar = () => {
                 </svg>
 
                 <span>Dashboard</span>
-              </Link>
+              </button>
             </li>
             <li>
-              <Link
-                href="javascript:void(0)"
+              <button
+                
                 className="text-gray-800 text-sm flex items-center hover:bg-gray-100 rounded-md px-4 py-2 transition-all"
               >
                 <svg
@@ -67,7 +83,7 @@ const SideBar = () => {
                   />
                 </svg>
                 <span>Analytics</span>
-              </Link>
+              </button>
             </li>
           </ul>
 
@@ -75,8 +91,8 @@ const SideBar = () => {
             <h6 className="text-blue-600 text-sm font-bold px-4">Management</h6>
             <ul className="mt-3 space-y-2">
               <li>
-                <Link
-                  href="./userManagement"
+                <button
+                  onClick={onUsers}
                   className="text-gray-800 text-sm flex items-center hover:bg-gray-100 rounded-md px-4 py-2 transition-all"
                 >
                   <svg
@@ -90,11 +106,11 @@ const SideBar = () => {
                     />
                   </svg>
                   <span>Users</span>
-                </Link>
+                </button>
               </li>
               <li>
-                <Link
-                  href="./orderManagement"
+                <button
+                  onClick={onOrders}
                   className="text-gray-800 text-sm flex items-center hover:bg-gray-100 rounded-md px-4 py-2 transition-all"
                 >
                   <svg
@@ -114,7 +130,7 @@ const SideBar = () => {
                     <path d="M5 17h-2v-11a1 1 0 0 1 1 -1h9v12m-4 0h6m4 0h2v-6h-8m0 -5h5l3 5" />
                   </svg>
                   <span>Orders</span>
-                </Link>
+                </button>
               </li>
             </ul>
           </div>
@@ -123,45 +139,45 @@ const SideBar = () => {
             <h6 className="text-blue-600 text-sm font-bold px-4">Products</h6>
             <ul className="mt-3 space-y-2">
               <li>
-                <Link
-                  href="./productManagement"
+                <button
+                  onClick={onProducts}
                   className="text-gray-800 text-sm flex items-center hover:bg-gray-100 rounded-md px-4 py-2 transition-all"
                 >
                   <svg
-                      width="20px"
-                      height="20px"
-                      className="mr-2"
-                      viewBox="0 0 1700 1700"
-                      strokeWidth="1.4"
-                      stroke="currentColor"
-                    >
-                      <path
-                        d="M916.7 1269.4c-10.7 0-20.4-7.2-23.2-18l-29.9-114.7c-3.3-12.8 4.3-25.9 17.2-29.3 12.8-3.3 25.9 4.3 29.3 17.2l29.9 114.7c3.3 12.8-4.3 25.9-17.2 29.3-2 .5-4.1.8-6.1.8zm-169.4 0c-2 0-4-.3-6.1-.8-12.8-3.3-20.5-16.4-17.2-29.3l29.9-114.7c3.3-12.8 16.4-20.5 29.3-17.2 12.8 3.3 20.5 16.4 17.2 29.3l-29.9 114.7c-2.8 10.8-12.6 18-23.2 18z"
-                        data-original="#000000"
-                      />
-                      <path
-                        d="M1066.6 1358.8H597.4c-13.3 0-24-10.7-24-24 0-62.6 50.9-113.5 113.5-113.5h290.4c62.6 0 113.5 50.9 113.5 113.5-.2 13.3-10.9 24-24.2 24zm-440.7-48H1038c-9.6-24.3-33.3-41.5-60.9-41.5H686.8c-27.6.1-51.3 17.3-60.9 41.5zM276.4 762.7c-13.3 0-24-10.7-24-24V395c0-29.7 24.2-53.9 53.9-53.9h1051.4c29.7 0 53.9 24.2 53.9 53.9v297.8c0 13.3-10.7 24-24 24s-24-10.7-24-24V395c0-3.2-2.6-5.9-5.9-5.9H306.3c-3.2 0-5.9 2.6-5.9 5.9v343.7c0 13.2-10.7 24-24 24zm904.5 392H446.5c-13.3 0-24-10.7-24-24s10.7-24 24-24h734.3c13.3 0 24 10.7 24 24s-10.6 24-23.9 24zm0-120.8H446.5c-13.3 0-24-10.7-24-24s10.7-24 24-24h734.3c13.3 0 24 10.7 24 24s-10.6 24-23.9 24z"
-                        data-original="#000000"
-                      />
-                      <path
-                        d="M424.1 1358.8H128.4c-25.6 0-46.4-20.8-46.4-46.4V761.1c0-25.6 20.8-46.4 46.4-46.4h295.7c25.6 0 46.4 20.8 46.4 46.4v551.3c0 25.6-20.8 46.4-46.4 46.4zm-294.1-48h292.5V762.7H130z"
-                        data-original="#000000"
-                      />
-                      <path
-                        d="M446.5 853.6H106c-13.3 0-24-10.7-24-24s10.7-24 24-24h340.5c13.3 0 24 10.7 24 24s-10.7 24-24 24zm0 414.4H106c-13.3 0-24-10.7-24-24s10.7-24 24-24h340.5c13.3 0 24 10.7 24 24s-10.7 24-24 24zm1125.1 90.8h-368.3c-25.6 0-46.4-20.8-46.4-46.4V715.2c0-25.6 20.8-46.4 46.4-46.4h368.3c25.6 0 46.4 20.8 46.4 46.4v597.2c0 25.6-20.8 46.4-46.4 46.4zm-366.7-48H1570v-594h-365.1z"
-                        data-original="#000000"
-                      />
-                      <path
-                        d="M1594 811.8h-413.1c-13.3 0-24-10.7-24-24s10.7-24 24-24H1594c13.3 0 24 10.7 24 24s-10.7 24-24 24zm0 452h-413.1c-13.3 0-24-10.7-24-24s10.7-24 24-24H1594c13.3 0 24 10.7 24 24s-10.7 24-24 24z"
-                        data-original="#000000"
-                      />
-                    </svg>
+                    width="20px"
+                    height="20px"
+                    className="mr-2"
+                    viewBox="0 0 1700 1700"
+                    strokeWidth="1.4"
+                    stroke="currentColor"
+                  >
+                    <path
+                      d="M916.7 1269.4c-10.7 0-20.4-7.2-23.2-18l-29.9-114.7c-3.3-12.8 4.3-25.9 17.2-29.3 12.8-3.3 25.9 4.3 29.3 17.2l29.9 114.7c3.3 12.8-4.3 25.9-17.2 29.3-2 .5-4.1.8-6.1.8zm-169.4 0c-2 0-4-.3-6.1-.8-12.8-3.3-20.5-16.4-17.2-29.3l29.9-114.7c3.3-12.8 16.4-20.5 29.3-17.2 12.8 3.3 20.5 16.4 17.2 29.3l-29.9 114.7c-2.8 10.8-12.6 18-23.2 18z"
+                      data-original="#000000"
+                    />
+                    <path
+                      d="M1066.6 1358.8H597.4c-13.3 0-24-10.7-24-24 0-62.6 50.9-113.5 113.5-113.5h290.4c62.6 0 113.5 50.9 113.5 113.5-.2 13.3-10.9 24-24.2 24zm-440.7-48H1038c-9.6-24.3-33.3-41.5-60.9-41.5H686.8c-27.6.1-51.3 17.3-60.9 41.5zM276.4 762.7c-13.3 0-24-10.7-24-24V395c0-29.7 24.2-53.9 53.9-53.9h1051.4c29.7 0 53.9 24.2 53.9 53.9v297.8c0 13.3-10.7 24-24 24s-24-10.7-24-24V395c0-3.2-2.6-5.9-5.9-5.9H306.3c-3.2 0-5.9 2.6-5.9 5.9v343.7c0 13.2-10.7 24-24 24zm904.5 392H446.5c-13.3 0-24-10.7-24-24s10.7-24 24-24h734.3c13.3 0 24 10.7 24 24s-10.6 24-23.9 24zm0-120.8H446.5c-13.3 0-24-10.7-24-24s10.7-24 24-24h734.3c13.3 0 24 10.7 24 24s-10.6 24-23.9 24z"
+                      data-original="#000000"
+                    />
+                    <path
+                      d="M424.1 1358.8H128.4c-25.6 0-46.4-20.8-46.4-46.4V761.1c0-25.6 20.8-46.4 46.4-46.4h295.7c25.6 0 46.4 20.8 46.4 46.4v551.3c0 25.6-20.8 46.4-46.4 46.4zm-294.1-48h292.5V762.7H130z"
+                      data-original="#000000"
+                    />
+                    <path
+                      d="M446.5 853.6H106c-13.3 0-24-10.7-24-24s10.7-24 24-24h340.5c13.3 0 24 10.7 24 24s-10.7 24-24 24zm0 414.4H106c-13.3 0-24-10.7-24-24s10.7-24 24-24h340.5c13.3 0 24 10.7 24 24s-10.7 24-24 24zm1125.1 90.8h-368.3c-25.6 0-46.4-20.8-46.4-46.4V715.2c0-25.6 20.8-46.4 46.4-46.4h368.3c25.6 0 46.4 20.8 46.4 46.4v597.2c0 25.6-20.8 46.4-46.4 46.4zm-366.7-48H1570v-594h-365.1z"
+                      data-original="#000000"
+                    />
+                    <path
+                      d="M1594 811.8h-413.1c-13.3 0-24-10.7-24-24s10.7-24 24-24H1594c13.3 0 24 10.7 24 24s-10.7 24-24 24zm0 452h-413.1c-13.3 0-24-10.7-24-24s10.7-24 24-24H1594c13.3 0 24 10.7 24 24s-10.7 24-24 24z"
+                      data-original="#000000"
+                    />
+                  </svg>
                   <span>Products</span>
-                </Link>
+                </button>
               </li>
               <li>
-                <Link
-                  href="./productManagement/addProduct"
+                <button
+                  onClick={onAddProduct}
                   className="text-gray-800 text-sm flex items-center hover:bg-gray-100 rounded-md px-4 py-2 transition-all"
                 >
                   <svg
@@ -179,7 +195,7 @@ const SideBar = () => {
                   </svg>
 
                   <span>Add product</span>
-                </Link>
+                </button>
               </li>
             </ul>
           </div>
@@ -190,8 +206,8 @@ const SideBar = () => {
             </h6>
             <ul className="mt-3 space-y-2">
               <li>
-                <Link
-                  href="javascript:void(0)"
+                <button
+                  
                   className="text-gray-800 text-sm flex items-center hover:bg-gray-100 rounded-md px-4 py-2 transition-all"
                 >
                   <svg
@@ -210,28 +226,7 @@ const SideBar = () => {
                     />
                   </svg>
                   <span>Security</span>
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="javascript:void(0)"
-                  className="text-gray-800 text-sm flex items-center hover:bg-gray-100 rounded-md px-4 py-2 transition-all"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="currentColor"
-                    className="w-[18px] h-[18px] mr-3"
-                    viewBox="0 0 32 32"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M20.063 7.94a3.96 3.96 0 0 1-5.342 3.713l2.362 2.815a6.601 6.601 0 1 0-7.24-8.627l2.364 2.818a3.96 3.96 0 1 1 7.856-.718zm-7.885 9.415L3.718 7.35A1.32 1.32 0 1 1 5.73 5.645l20.055 23.712a1.32 1.32 0 1 1-2.015 1.705l-2.03-2.401a8.886 8.886 0 0 1-2.645.4H13.11a8.886 8.886 0 0 1-8.886-8.886c0-.518.272-.993.747-1.198 1.095-.47 3.427-1.27 7.208-1.622zm7.634 9.025c-.235.026-.474.04-.716.04H13.11a6.248 6.248 0 0 1-6.184-5.362c1.35-.454 3.751-1.047 7.37-1.2zm-.347-9.072 2.476 2.95a21.397 21.397 0 0 1 3.34.8 6.204 6.204 0 0 1-.78 2.25l1.77 2.111a8.845 8.845 0 0 0 1.712-5.244c0-.518-.272-.993-.747-1.198-1.149-.493-3.657-1.349-7.771-1.67z"
-                      clipRule="evenodd"
-                      data-original="#000000"
-                    />
-                  </svg>
-                  <span>Account Deactivation</span>
-                </Link>
+                </button>
               </li>
             </ul>
           </div>
@@ -240,8 +235,8 @@ const SideBar = () => {
             <h6 className="text-blue-600 text-sm font-bold px-4">Actions</h6>
             <ul className="mt-3 space-y-2">
               <li>
-                <Link
-                  href="javascript:void(0)"
+                <button
+                  onClick={onProfile}
                   className="text-gray-800 text-sm flex items-center hover:bg-gray-100 rounded-md px-4 py-2 transition-all"
                 >
                   <svg
@@ -255,7 +250,7 @@ const SideBar = () => {
                     />
                   </svg>
                   <span>Profile</span>
-                </Link>
+                </button>
               </li>
               <li>
                 <Link

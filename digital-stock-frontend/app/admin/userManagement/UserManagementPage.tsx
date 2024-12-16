@@ -3,7 +3,11 @@
 import { useAdminState } from "@/app/store/AdminState";
 import { useEffect } from "react";
 
-const UserManagementPage = () => {
+type Props = {
+  onUserDetails: () => void;
+};
+
+const UserManagementPage = ({onUserDetails}: Props) => {
   const { fetchAllUsers, userList } = useAdminState();
 
   useEffect(() => {

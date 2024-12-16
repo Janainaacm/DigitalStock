@@ -97,6 +97,9 @@ const config: Config = {
         },
       },
     },
+    safelist: [
+      'animate-spin', 
+    ],
   },
   
   plugins: [],

@@ -41,7 +41,7 @@ export const useAdminState = create<AdminState>((set) => ({
 
   addNewProduct: async (productData: ProductInterface): Promise<void> => {
     try {
-      const response = await axiosInstance.post(`${API_URL}/products/new`, productData);
+      const response = await axiosInstance.post(`${API_URL}/admin/products/new`, productData);
       set((state) => ({
         productList: [...state.productList, response.data], 
       }));
@@ -53,7 +53,7 @@ export const useAdminState = create<AdminState>((set) => ({
 
   editProduct: async (productId: number, productDetails: ProductInterface): Promise<void> => {
     try {
-      const response = await axiosInstance.put(`${API_URL}/products/${productId}`, productDetails);
+      const response = await axiosInstance.put(`${API_URL}/admin/products/${productId}`, productDetails);
       set((state) => ({
         productList: state.productList.map((product) =>
           product.id === productId ? response.data : product 
@@ -67,7 +67,7 @@ export const useAdminState = create<AdminState>((set) => ({
 
   deleteProduct: async (productId: number): Promise<void> => {
     try {
-      await axiosInstance.delete(`${API_URL}/products/${productId}`);
+      await axiosInstance.delete(`${API_URL}/admin/products/${productId}`);
       set((state) => ({
         productList: state.productList.filter((product) => product.id !== productId),
       }));
@@ -79,7 +79,7 @@ export const useAdminState = create<AdminState>((set) => ({
 
   fetchAllOrders: async (): Promise<OrderInterface[]> => {
     try {
-      const response = await axiosInstance.get(`${API_URL}/orders`);
+      const response = await axiosInstance.get(`${API_URL}/admin/orders`);
       set({ orders: response.data });
       return response.data;
     } catch (error) {
@@ -91,7 +91,7 @@ export const useAdminState = create<AdminState>((set) => ({
   updateOrderStatus: async (orderId: number, status: string): Promise<void> => {
     try {
       const response = await axiosInstance.put(
-        `${API_URL}/orders/update/${orderId}`,
+        `${API_URL}/admin/orders/update/${orderId}`,
         { status }, 
         {
           headers: {
