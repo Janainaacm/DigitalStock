@@ -9,12 +9,20 @@ export interface UserInterface {
   firstName: string;
   lastName: string;
   phoneNo: string;
+  address: AddressInterface;
 }
 
 export interface WishlistInterface {
   id: number;
   user: UserInterface;
   items: WishlistItemsInterface[];
+}
+
+export interface AddressInterface {
+  addressLine: string;
+  city: string;
+  state: string;
+  zipCode: string;
 }
 
 export interface WishlistItemsInterface {
@@ -25,14 +33,15 @@ export interface WishlistItemsInterface {
 export interface OrderInterface {
   id: number;
   user: UserInterface;
-  items: OrderItemInterface[];
+  firstName: string;
+  lastName: string;
+  email: string;
+  phoneNo: string;
+  orderItems: OrderItemInterface[];
   status: string;
-  pointsEarned: number;
-  orderDate: Date;
-  addressLine: string;
-  city: string;
-  state: string;
-  zipCode: string;
+  orderDate: string;
+  address: AddressInterface;
+  subtotal: number;
 }
 
 export interface OrderItemInterface {
@@ -42,7 +51,7 @@ export interface OrderItemInterface {
 }
 
 export interface ProductInterface {
-  id?: number;
+  id: number;
   name: string;
   description: string;
   price: number;

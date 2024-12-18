@@ -33,7 +33,7 @@ interface UserState {
   fetchOrderById: (orderId: number) => Promise<OrderInterface | null>;
   fetchOrdersByUserId: () => Promise<OrderInterface[]>;
   fetchOrderByStatus: (status: string) => Promise<OrderInterface[]>;
-  placeOrder: () => Promise<void>;
+  placeOrder: (order: OrderInterface) => Promise<void>;
   cancelOrder: (orderId: number) => Promise<void>;
   deleteOrder: (orderId: number) => Promise<void>;
 }
@@ -340,12 +340,22 @@ clearCart: async (): Promise<void> => {
   },
   
 
-  placeOrder: async (): Promise<void> => {
+  placeOrder: async (order: OrderInterface): Promise<void> => {
     const user = useAuthState.getState().user;
     if (!user) return;
   
     try {
-      const response = await axiosInstance.post(`${API_URL}/orders/place/${user.id}`);
+      const validItems = order.orderItems.map((item) => ({
+        productId: item.product.id,
+        quantity: item.quantity,
+      }));
+      
+      const payload = {
+        ...order,
+        items: validItems,
+      };
+            
+      const response = await axiosInstance.post(`${API_URL}/orders/place/${user.id}`, payload);
       const currentOrders = useAuthState.getState().orders;
       useAuthState.setState({
         orders: [...currentOrders, response.data], 

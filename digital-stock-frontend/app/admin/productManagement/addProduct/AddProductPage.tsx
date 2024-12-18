@@ -91,6 +91,7 @@ const AddProductPage = ({onProducts}: Props) => {
     }
   
     const newProduct: ProductInterface = {
+      id: 0,
       name: name.trim(),
       description: description.trim(),
       price: parseFloat(price),
@@ -98,7 +99,7 @@ const AddProductPage = ({onProducts}: Props) => {
       colorName: colorName.trim(),
       imageUrl: imageUrl.trim(),
       stock: parseInt(stock, 10),
-      sales: 0,
+      sales: 0
     };
   
     try {

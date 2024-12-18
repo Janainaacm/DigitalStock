@@ -26,9 +26,9 @@ export default function AuthForm({extraClass, children, auth}: Props) {
     if (user && open) {
       setOpen(false); 
       if (user.role === "ROLE_ADMIN") {
-        router.push("/admin/dashboard");
+        router.push("/admin");
       } else {
-        router.push("/user/profile"); 
+        router.push("/user"); 
       }
     }
   }, [user, open, router]);
