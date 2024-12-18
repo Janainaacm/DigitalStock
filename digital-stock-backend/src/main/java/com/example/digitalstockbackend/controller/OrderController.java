@@ -44,8 +44,8 @@ public class OrderController {
     }
 
     @PostMapping("/place/{userId}")
-    public ResponseEntity<OrderDTO> placeOrder(@PathVariable Long userId) {
-        return orderService.placeOrder(userId);
+    public ResponseEntity<OrderDTO> placeOrder(@PathVariable Long userId, @RequestBody OrderDTO orderDTO) {
+        return orderService.placeOrder(userId, orderDTO);
     }
 
     @PutMapping("/{orderId}")

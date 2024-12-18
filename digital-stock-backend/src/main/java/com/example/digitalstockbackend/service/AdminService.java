@@ -2,7 +2,6 @@ package com.example.digitalstockbackend.service;
 
 import com.example.digitalstockbackend.authorities.OrderStatus;
 import com.example.digitalstockbackend.dto.CategoryDTO;
-import com.example.digitalstockbackend.dto.ProductDTO;
 import com.example.digitalstockbackend.dto.UserDTO;
 import com.example.digitalstockbackend.model.Category;
 import com.example.digitalstockbackend.model.roles.CustomUser;
@@ -14,9 +13,7 @@ import com.example.digitalstockbackend.repository.ProductRepository;
 import com.example.digitalstockbackend.repository.UserRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service

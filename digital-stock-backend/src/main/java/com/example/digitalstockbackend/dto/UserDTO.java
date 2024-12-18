@@ -9,6 +9,7 @@ public class UserDTO {
     private String username;
     private String email;
     private String role;
+    private AddressDTO address;
     private WishlistDTO wishlist;
     private CartDTO cart;
     private List<OrderDTO> orders;
@@ -18,6 +19,7 @@ public class UserDTO {
         this.username = user.getUsername();
         this.email = user.getEmail();
         this.role = user.getRole().getName().name();
+        this.address = user.getAddress() != null ? new AddressDTO(user.getAddress()) : null;
         this.wishlist = user.getWishlist() != null ? new WishlistDTO(user.getWishlist()) : null;
         this.cart = user.getCart() != null ? new CartDTO(user.getCart()) : null;
         this.orders = user.getUserOrders().stream().map(OrderDTO::new).toList();
@@ -54,6 +56,14 @@ public class UserDTO {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public AddressDTO getAddress() {
+        return address;
+    }
+
+    public void setAddress(AddressDTO address) {
+        this.address = address;
     }
 
     public WishlistDTO getWishlist() {

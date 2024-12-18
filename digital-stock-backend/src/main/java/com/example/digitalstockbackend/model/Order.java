@@ -7,7 +7,6 @@ import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDateTime;
 import java.util.List;
-
 @Entity
 @Table(name = "orders")
 public class Order {
@@ -29,26 +28,62 @@ public class Order {
 
     private LocalDateTime orderDate;
 
-    private String addressLine;
+    // Personal details
+    @Column(name = "first_name", nullable = false)
+    private String firstName;
 
-    private String city;
+    @Column(name = "last_name", nullable = false)
+    private String lastName;
 
-    private String state;
+    @Column(name = "phone_no", nullable = false)
+    private String phoneNo;
 
-    private String zipCode;
+    @Column(name = "email", nullable = false)
+    private String email;
 
-    public Order () {};
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "address_id", referencedColumnName = "id")
+    private Address address;
 
-    public Order(Long id, CustomUser user, List<OrderItem> orderItems, OrderStatus status, LocalDateTime orderDate, String addressLine, String city, String state, String zipCode) {
+    @Column(name = "subtotal", nullable = false)
+    private Long subtotal;
+
+    public Order() {
+    }
+
+    public Order(Long id, CustomUser user, List<OrderItem> orderItems, OrderStatus status, LocalDateTime orderDate,
+                 String firstName, String lastName, String phoneNo, String email,
+                 Address address, Long subtotal) {
         this.id = id;
         this.user = user;
         this.orderItems = orderItems;
         this.status = status;
         this.orderDate = orderDate;
-        this.addressLine = addressLine;
-        this.city = city;
-        this.state = state;
-        this.zipCode = zipCode;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.phoneNo = phoneNo;
+        this.email = email;
+        this.address = address;
+        this.subtotal = subtotal;
+    }
+
+    // Getters and Setters
+
+
+    public Address getAddress() {
+        return address;
+    }
+
+    public void setAddress(Address address) {
+        this.address = address;
+    }
+
+    public Long getSubtotal() {
+        return subtotal;
+    }
+
+    public void setSubtotal(Long subtotal) {
+        this.subtotal = subtotal;
     }
 
     public Long getId() {
@@ -84,43 +119,42 @@ public class Order {
     }
 
     public LocalDateTime getOrderDate() {
-        return LocalDateTime.now();
+        return orderDate;
     }
 
     public void setOrderDate(LocalDateTime orderDate) {
         this.orderDate = orderDate;
     }
 
-    public String getAddressLine() {
-        return addressLine;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setAddressLine(String addressLine) {
-        this.addressLine = addressLine;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
-    public String getCity() {
-        return city;
+    public String getLastName() {
+        return lastName;
     }
 
-    public void setCity(String city) {
-        this.city = city;
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
-    public String getState() {
-        return state;
+    public String getPhoneNo() {
+        return phoneNo;
     }
 
-    public void setState(String state) {
-        this.state = state;
+    public void setPhoneNo(String phoneNo) {
+        this.phoneNo = phoneNo;
     }
 
-    public String getZipCode() {
-        return zipCode;
+    public String getEmail() {
+        return email;
     }
 
-    public void setZipCode(String zipCode) {
-        this.zipCode = zipCode;
+    public void setEmail(String email) {
+        this.email = email;
     }
 }
-

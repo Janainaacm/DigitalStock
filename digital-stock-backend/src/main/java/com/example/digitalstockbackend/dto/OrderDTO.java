@@ -9,23 +9,41 @@ public class OrderDTO {
     private Long id;
     private String status;
     private LocalDateTime orderDate;
-    private String addressLine;
-    private String city;
-    private String state;
-    private String zipCode;
+
+    // Personal details
+    private String firstName;
+    private String lastName;
+    private String phoneNo;
+    private String email;
+
+    // Shipping details
+    private AddressDTO address;
+    private Long subtotal;
+
     private List<OrderItemDTO> orderItems;
+
+    public OrderDTO() {}
 
     public OrderDTO(Order order) {
         this.id = order.getId();
         this.status = order.getStatus().toString();
         this.orderDate = order.getOrderDate();
-        this.addressLine = order.getAddressLine();
-        this.city = order.getCity();
-        this.state = order.getState();
-        this.zipCode = order.getZipCode();
+
+        // Personal details
+        this.firstName = order.getFirstName();
+        this.lastName = order.getLastName();
+        this.phoneNo = order.getPhoneNo();
+        this.email = order.getEmail();
+
+        // Shipping details
+        this.address = order.getAddress() != null ? new AddressDTO(order.getAddress()) : null;
+        this.subtotal = order.getSubtotal();
+
+        // Order items
         this.orderItems = order.getOrderItems().stream().map(OrderItemDTO::new).toList();
     }
 
+    // Getters and setters
     public Long getId() {
         return id;
     }
@@ -50,36 +68,52 @@ public class OrderDTO {
         this.orderDate = orderDate;
     }
 
-    public String getAddressLine() {
-        return addressLine;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setAddressLine(String addressLine) {
-        this.addressLine = addressLine;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
-    public String getCity() {
-        return city;
+    public String getLastName() {
+        return lastName;
     }
 
-    public void setCity(String city) {
-        this.city = city;
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
-    public String getState() {
-        return state;
+    public String getPhoneNo() {
+        return phoneNo;
     }
 
-    public void setState(String state) {
-        this.state = state;
+    public void setPhoneNo(String phoneNo) {
+        this.phoneNo = phoneNo;
     }
 
-    public String getZipCode() {
-        return zipCode;
+    public String getEmail() {
+        return email;
     }
 
-    public void setZipCode(String zipCode) {
-        this.zipCode = zipCode;
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public AddressDTO getAddress() {
+        return address;
+    }
+
+    public void setAddress(AddressDTO address) {
+        this.address = address;
+    }
+
+    public Long getSubtotal() {
+        return subtotal;
+    }
+
+    public void setSubtotal(Long subtotal) {
+        this.subtotal = subtotal;
     }
 
     public List<OrderItemDTO> getOrderItems() {

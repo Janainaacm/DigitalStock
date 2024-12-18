@@ -2,15 +2,10 @@ package com.example.digitalstockbackend.config.security.jwt;
 
 import java.security.Key;
 import java.util.*;
-import java.util.stream.Collectors;
 
 import com.example.digitalstockbackend.config.security.CustomUserDetails;
-import com.example.digitalstockbackend.service.UserService;
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -25,12 +20,6 @@ import io.jsonwebtoken.security.Keys;
 @Component
 public class JwtUtils {
     private static final Logger logger = LoggerFactory.getLogger(JwtUtils.class);
-    private final UserService userService;
-
-    @Autowired
-    public JwtUtils(UserService userService) {
-        this.userService = userService;
-    }
 
     @Value("${app.jwtSecret}")
     private String jwtSecret;

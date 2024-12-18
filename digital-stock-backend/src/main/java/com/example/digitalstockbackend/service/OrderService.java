@@ -1,9 +1,11 @@
 package com.example.digitalstockbackend.service;
 
 import com.example.digitalstockbackend.authorities.OrderStatus;
+import com.example.digitalstockbackend.dto.AddressDTO;
 import com.example.digitalstockbackend.dto.OrderDTO;
 import com.example.digitalstockbackend.dto.OrderItemDTO;
 import com.example.digitalstockbackend.dto.ProductDTO;
+import com.example.digitalstockbackend.model.Address;
 import com.example.digitalstockbackend.model.Cart;
 import com.example.digitalstockbackend.model.roles.CustomUser;
 import com.example.digitalstockbackend.model.Order;
@@ -11,6 +13,7 @@ import com.example.digitalstockbackend.model.OrderItem;
 import com.example.digitalstockbackend.repository.CartRepository;
 import com.example.digitalstockbackend.repository.OrderItemRepository;
 import com.example.digitalstockbackend.repository.OrderRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -31,7 +34,8 @@ public class OrderService {
     private final ProductService productService;
 
     @Autowired
-    public OrderService(OrderRepository orderRepository, UserService userService, CartRepository cartRepository, OrderItemRepository orderItemRepository, ProductService productService) {
+    public OrderService(OrderRepository orderRepository, UserService userService, CartRepository cartRepository,
+                        OrderItemRepository orderItemRepository, ProductService productService) {
         this.orderRepository = orderRepository;
         this.userService = userService;
         this.cartRepository = cartRepository;
@@ -75,7 +79,8 @@ public class OrderService {
     }
 
     // Place Order
-    public ResponseEntity<OrderDTO> placeOrder(Long userId) {
+    @Transactional
+    public ResponseEntity<OrderDTO> placeOrder(Long userId, OrderDTO orderDTO) {
         Optional<Cart> optionalCart = cartRepository.findByUserId(userId);
 
         if (optionalCart.isEmpty()) {
@@ -88,6 +93,26 @@ public class OrderService {
         order.setOrderDate(LocalDateTime.now());
         order.setStatus(OrderStatus.PENDING);
 
+        // Set personal details
+        order.setFirstName(orderDTO.getFirstName());
+        order.setLastName(orderDTO.getLastName());
+        order.setPhoneNo(orderDTO.getPhoneNo());
+        order.setEmail(orderDTO.getEmail());
+
+        // Set shipping details
+        order.setAddress(convertToAddressEntity(orderDTO.getAddress()));
+        order.setSubtotal(orderDTO.getSubtotal());
+
+
+        cart.getItems().forEach(cartItem -> {
+            int availableStock = productService.getStock(cartItem.getProduct().getId());
+            if (availableStock < cartItem.getQuantity()) {
+                throw new RuntimeException("Product " + cartItem.getProduct().getName() + " is out of stock.");
+            }
+        });
+
+
+        // Map cart items to order items
         List<OrderItem> orderItems = cart.getItems().stream().map(cartItem -> {
             OrderItem orderItem = new OrderItem();
             orderItem.setOrder(order);
@@ -99,21 +124,22 @@ public class OrderService {
 
         order.setOrderItems(orderItems);
 
+        // Save order and clear cart
         Order savedOrder = orderRepository.save(order);
         orderItemRepository.saveAll(orderItems);
 
         cart.getItems().clear();
         cartRepository.save(cart);
 
-        OrderDTO orderDTO = convertToOrderDTO(savedOrder);
-        return ResponseEntity.ok(orderDTO);
+        OrderDTO newOrderDTO = convertToOrderDTO(savedOrder);
+        return ResponseEntity.ok(newOrderDTO);
     }
 
     public ResponseEntity<?> cancelOrder(Long orderId) {
         return orderRepository.findById(orderId)
                 .map(order -> {
                     if (order.getStatus() == OrderStatus.PENDING ||
-                            order.getStatus() == OrderStatus.ONGOING ||
+                            order.getStatus() == OrderStatus.CONFIRMED ||
                             order.getStatus() == OrderStatus.CANCELLED) {
 
                         order.setStatus(OrderStatus.CANCELLED);
@@ -122,13 +148,11 @@ public class OrderService {
                         return ResponseEntity.ok(orderDTO);
 
                     } else {
-                        // Explicitly specify the type
                         return ResponseEntity.<OrderDTO>badRequest().build();
                     }
                 })
                 .orElseGet(() -> ResponseEntity.<OrderDTO>notFound().build());
     }
-
 
     // Delete Order
     public ResponseEntity<Void> deleteOrder(Long id) {
@@ -142,6 +166,20 @@ public class OrderService {
 
     // Helper: Convert Order to OrderDTO
     private OrderDTO convertToOrderDTO(Order order) {
-        return userService.getOrderDTO(order);
+        return new OrderDTO(order);
     }
+
+    private Address convertToAddressEntity(AddressDTO addressDTO) {
+        if (addressDTO == null) {
+            return null;
+        }
+        Address address = new Address();
+        address.setAddressLine(addressDTO.getAddressLine());
+        address.setCity(addressDTO.getCity());
+        address.setState(addressDTO.getState());
+        address.setZipCode(addressDTO.getZipCode());
+        return address;
+    }
+
 }
+

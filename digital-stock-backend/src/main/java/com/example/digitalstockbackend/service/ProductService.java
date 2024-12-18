@@ -101,6 +101,13 @@ public class ProductService {
                 .orElse(null);
     }
 
+    public int getStock(Long productId) {
+        Product product = productRepository.findById(productId)
+                .orElseThrow();
+
+        return product.getStock();
+    }
+
     public void sellProduct(Long productId, int quantity) {
         Product product = productRepository.findById(productId)
                 .orElseThrow();

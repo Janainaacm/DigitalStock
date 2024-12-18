@@ -2,6 +2,8 @@ package com.example.digitalstockbackend.model.roles;
 
 import com.example.digitalstockbackend.model.Cart;
 import com.example.digitalstockbackend.model.Order;
+import com.example.digitalstockbackend.model.Address;
+
 import com.example.digitalstockbackend.model.Wishlist;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
@@ -52,6 +54,9 @@ public class CustomUser {
 
     private String phoneNo;
 
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "address_id", referencedColumnName = "id")
+    private Address address;
 
     private boolean isAccountNonExpired = true;
     private boolean isAccountNonLocked = true;
@@ -66,6 +71,27 @@ public class CustomUser {
         this.password = password;
         this.role = null;
     }
+
+    // Getters and Setters
+    public Address getAddress() {
+        return address;
+    }
+
+    public void setAddress(Address address) {
+        this.address = address;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
 
     public Long getId() {
         return id;

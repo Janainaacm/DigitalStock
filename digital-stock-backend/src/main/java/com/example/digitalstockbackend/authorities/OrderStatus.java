@@ -2,8 +2,8 @@ package com.example.digitalstockbackend.authorities;
 
 public enum OrderStatus {
     PENDING("PENDING"),
-    ONGOING("ONGOING"),
-    SENT("SENT"),
+    CONFIRMED("CONFIRMED"),
+    SHIPPED("SHIPPED"),
     DELIVERED("DELIVERED"),
     CANCELLED("CANCELLED");
 

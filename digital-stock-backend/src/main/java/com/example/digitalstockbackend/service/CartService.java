@@ -15,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
@@ -119,13 +120,14 @@ public class CartService {
         return new CartDTO(cart);
     }
 
-    private Cart findOrCreateCartByUserId(Long userId) {
-        CustomUser user = userService.getUserById(userId);
+    public Cart findOrCreateCartByUserId(Long userId) {
         return cartRepository.findByUserId(userId)
                 .orElseGet(() -> {
                     Cart newCart = new Cart();
-                    newCart.setUser(user);
+                    newCart.setUser(userService.getUserById(userId));
+                    newCart.setItems(new ArrayList<>());
                     return cartRepository.save(newCart);
                 });
     }
+
 }

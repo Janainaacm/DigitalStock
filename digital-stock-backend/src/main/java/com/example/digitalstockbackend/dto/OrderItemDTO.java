@@ -7,6 +7,9 @@ public class OrderItemDTO {
     private ProductDTO product;
     private int quantity;
 
+    public OrderItemDTO() {
+    }
+
     public OrderItemDTO(OrderItem orderItem) {
         this.id = orderItem.getId();
         this.product = new ProductDTO(orderItem.getProduct());
