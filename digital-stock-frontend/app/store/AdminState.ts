@@ -7,11 +7,13 @@ import {
   OrderInterface,
 } from "../utils/Types";
 import { useAppState } from "./BackendAPIState";
+import { useAuthState } from "./AuthState";
 
 interface AdminState {
   userList: UserInterface[];
   productList: ProductInterface[];
   orders: OrderInterface[];
+  orderDetails: OrderInterface | null;
 
   // Admin Actions
   fetchAllUsers: () => Promise<void>;
@@ -22,12 +24,15 @@ interface AdminState {
   updateOrderStatus: (orderId: number, status: string) => Promise<void>;
   addNewCategory: (categoryName: string) => Promise<void>;
   deleteCategory: (categoryId: number) => Promise<void>;
+  cancelOrder: (orderId: number) => Promise<void>;
+  setOrderDetails: (order: OrderInterface) => void;
 }
 
 export const useAdminState = create<AdminState>((set) => ({
   userList: [],
   productList: [],
   orders: [],
+  orderDetails: null,
 
   fetchAllUsers: async (): Promise<void> => {
     try {
@@ -92,16 +97,11 @@ export const useAdminState = create<AdminState>((set) => ({
     try {
       const response = await axiosInstance.put(
         `${API_URL}/admin/orders/update/${orderId}`,
-        { status }, 
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
+        {status}
       );
       set((state) => ({
         orders: state.orders.map((order) =>
-          order.id === orderId ? { ...order, status: response.data.status } : order // Update the order status
+          order.id === orderId ? { ...order, status: response.data.status } : order 
         ),
       }));
     } catch (error) {
@@ -138,5 +138,27 @@ export const useAdminState = create<AdminState>((set) => ({
       throw error; 
     }
   },
+
+  cancelOrder: async (orderId: number): Promise<void> => {
+    const user = useAuthState.getState().user;
+    if (!user) return;
+  
+    try {
+      const response = await axiosInstance.put(`${API_URL}/orders/${user.id}/cancel/${orderId}`);
+      set((state) => ({
+        orders: state.orders.map((order) =>
+          order.id === orderId ? response.data : order
+        ),
+      }));
+    } catch (error) {
+      console.error("Error canceling order:", error);
+      throw error;
+    }
+  },
+
+  setOrderDetails: (order: OrderInterface) => {
+    set({ orderDetails: order});
+  },
+
   
 }));

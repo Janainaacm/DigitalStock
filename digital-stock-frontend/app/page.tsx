@@ -1,6 +1,5 @@
 "use client";
 import Image from "next/image";
-import CustomButton from "./globalComponents/ui-elements/CustomButton";
 import { useEffect } from "react";
 import { useAuthState } from "./store/AuthState";
 import React from "react";
@@ -18,13 +17,11 @@ export default function Home() {
 
   return (
     <>
-
-      {/* ===== Carousel Section ===== */}
       <Slideshow />
 
-      <main className="flex flex-col items-center px-4 justify-evenly md:flex-row md:justify-center md:h-5/6 ">
-        <section className=" md:max-w-md lg:max-w-lg">
-          <h1 className="flex flex-col items-center md:items-start text-[max(4vw,32px)] font-extrabold tracking-wide font-mono leading-snug ">
+      <main className="flex flex-col items-center px-4 justify-evenly md:flex-row md:justify-center md:h-5/6">
+        <section className="md:max-w-md lg:max-w-lg">
+          <h1 className="flex flex-col items-center md:items-start text-[max(4vw,32px)] font-extrabold tracking-wide font-mono leading-snug">
             Welcome to
             <span className="text-transparent bg-gradient-to-r from-limedSpruce-500 via-bismark-600 to-jetStream-400 bg-clip-text">
               DigitalStock
@@ -36,11 +33,7 @@ export default function Home() {
             magnam rem aliquid laboriosam vero libero? Quo commodi debitis quia?
             Hic, eius.
           </p>
-          <section className="flex gap-8 my-8 justify-evenly md:justify-start ">
-            <CustomButton href={"/products"} text={"products"} />
-            <CustomButton href={"/admin/adminDashboard"} text={"admin"} />
-            <CustomButton href={"/auth/register"} text={"Register user"} />
-          </section>
+          
         </section>
 
         <div className="p-4 md:max-w-xl ">

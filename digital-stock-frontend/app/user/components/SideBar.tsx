@@ -1,16 +1,15 @@
 "use client";
 import { useAuthState } from "@/app/store/AuthState";
 import { useRouter } from "next/navigation";
-import DeleteUserButton from "./DeleteUserButton";
+import DeleteUserButton from "./functions/DeleteUserButton";
 
 type Props = {
-  onDashboard: () => void;
   onProfile: () => void;
   onOrders: () => void;
   onWishlist: () => void;
 };
 
-const SideBar = ({onDashboard, onProfile, onOrders, onWishlist}: Props) => {
+const SideBar = ({onProfile, onOrders, onWishlist}: Props) => {
   const { logout } = useAuthState();
   const router = useRouter();
 
@@ -31,33 +30,6 @@ const SideBar = ({onDashboard, onProfile, onOrders, onWishlist}: Props) => {
           <div className="mt-3">
             <h6 className="text-blue-600 text-sm font-bold px-4">User Menu</h6>
             <ul className="mt-5 space-y-3">
-            <li>
-              <button
-                onClick={onDashboard}
-                className="text-gray-800 w-full text-sm flex items-center hover:bg-gray-100 rounded-md px-4 py-2 transition-all"
-              >
-                <svg
-                  className="h-5 w-5 mr-2 text-gray-600"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  strokeWidth="1.5"
-                  stroke="currentColor"
-                  fill="none"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <path stroke="none" d="M0 0h24v24H0z" />
-                  <rect x="4" y="4" width="6" height="6" rx="1" />
-                  <rect x="4" y="14" width="6" height="6" rx="1" />
-                  <rect x="14" y="14" width="6" height="6" rx="1" />
-                  <line x1="14" y1="7" x2="20" y2="7" />
-                  <line x1="17" y1="4" x2="17" y2="10" />
-                </svg>
-
-                <span>Dashboard</span>
-              </button>
-            </li>
             <li>
                 <button
                   onClick={onProfile}

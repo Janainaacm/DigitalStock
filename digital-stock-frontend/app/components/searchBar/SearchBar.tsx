@@ -11,7 +11,7 @@ interface Props {
 }
 
 const SearchBar = ({setSearchResult, inSideBar}: Props) => {
-  const { searchBar, setSearchBar, productList } = useAppState();
+  const { searchBar, setSearchBar, productList, setSearchKeyword } = useAppState();
   const router = useRouter();
   const [open, setOpen] = useState(inSideBar)
   const inputRef = useRef<HTMLInputElement>(null); 
@@ -25,6 +25,7 @@ const SearchBar = ({setSearchResult, inSideBar}: Props) => {
     if (!inSideBar) {
       setOpen(!open)
     }
+    setSearchKeyword(searchBar)
     setSearchResult()
     router.push("/products");
   };

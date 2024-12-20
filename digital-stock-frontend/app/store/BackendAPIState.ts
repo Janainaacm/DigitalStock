@@ -55,7 +55,6 @@ export const useAppState = create<AppState>((set) => ({
   },
 
   fetchDisplayProducts: () => {
-    console.log("inside fetch")
     const {  productList, filteredProductList } = useAppState.getState();
     const user = useAuthState.getState().user;
     const wishlist = useAuthState.getState().wishlist;
@@ -166,6 +165,7 @@ export const useAppState = create<AppState>((set) => ({
 
       set({ filteredProductList: response.data });
       set({ chosenCategory: categoryName });
+      set({ searchKeyword: categoryName });
       return response.data;
     } catch (error) {
       console.error("Error fetching products by category:", error);

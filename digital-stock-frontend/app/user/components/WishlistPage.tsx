@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import { useAuthState } from "../store/AuthState";
-import { WishlistItemsInterface } from "../utils/Types";
-import { useUserState } from "../store/UserState";
+import { useAuthState } from "../../store/AuthState";
+import { WishlistItemsInterface } from "../../utils/Types";
+import { useUserState } from "../../store/UserState";
 import { useRouter } from "next/navigation";
 
 const WishlistPage = () => {

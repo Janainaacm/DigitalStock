@@ -10,7 +10,7 @@ type CurrentPage = "login" | "register" | "forgot-password";
 
 type Props = {
     extraClass?: string;
-    children: React.ReactNode;
+    children?: React.ReactNode;
     auth?: boolean;
   };
 

@@ -1,6 +1,6 @@
 "use client";
 import { useAppState } from "@/app/store/BackendAPIState";
-import DeleteProductButton from "./components/DeleteProductButton";
+import DeleteProductButton from "./functions/DeleteProductButton";
 import { useState, useEffect } from "react";
 import { ProductInterface } from "@/app/utils/Types";
 

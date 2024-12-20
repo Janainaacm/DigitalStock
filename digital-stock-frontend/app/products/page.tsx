@@ -24,7 +24,7 @@ export default function ProductPage() {
     fetchDisplayProducts();
 
     if (searchKeyword) {
-      setTitle(`Products found in ${searchKeyword}`)
+      setTitle(`${searchKeyword}:`)
     }
   }, [productList, filteredProductList]);
 
@@ -58,7 +58,7 @@ export default function ProductPage() {
         <h2 className="text-4xl font-extrabold text-gray-800 mb-4">
           {title}
         </h2>
-        <p className="mb-12 text-gray-500 border-b ">{displayProducts.length} Items</p>
+        <p className="mb-12 text-gray-500 border-b ">{displayProducts.length} Products</p>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {displayProducts.map((product) => (

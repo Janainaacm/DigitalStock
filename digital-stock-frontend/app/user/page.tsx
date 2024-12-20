@@ -2,44 +2,44 @@
 
 import { useEffect, useState } from "react";
 import SideBar from "./components/SideBar";
-import UserDashboardPage from "./UserDashboard";
-import UserProfilePage from "./UserProfilePage";
-import UserOrderPage from "./UserOrderPage";
-import WishlistPage from "./WishlistPage";
+import { useSearchParams, useRouter } from "next/navigation";
+import UserProfilePage from "./components/UserProfilePage";
+import UserOrderPage from "./components/UserOrderPage";
+import WishlistPage from "./components/WishlistPage";
 
-type CurrentPage = "dashboard" | "profile" | "orders" | "wishlist";
+type CurrentPage = "profile" | "orders" | "wishlist";
 
 const UserPage = () => {
-  const [currentPage, setCurrentPage] = useState<CurrentPage>("dashboard");
-
-  const renderComponent = () => {
-    if (currentPage == "dashboard") {
-      return <UserDashboardPage />;
-    }
-
-    if (currentPage == "profile") {
-      return <UserProfilePage />;
-    }
-
-    if (currentPage == "orders") {
-      return <UserOrderPage />;
-    }
-
-    if (currentPage == "wishlist") {
-      return <WishlistPage />;
-    }
-  };
-
-  useEffect(() => {
-    console.log(currentPage);
-  }, [currentPage]);
+    const searchParams = useSearchParams();
+    const router = useRouter();
+    const initialPage = (searchParams.get("currentPage") as CurrentPage) || "profile";
+    const [currentPage, setCurrentPage] = useState<CurrentPage>(initialPage);
+  
+    const renderComponent = () => {
+      switch (currentPage) {
+        case "profile":
+          return <UserProfilePage />;
+        case "orders":
+          return <UserOrderPage />;
+        case "wishlist":
+          return <WishlistPage />;
+        default:
+          return <UserProfilePage />;
+      }
+    };
+  
+    useEffect(() => {
+      console.log(initialPage)
+      const query = new URLSearchParams({ currentPage }).toString();
+      router.replace(`/user?${query}`);
+    }, [currentPage, router]);
+  
 
   return (
     <>
       <div className="grid grid-cols-[250px_1fr] h-full">
         <div className="col-span-1">
           <SideBar
-            onDashboard={() => setCurrentPage("dashboard")}
             onProfile={() => setCurrentPage("profile")}
             onOrders={() => setCurrentPage("orders")}
             onWishlist={() => setCurrentPage("wishlist")}

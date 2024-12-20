@@ -371,7 +371,7 @@ clearCart: async (): Promise<void> => {
     if (!user) return;
   
     try {
-      const response = await axiosInstance.put(`${API_URL}/orders/cancel/${orderId}`);
+      const response = await axiosInstance.put(`${API_URL}/orders/${user.id}/cancel/${orderId}`);
       const currentOrders = useAuthState.getState().orders;
       useAuthState.setState({
         orders: currentOrders.map((order) =>

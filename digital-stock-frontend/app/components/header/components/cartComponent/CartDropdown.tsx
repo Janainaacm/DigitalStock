@@ -2,6 +2,8 @@ import { CartItemInterface } from "@/app/utils/Types";
 import { useUserState } from "@/app/store/UserState";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import AuthForm from "@/app/auth/AuthForm";
+import { useAuthState } from "@/app/store/AuthState";
 
 interface CartItemProps {
   cartItems: CartItemInterface[];
@@ -10,6 +12,7 @@ interface CartItemProps {
 
 const CartDropdown = ({ cartItems, onClose }: CartItemProps) => {
   const router = useRouter()
+  const {user} = useAuthState()
   const { addItemToCart, removeItemFromCart, clearCart } = useUserState();
   const [subtotal, setSubtotal] = useState(0);
   const [itemsAmount, setItemsAmount] = useState(0);
@@ -42,29 +45,9 @@ const CartDropdown = ({ cartItems, onClose }: CartItemProps) => {
     router.push("../cart")
   }
 
-  return (
-    <div className="w-[500px] max-w-xl bg-white shadow-lg relative ml-auto h-screen">
-      <div className="overflow-auto p-6">
-          <div className="flex items-center gap- pt-6 pb-1 text-gray-800">
-            <h3 className="text-2xl font-bold flex-1">Shopping cart</h3>
-            
-            <button onClick={onClose}>
-              <svg
-                className="w-3.5 ml-2 cursor-pointer shrink-0 fill-black hover:fill-red-500"
-                viewBox="0 0 320.591 320.591"
-              >
-                <path
-                  d="M30.391 318.583a30.37 30.37 0 0 1-21.56-7.288c-11.774-11.844-11.774-30.973 0-42.817L266.643 10.665c12.246-11.459 31.462-10.822 42.921 1.424 10.362 11.074 10.966 28.095 1.414 39.875L51.647 311.295a30.366 30.366 0 0 1-21.256 7.288z"
-                  data-original="#000000"
-                ></path>
-                <path
-                  d="M287.9 318.583a30.37 30.37 0 0 1-21.257-8.806L8.83 51.963C-2.078 39.225-.595 20.055 12.143 9.146c11.369-9.736 28.136-9.736 39.504 0l259.331 257.813c12.243 11.462 12.876 30.679 1.414 42.922-.456.487-.927.958-1.414 1.414a30.368 30.368 0 0 1-23.078 7.288z"
-                  data-original="#000000"
-                ></path>
-              </svg>
-            </button>
-          </div>
-          <p className="flex-1 border-b text-sm font-bold text-gray-400 pb-4">Items: {itemsAmount}</p>
+  const showContents = () => {
+    if (user) {
+      return (
           <div className="max-h-[530px] py-6 overflow-scroll no-scrollbar">
             {cartItems && cartItems.length > 0 ? (
               <div className="space-y-4">
@@ -183,6 +166,46 @@ const CartDropdown = ({ cartItems, onClose }: CartItemProps) => {
               <p className="text-sm text-gray-600">Your cart is empty.</p>
             )}
           </div>
+      )
+    } else {
+      return (
+          <div className="flex py-16 flex-col items-center justify-center">
+          <h4 className="text-lg font-semibold pb-5 text-gray-600">Sign in to see shopping cart</h4>
+          <AuthForm>
+            <div className="bg-blue-500 text-white font-semibold rounded-xl py-3 px-9">Sign in</div>
+          </AuthForm>
+          </div>
+      )
+    }
+  }
+
+  return (
+    <div className="w-[500px] max-w-xl bg-white shadow-lg relative ml-auto h-screen">
+      <div className="overflow-auto p-6">
+          <div className="flex items-center gap- pt-6 pb-1 text-gray-800">
+            <h3 className="text-2xl font-bold flex-1">Shopping cart</h3>
+            
+            <button onClick={onClose}>
+              <svg
+                className="w-3.5 ml-2 cursor-pointer shrink-0 fill-black hover:fill-red-500"
+                viewBox="0 0 320.591 320.591"
+              >
+                <path
+                  d="M30.391 318.583a30.37 30.37 0 0 1-21.56-7.288c-11.774-11.844-11.774-30.973 0-42.817L266.643 10.665c12.246-11.459 31.462-10.822 42.921 1.424 10.362 11.074 10.966 28.095 1.414 39.875L51.647 311.295a30.366 30.366 0 0 1-21.256 7.288z"
+                  data-original="#000000"
+                ></path>
+                <path
+                  d="M287.9 318.583a30.37 30.37 0 0 1-21.257-8.806L8.83 51.963C-2.078 39.225-.595 20.055 12.143 9.146c11.369-9.736 28.136-9.736 39.504 0l259.331 257.813c12.243 11.462 12.876 30.679 1.414 42.922-.456.487-.927.958-1.414 1.414a30.368 30.368 0 0 1-23.078 7.288z"
+                  data-original="#000000"
+                ></path>
+              </svg>
+            </button>
+          </div>
+          <p className="flex-1 border-b text-sm font-bold text-gray-400 pb-4">Items: {itemsAmount}</p>
+          <div>
+            {showContents()}
+          </div>
+          
         </div>
         <div className="p-6 absolute bottom-0 w-full border-t bg-white">
           <ul className="text-gray-800 divide-y">
@@ -193,6 +216,7 @@ const CartDropdown = ({ cartItems, onClose }: CartItemProps) => {
           </ul>
           <button
             type="button"
+            disabled={!user}
             onClick={() => checkout()}
             className="mt-6 text-sm font-semibold px-6 py-3 w-full bg-gray-700 hover:bg-blue-700 text-white rounded-md tracking-wide"
           >

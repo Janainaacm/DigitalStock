@@ -1,8 +1,8 @@
 "use client";
 import { useEffect, useState } from "react";
-import CategoryDropdown from "./components/CategoryDropdown";
-import CreateNewCategory from "./components/CreateNewCategory";
-import RenderImage from "./components/RenderImage";
+import CategoryDropdown from "./functions/CategoryDropdown";
+import CreateNewCategory from "./functions/CreateNewCategory";
+import RenderImage from "./functions/RenderImage";
 import { useAdminState } from "@/app/store/AdminState";
 import { ProductInterface } from "@/app/utils/Types";
 
