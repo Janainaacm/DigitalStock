@@ -6,10 +6,8 @@ public class CategoryDTO {
     private Long id;
     private String name;
 
-    // Default constructor
     public CategoryDTO() {}
 
-    // Constructor for entity conversion
     public CategoryDTO(Category category) {
         this.id = category.getId();
         this.name = category.getName();

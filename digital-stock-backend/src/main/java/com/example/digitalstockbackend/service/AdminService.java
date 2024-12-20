@@ -2,6 +2,7 @@ package com.example.digitalstockbackend.service;
 
 import com.example.digitalstockbackend.authorities.OrderStatus;
 import com.example.digitalstockbackend.dto.CategoryDTO;
+import com.example.digitalstockbackend.dto.OrderDTO;
 import com.example.digitalstockbackend.dto.UserDTO;
 import com.example.digitalstockbackend.model.Category;
 import com.example.digitalstockbackend.model.roles.CustomUser;
@@ -43,16 +44,18 @@ public class AdminService {
 
 
     //Orders
-    public ResponseEntity<List<Order>> fetchAllOrders() {
+    public ResponseEntity<List<OrderDTO>> fetchAllOrders() {
         List<Order> list = orderRepository.findAll();
 
-        return ResponseEntity.ok(list);
+        List<OrderDTO> dtoList = list.stream().map(OrderDTO::new).toList();
+
+        return ResponseEntity.ok(dtoList);
     }
 
     public ResponseEntity<Order> updateOrderStatus(Long orderId, String newStatus) {
         OrderStatus status;
         try {
-            status = OrderStatus.valueOf(newStatus.toUpperCase());
+            status = OrderStatus.valueOf(newStatus);
         } catch (IllegalArgumentException e) {
             throw new RuntimeException("Invalid order status");
         }
@@ -65,7 +68,6 @@ public class AdminService {
 
         return ResponseEntity.ok(order);
     }
-
 
 
     //Products
@@ -119,6 +121,11 @@ public class AdminService {
         }
         categoryRepository.deleteById(categoryId);
         return ResponseEntity.noContent().build();
+    }
+
+    private OrderDTO convertToOrderDTO(Order order) {
+        return new OrderDTO(order);
+
     }
 }
 

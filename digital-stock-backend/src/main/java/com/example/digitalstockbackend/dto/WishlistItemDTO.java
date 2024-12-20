@@ -6,6 +6,9 @@ public class WishlistItemDTO {
     private Long id;
     private ProductDTO product;
 
+    public WishlistItemDTO() {
+    }
+
     public WishlistItemDTO(WishlistItem wishlistItem) {
         this.id = wishlistItem.getId();
         this.product = new ProductDTO(wishlistItem.getProduct());

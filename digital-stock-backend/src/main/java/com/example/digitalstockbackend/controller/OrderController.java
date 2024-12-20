@@ -27,9 +27,9 @@ public class OrderController {
         return orderService.fetchOrderById(orderId);
     }
 
-    @GetMapping("/user")
-    public ResponseEntity<List<OrderDTO>> fetchOrdersByUserId(Principal principal) {
-        return orderService.fetchOrdersByUserId(principal);
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<List<OrderDTO>> fetchOrdersByUserId(@PathVariable Long userId) {
+        return orderService.fetchOrdersByUserId(userId);
     }
 
     @GetMapping("/status/{status}")
@@ -48,9 +48,9 @@ public class OrderController {
         return orderService.placeOrder(userId, orderDTO);
     }
 
-    @PutMapping("/{orderId}")
-    public ResponseEntity<?> cancelOrder(@PathVariable Long orderId) {
-        return orderService.cancelOrder(orderId);
+    @PutMapping("/{userId}/cancel/{orderId}")
+    public ResponseEntity<?> cancelOrder(@PathVariable Long orderId, @PathVariable Long userId) {
+        return orderService.cancelOrder(orderId, userId);
     }
 
     @DeleteMapping("/{orderId}")

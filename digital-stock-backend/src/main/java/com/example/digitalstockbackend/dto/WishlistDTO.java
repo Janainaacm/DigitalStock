@@ -8,6 +8,9 @@ public class WishlistDTO {
     private Long id;
     private List<WishlistItemDTO> items;
 
+    public WishlistDTO() {
+    }
+
     public WishlistDTO(Wishlist wishlist) {
         this.id = wishlist.getId();
         this.items = wishlist.getItems().stream().map(WishlistItemDTO::new).toList();

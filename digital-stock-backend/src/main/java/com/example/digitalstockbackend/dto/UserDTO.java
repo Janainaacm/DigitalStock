@@ -13,6 +13,12 @@ public class UserDTO {
     private WishlistDTO wishlist;
     private CartDTO cart;
     private List<OrderDTO> orders;
+    private String firstName;
+    private String lastName;
+    private String phoneNo;
+
+    public UserDTO() {
+    }
 
     public UserDTO(CustomUser user) {
         this.id = user.getId();
@@ -23,6 +29,33 @@ public class UserDTO {
         this.wishlist = user.getWishlist() != null ? new WishlistDTO(user.getWishlist()) : null;
         this.cart = user.getCart() != null ? new CartDTO(user.getCart()) : null;
         this.orders = user.getUserOrders().stream().map(OrderDTO::new).toList();
+        this.firstName = user.getFirstName();
+        this.lastName = user.getLastName();
+        this.phoneNo = user.getPhoneNo();
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public String getPhoneNo() {
+        return phoneNo;
+    }
+
+    public void setPhoneNo(String phoneNo) {
+        this.phoneNo = phoneNo;
     }
 
     // Getters and setters

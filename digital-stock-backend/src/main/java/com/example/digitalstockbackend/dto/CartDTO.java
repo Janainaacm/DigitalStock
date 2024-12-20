@@ -8,6 +8,9 @@ public class CartDTO {
     private Long id;
     private List<CartItemDTO> items;
 
+    public CartDTO() {
+    }
+
     public CartDTO(Cart cart) {
         this.id = cart.getId();
         this.items = cart.getItems().stream().map(CartItemDTO::new).toList();

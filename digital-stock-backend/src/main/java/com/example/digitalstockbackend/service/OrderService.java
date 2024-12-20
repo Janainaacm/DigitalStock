@@ -10,11 +10,14 @@ import com.example.digitalstockbackend.model.Cart;
 import com.example.digitalstockbackend.model.roles.CustomUser;
 import com.example.digitalstockbackend.model.Order;
 import com.example.digitalstockbackend.model.OrderItem;
+import com.example.digitalstockbackend.model.roles.ERole;
+import com.example.digitalstockbackend.model.roles.Role;
 import com.example.digitalstockbackend.repository.CartRepository;
 import com.example.digitalstockbackend.repository.OrderItemRepository;
 import com.example.digitalstockbackend.repository.OrderRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -56,8 +59,8 @@ public class OrderService {
     }
 
     // Fetch Orders by User ID
-    public ResponseEntity<List<OrderDTO>> fetchOrdersByUserId(Principal principal) {
-        CustomUser requestedUser = userService.getUserByUsername(principal.getName());
+    public ResponseEntity<List<OrderDTO>> fetchOrdersByUserId(Long userId) {
+        CustomUser requestedUser = userService.getUserById(userId);
         List<Order> requestedOrders = orderRepository.findByUserId(requestedUser.getId());
 
         List<OrderDTO> orderDTOs = requestedOrders.stream()
@@ -135,24 +138,28 @@ public class OrderService {
         return ResponseEntity.ok(newOrderDTO);
     }
 
-    public ResponseEntity<?> cancelOrder(Long orderId) {
+    public ResponseEntity<?> cancelOrder(Long orderId, Long userId) {
+        CustomUser user = userService.getUserById(userId);
         return orderRepository.findById(orderId)
                 .map(order -> {
-                    if (order.getStatus() == OrderStatus.PENDING ||
-                            order.getStatus() == OrderStatus.CONFIRMED ||
-                            order.getStatus() == OrderStatus.CANCELLED) {
+                    if (user.getRole().getName() == ERole.ROLE_ADMIN || order.getUser().getId().equals(user.getId())) {
+                        if (order.getStatus() == OrderStatus.PENDING) {
 
-                        order.setStatus(OrderStatus.CANCELLED);
-                        orderRepository.save(order);
-                        OrderDTO orderDTO = convertToOrderDTO(order);
-                        return ResponseEntity.ok(orderDTO);
+                            order.setStatus(OrderStatus.CANCELLED);
+                            orderRepository.save(order);
+                            OrderDTO orderDTO = convertToOrderDTO(order);
+                            return ResponseEntity.ok(orderDTO);
 
+                        } else {
+                            return ResponseEntity.badRequest().body("Order cannot be cancelled unless it is in PENDING status.");
+                        }
                     } else {
-                        return ResponseEntity.<OrderDTO>badRequest().build();
+                        return ResponseEntity.status(HttpStatus.FORBIDDEN).body("You are not authorized to cancel this order.");
                     }
                 })
-                .orElseGet(() -> ResponseEntity.<OrderDTO>notFound().build());
+                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).body("Order not found."));
     }
+
 
     // Delete Order
     public ResponseEntity<Void> deleteOrder(Long id) {

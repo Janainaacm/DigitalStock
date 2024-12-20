@@ -1,6 +1,7 @@
 package com.example.digitalstockbackend.controller;
 
 import com.example.digitalstockbackend.dto.CategoryDTO;
+import com.example.digitalstockbackend.dto.OrderDTO;
 import com.example.digitalstockbackend.dto.ProductDTO;
 import com.example.digitalstockbackend.dto.UserDTO;
 import com.example.digitalstockbackend.model.Order;
@@ -13,6 +14,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/admin")
@@ -63,12 +65,14 @@ public class AdminController {
 
     // Handle order management
     @GetMapping("/orders")
-    public ResponseEntity<List<Order>> getAllOrders() {
+    public ResponseEntity<List<OrderDTO>> getAllOrders() {
         return adminService.fetchAllOrders();
     }
 
     @PutMapping("/orders/update/{orderId}")
-    public ResponseEntity<Order> updateOrderStatus(@PathVariable Long orderId, @RequestBody String orderStatus) {
-        return adminService.updateOrderStatus(orderId, orderStatus);
+    public ResponseEntity<Order> updateOrderStatus(@PathVariable Long orderId, @RequestBody Map<String, String> request) {
+        String status = request.get("status");
+        return adminService.updateOrderStatus(orderId, status);
     }
+
 }
