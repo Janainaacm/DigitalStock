@@ -4,30 +4,49 @@ import { useAppState } from "../store/BackendAPIState";
 import { useEffect, useState } from "react";
 import { useAuthState } from "@/app/store/AuthState";
 import { useUserState } from "../store/UserState";
-import FilterButton from "./components/FilterButton";
 import AddToCartButton from "./components/AddToCartButton";
+import FilterProductsButton from "./components/filterButton/FilterProductsButton.tsx";
+import { ProductInterface } from "../utils/Types";
+import LoadingPage from "../components/loadingPage/LoadingPage";
+import { isEqual } from "lodash";
 
 export default function ProductPage() {
-  const { fetchAllProducts, productList, displayProducts, fetchDisplayProducts, filteredProductList, searchKeyword } = useAppState();
-  const { addToWishlist, removeFromWishlist, isProductInWishlist, clearWishlist } = useUserState()
+  const {
+    fetchAllProducts,
+    productList,
+    displayProducts,
+    fetchDisplayProducts,
+    filteredProductList,
+    searchKeyword,
+  } = useAppState();
+  const {
+    addToWishlist,
+    removeFromWishlist,
+    isProductInWishlist,
+    clearWishlist,
+  } = useUserState();
   const { user } = useAuthState();
   const router = useRouter();
-  const [title, setTitle] = useState("Products")
+  const [title, setTitle] = useState("Products");
+  const [hasFilter, setHasFilter] = useState(false);
+  const [filterOpen, setFilterOpen] = useState(false);
 
   useEffect(() => {
     if (productList.length === 0) {
-      fetchAllProducts()
+      fetchAllProducts();
     }
   }, [productList]);
 
-  useEffect(() => {
-    fetchDisplayProducts();
+useEffect(() => {
+  fetchDisplayProducts();
 
-    if (searchKeyword) {
-      setTitle(`${searchKeyword}:`)
-    }
-  }, [productList, filteredProductList]);
+  if (searchKeyword) {
+    setTitle(`${searchKeyword}:`);
+  }
 
+}, [fetchDisplayProducts, searchKeyword]);
+
+  
 
   const handleAddToWishlist = (productId: number) => {
     if (!user) {
@@ -38,33 +57,44 @@ export default function ProductPage() {
     const inWishlist = isProductInWishlist(productId);
 
     if (inWishlist) {
-      console.log(productId)
+      console.log(productId);
       removeFromWishlist(productId);
     } else {
       addToWishlist(productId);
     }
-    
   };
 
   const clear = () => {
     clearWishlist();
   };
 
-  
+  const toggleFilterDropdown = () => {};
+
+/*   if (productDisplay.length == 0) {
+    return (
+      <LoadingPage/>
+    )
+  } */
+
   return (
     <div>
-      <div className="font-sans bg-gray-50 p-4 mx-autow-full px-24 shadow-inner">
-        
-        <h2 className="text-4xl font-extrabold text-gray-800 mb-4">
-          {title}
-        </h2>
-        <p className="mb-12 text-gray-500 border-b ">{displayProducts.length} Products</p>
+      <div className="font-sans bg-white p-4 mx-autow-full px-24 shadow-inner">
+        <h2 className="text-4xl font-extrabold text-gray-800 mb-2">{title}</h2>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="border-b flex justify-between items-center pb-2">
+          <div>
+            <p className="text-gray-500">{displayProducts.length} Products</p>
+          </div>
+          <div>
+            <FilterProductsButton/>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 mt-8 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {displayProducts.map((product) => (
             <div
               key={product.id}
-              className="bg-white rounded overflow-hidden shadow-md cursor-pointer hover:shadow-lg transition-all duration-400"
+              className="bg-gray-100 border border-gray-200 p-2 rounded-xl overflow-hidden cursor-pointer hover:shadow-xl hover:scale-[1.05] transition-all duration-400"
               onClick={() => router.push(`./products/${product.id}`)}
             >
               <div className="relative w-full aspect-w-16 p-2 aspect-h-8 lg:h-80">
@@ -82,7 +112,6 @@ export default function ProductPage() {
                         ? "fill-red-600"
                         : "fill-none hover:fill-red-200 hover:scale-[1.05] hover:opacity-80 transition-all duration-600"
                     }`}
-                    
                     viewBox="0 0 24 24"
                     stroke="currentColor"
                   >
@@ -97,11 +126,11 @@ export default function ProductPage() {
                 <img
                   src={product.imageUrl}
                   alt={product.name}
-                  className=" h-full w-full object-cover object-top"
+                  className="p-3 bg-white h-full w-full object-cover object-top"
                 />
               </div>
 
-              <div className="p-4">
+              <div className="px-4 pt-4">
                 <h3 className="text-lg font-bold text-gray-800">
                   {product.name}
                 </h3>
@@ -110,8 +139,8 @@ export default function ProductPage() {
                     ${product.price}
                   </h4>
 
-                  <div className="relative w-full aspect-w-16 p-2">
-                    <AddToCartButton productId={product.id} quantity={1}/>
+                  <div className="relative w-full aspect-w-16 mt-2">
+                    <AddToCartButton productId={product.id} quantity={1} />
                   </div>
                 </div>
               </div>

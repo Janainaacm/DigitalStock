@@ -138,7 +138,7 @@ export const useAppState = create<AppState>((set) => ({
 
   fetchProductsBySearch: async (): Promise<void> => {},
 
-  setFilteredProductList: async (searchResult: ProductInterface[]) => {
+  setFilteredProductList: (searchResult: ProductInterface[]) => {
     set({
       filteredProductList: searchResult,
     });

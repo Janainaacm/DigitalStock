@@ -27,7 +27,7 @@ export default function HeaderSidebar() {
     if (wishlist) {
       setWishlistNumber(wishlist.items.length);
     }
-  });
+  }, [wishlist, user]);
 
   const searchByCategory = (category: string) => {
     fetchProductsByCategory(category);

@@ -1,5 +1,6 @@
 "use client";
 
+import LoadingPage from "@/app/components/loadingPage/LoadingPage";
 import { useAdminState } from "@/app/store/AdminState";
 import { OrderInterface, OrderItemInterface } from "@/app/utils/Types";
 import { useSearchParams } from "next/navigation";
@@ -46,14 +47,8 @@ const AdminOrderDetailsPage = ({ onBack }: Props) => {
 
   if (!orderDetails) {
     return (
-      <div className="h-full w-full flex items-center justify-center">
-        <div
-          className="inline-block h-6 w-6 animate-spin rounded-full border-2 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"
-          role="status"
-        ></div>
-        <p className="ml-3">Loading...</p>
-      </div>
-    );
+      <LoadingPage/>
+    )
   }
 
   const handleDivClick = (id: number) => {
