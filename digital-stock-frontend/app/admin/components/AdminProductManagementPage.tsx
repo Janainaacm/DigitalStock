@@ -21,6 +21,10 @@ const ProductManagementPage = ({onAddProduct, onEditProduct}: Props) => {
     fetchAllProducts();
   }, [fetchAllProducts]);
 
+    useEffect(() => {
+    console.log(productList)
+  }, [productList]);
+
   useEffect(() => {
     let sorted = [...productList];
 
@@ -75,43 +79,44 @@ const ProductManagementPage = ({onAddProduct, onEditProduct}: Props) => {
 
       <div className=" px-6 overflow-x-auto font-[sans-serif]">
         <table className="min-w-full bg-white">
-          <thead className="bg-gray-100 whitespace-nowrap">
-            <tr>
-              <th
-                onClick={() => handleSort("name")}
-                className="p-4 text-left text-sm font-semibold text-black cursor-pointer hover:text-blue-500"
-              >
-                Product
-              </th>
-              <th
-                onClick={() => handleSort("price")}
-                className="p-4 text-left text-sm font-semibold text-black cursor-pointer hover:text-blue-500"
-              >
-                Price
-              </th>
-              <th
-                onClick={() => handleSort("stock")}
-                className="p-4 text-left text-sm font-semibold text-black cursor-pointer hover:text-blue-500"
-              >
-                In stock
-              </th>
-              <th
-                onClick={() => handleSort("sales")}
-                className="p-4 text-left text-sm font-semibold text-black cursor-pointer hover:text-blue-500"
-              >
-                Sales
-              </th>
-              <th
-                onClick={() => handleSort("colorName")}
-                className="p-4 text-left text-sm font-semibold text-black cursor-pointer hover:text-blue-500"
-              >
-                Color
-              </th>
-              <th className="p-4 text-left text-sm font-semibold text-black">
-                Action
-              </th>
-            </tr>
-          </thead>
+         <thead className="bg-gray-100 whitespace-nowrap">
+  <tr>
+    <th
+      onClick={() => handleSort("name")}
+      className="p-4 text-left text-sm font-semibold text-black cursor-pointer hover:text-blue-500 w-1/4"
+    >
+      Product
+    </th>
+    <th
+      onClick={() => handleSort("price")}
+      className="p-4 text-left text-sm font-semibold text-black cursor-pointer hover:text-blue-500 w-1/6"
+    >
+      Price
+    </th>
+    <th
+      onClick={() => handleSort("stock")}
+      className="p-4 text-left text-sm font-semibold text-black cursor-pointer hover:text-blue-500 w-1/6"
+    >
+      In stock
+    </th>
+    <th
+      onClick={() => handleSort("sales")}
+      className="p-4 text-left text-sm font-semibold text-black cursor-pointer hover:text-blue-500 w-1/6"
+    >
+      Sales
+    </th>
+    <th
+      onClick={() => handleSort("colorName")}
+      className="p-4 text-left text-sm font-semibold text-black cursor-pointer hover:text-blue-500 w-1/6"
+    >
+      Color
+    </th>
+    <th className="p-4 text-left text-sm font-semibold text-black w-1/6">
+      Action
+    </th>
+  </tr>
+</thead>
+
 
           <tbody className="whitespace-nowrap divide-y divide-gray-200">
             {currentProducts.map((product) => (

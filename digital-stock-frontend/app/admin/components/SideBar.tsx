@@ -43,7 +43,7 @@ const SideBar = ({
             <li>
               <button
                 onClick={onDashboard}
-                className="text-gray-800 text-sm flex items-center hover:bg-gray-100 rounded-md px-4 py-2 transition-all"
+                className="text-gray-800 w-full text-sm flex items-center hover:bg-gray-100 rounded-md px-4 py-2 transition-all"
               >
                 <svg
                   className="h-5 w-5 mr-2 text-gray-600"
@@ -56,11 +56,11 @@ const SideBar = ({
                   strokeLinecap="round"
                   strokeLinejoin="round"
                 >
-                  <path stroke="none" d="M0 0h24v24H0z" />{" "}
-                  <rect x="4" y="4" width="6" height="6" rx="1" />{" "}
-                  <rect x="4" y="14" width="6" height="6" rx="1" />{" "}
-                  <rect x="14" y="14" width="6" height="6" rx="1" />{" "}
-                  <line x1="14" y1="7" x2="20" y2="7" />{" "}
+                  <path stroke="none" d="M0 0h24v24H0z" />
+                  <rect x="4" y="4" width="6" height="6" rx="1" />
+                  <rect x="4" y="14" width="6" height="6" rx="1" />
+                  <rect x="14" y="14" width="6" height="6" rx="1" />
+                  <line x1="14" y1="7" x2="20" y2="7" />
                   <line x1="17" y1="4" x2="17" y2="10" />
                 </svg>
 
@@ -70,7 +70,7 @@ const SideBar = ({
             <li>
               <button
                 
-                className="text-gray-800 text-sm flex items-center hover:bg-gray-100 rounded-md px-4 py-2 transition-all"
+                className="text-gray-800 w-full text-sm flex items-center hover:bg-gray-100 rounded-md px-4 py-2 transition-all"
               >
                 <svg
                   fill="currentColor"
@@ -93,7 +93,7 @@ const SideBar = ({
               <li>
                 <button
                   onClick={onUsers}
-                  className="text-gray-800 text-sm flex items-center hover:bg-gray-100 rounded-md px-4 py-2 transition-all"
+                  className="text-gray-800 w-full text-sm flex items-center hover:bg-gray-100 rounded-md px-4 py-2 transition-all"
                 >
                   <svg
                     fill="currentColor"
@@ -111,7 +111,7 @@ const SideBar = ({
               <li>
                 <button
                   onClick={onOrders}
-                  className="text-gray-800 text-sm flex items-center hover:bg-gray-100 rounded-md px-4 py-2 transition-all"
+                  className="text-gray-800 w-full text-sm flex items-center hover:bg-gray-100 rounded-md px-4 py-2 transition-all"
                 >
                   <svg
                     className="w-5 h-5 mr-3"
@@ -141,7 +141,7 @@ const SideBar = ({
               <li>
                 <button
                   onClick={onProducts}
-                  className="text-gray-800 text-sm flex items-center hover:bg-gray-100 rounded-md px-4 py-2 transition-all"
+                  className="text-gray-800 w-full text-sm flex items-center hover:bg-gray-100 rounded-md px-4 py-2 transition-all"
                 >
                   <svg
                     width="20px"
@@ -178,7 +178,7 @@ const SideBar = ({
               <li>
                 <button
                   onClick={onAddProduct}
-                  className="text-gray-800 text-sm flex items-center hover:bg-gray-100 rounded-md px-4 py-2 transition-all"
+                  className="text-gray-800 w-full text-sm flex items-center hover:bg-gray-100 rounded-md px-4 py-2 transition-all"
                 >
                   <svg
                     className="h-5 w-5 text-gray-800 mr-2"
@@ -207,7 +207,7 @@ const SideBar = ({
               <li>
                 <button
                   onClick={onProfile}
-                  className="text-gray-800 text-sm flex items-center hover:bg-gray-100 rounded-md px-4 py-2 transition-all"
+                  className="text-gray-800 w-full text-sm flex items-center hover:bg-gray-100 rounded-md px-4 py-2 transition-all"
                 >
                   <svg
                     fill="currentColor"
@@ -248,7 +248,7 @@ const SideBar = ({
               <li>
                 <button
                   onClick={handleLogOut}
-                  className="text-gray-800 text-sm mb-20 flex items-center hover:bg-gray-100 rounded-md px-4 py-2 transition-all"
+                  className="text-gray-800 text-sm mb-20 w-full flex items-center hover:bg-gray-100 rounded-md px-4 py-2 transition-all"
                 >
                   <svg
                     fill="currentColor"
