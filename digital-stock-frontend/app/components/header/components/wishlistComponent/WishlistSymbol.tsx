@@ -3,7 +3,7 @@ import { useCallback, useEffect, useState } from "react";
 import { WishlistItemsInterface } from "@/app/utils/Types";
 import WishlistDropdown from "./WishlistDropdown";
 import WhistlistIcon from "@/public/icons/WishlistIcon";
-import AuthForm from "@/app/auth/AuthForm";
+import AuthForm from "@/app/(with-layout)/auth/AuthForm";
 
 const WishlistSymbol = () => {
   const { wishlist, user } = useAuthState();

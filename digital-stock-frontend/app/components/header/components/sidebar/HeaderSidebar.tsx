@@ -1,4 +1,4 @@
-import AuthForm from "@/app/auth/AuthForm";
+import AuthForm from "@/app/(with-layout)/auth/AuthForm";
 import WhistlistIcon from "@/public/icons/WishlistIcon";
 import { Dialog, Transition, TransitionChild } from "@headlessui/react";
 import { useRouter } from "next/navigation";

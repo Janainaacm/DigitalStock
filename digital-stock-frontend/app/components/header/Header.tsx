@@ -4,7 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 
 import UserIcon from "@/public/icons/UserIcon";
-import AuthForm from "@/app/auth/AuthForm";
+import AuthForm from "@/app/(with-layout)/auth/AuthForm";
 
 import styles from "./components/styles/Header.module.css";
 import DisplaySearchBar from "../searchBar/DisplaySearchBar";

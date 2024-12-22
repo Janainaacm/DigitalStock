@@ -2,7 +2,7 @@ import { CartItemInterface } from "@/app/utils/Types";
 import { useUserState } from "@/app/store/UserState";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import AuthForm from "@/app/auth/AuthForm";
+import AuthForm from "@/app/(with-layout)/auth/AuthForm";
 import { useAuthState } from "@/app/store/AuthState";
 
 interface CartItemProps {
