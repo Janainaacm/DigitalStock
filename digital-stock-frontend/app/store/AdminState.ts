@@ -15,6 +15,7 @@ interface AdminState {
   orders: OrderInterface[];
   orderDetails: OrderInterface | null;
   userDetails: UserInterface | null;
+  productDetails: ProductInterface | null;
 
   // Admin Actions
   fetchAllUsers: () => Promise<void>;
@@ -28,7 +29,7 @@ interface AdminState {
   cancelOrder: (orderId: number) => Promise<void>;
   setOrderDetails: (order: OrderInterface) => void;
   setUserDetails: (user: UserInterface) => void;
-
+  setProductDetails: (product: ProductInterface) => void;
 }
 
 export const useAdminState = create<AdminState>((set) => ({
@@ -37,6 +38,7 @@ export const useAdminState = create<AdminState>((set) => ({
   orders: [],
   orderDetails: null,
   userDetails: null,
+  productDetails: null,
 
   fetchAllUsers: async (): Promise<void> => {
     try {
@@ -167,6 +169,10 @@ export const useAdminState = create<AdminState>((set) => ({
   setUserDetails: (user) => {
       set({userDetails: user})
   },
+
+  setProductDetails: (product) => {
+    set({productDetails: product})
+},
 
   
 }));

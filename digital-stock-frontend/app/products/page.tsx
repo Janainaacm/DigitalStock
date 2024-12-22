@@ -37,16 +37,15 @@ export default function ProductPage() {
     }
   }, [productList]);
 
-useEffect(() => {
-  fetchDisplayProducts();
+  useEffect(() => {
+    fetchDisplayProducts();
 
-  if (searchKeyword) {
-    setTitle(`${searchKeyword}:`);
-  }
+    if (searchKeyword) {
+      setTitle(`${searchKeyword}:`);
+    }
 
-}, [fetchDisplayProducts, searchKeyword]);
-
-  
+    console.log(displayProducts);
+  }, [fetchDisplayProducts, searchKeyword]);
 
   const handleAddToWishlist = (productId: number) => {
     if (!user) {
@@ -70,7 +69,7 @@ useEffect(() => {
 
   const toggleFilterDropdown = () => {};
 
-/*   if (productDisplay.length == 0) {
+  /*   if (productDisplay.length == 0) {
     return (
       <LoadingPage/>
     )
@@ -86,7 +85,7 @@ useEffect(() => {
             <p className="text-gray-500">{displayProducts.length} Products</p>
           </div>
           <div>
-            <FilterProductsButton/>
+            <FilterProductsButton />
           </div>
         </div>
 

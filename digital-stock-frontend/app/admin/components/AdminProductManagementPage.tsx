@@ -3,6 +3,7 @@ import { useAppState } from "@/app/store/BackendAPIState";
 import DeleteProductButton from "./functions/DeleteProductButton";
 import { useState, useEffect } from "react";
 import { ProductInterface } from "@/app/utils/Types";
+import { useAdminState } from "@/app/store/AdminState";
 
 type Props = {
   onAddProduct: () => void;
@@ -11,6 +12,7 @@ type Props = {
 
 const ProductManagementPage = ({onAddProduct, onEditProduct}: Props) => {
   const { productList, fetchAllProducts } = useAppState();
+  const { setProductDetails } = useAdminState();
   const [currentPage, setCurrentPage] = useState(1);
   const [productsPerPage] = useState(15);
   const [sortedList, setSortedList] = useState<ProductInterface[]>([]);
@@ -69,6 +71,11 @@ const ProductManagementPage = ({onAddProduct, onEditProduct}: Props) => {
   const handlePageChange = (pageNumber: number) => {
     setCurrentPage(pageNumber);
   };
+
+  const onEdit = (product: ProductInterface) => {
+    setProductDetails(product)
+    onEditProduct()
+  }
   
 
   return (
@@ -137,7 +144,7 @@ const ProductManagementPage = ({onAddProduct, onEditProduct}: Props) => {
                 <td className="p-4 text-sm">{product.sales}</td>
                 <td className="p-4 text-sm">{product.colorName}</td>
                 <td className="p-4 text-sm">
-                  <button onClick={() => console.log("Edit product", product)}>
+                  <button onClick={() => onEdit(product)}>
                     <svg
                       className="h-5 w-5 text-gray-900 mr-1.5 hover:text-green-600 hover:scale-[1.2] transition-all duration-200"
                       viewBox="0 0 24 24"

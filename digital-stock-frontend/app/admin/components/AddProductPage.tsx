@@ -219,8 +219,7 @@ const AddProductPage = ({onProducts}: Props) => {
               </div>
               <div className="py-4 pb-4 px-6">
                 <h3 className="text-xl font-bold text-gray-700">Description</h3>
-                <input
-                  type="text"
+                <textarea
                   className={`w-full pb-60 rounded-lg border px-2 italic mt-2 py-1.5 ${
                     error.includes("description")
                       ? "border-red-500 placeholder-red-500"

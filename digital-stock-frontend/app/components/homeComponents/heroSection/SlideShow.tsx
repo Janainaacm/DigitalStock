@@ -11,7 +11,7 @@ import "swiper/css/pagination";
 import "swiper/css/navigation";
 
 import { Autoplay, Pagination, Navigation } from "swiper/modules";
-import ShopCategoryButton from "../buttons/ShopCategoryButton";
+import ShopCategoryButton from "../../buttons/ShopCategoryButton";
 
 export default function SlideShow() {
   const sliders = [
@@ -53,10 +53,10 @@ export default function SlideShow() {
         spaceBetween={0}
         loop={true}
         centeredSlides={true}
-        /* autoplay={{
+        autoplay={{
           delay: 2500,
           disableOnInteraction: true,
-        }} */
+        }} 
         navigation={true}
         pagination={{
           clickable: true,

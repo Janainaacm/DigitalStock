@@ -39,7 +39,7 @@ export default function ForgotPassword({ onLogin }: ForgotPasswordProps) {
             handleResetPassword(); 
           }
         }}
-        className="md:col-span-2 w-full py-3 sm:px-16 bg-[#F5F5F5]"
+        className="md:col-span-2 w-full py-3 sm:px-16 bg-white"
       >
         <div className="mb-7">
           <h3 className="text-gray-800 text-3xl py-6 font-bold">
@@ -55,7 +55,7 @@ export default function ForgotPassword({ onLogin }: ForgotPasswordProps) {
                 type="email"
                 required
                 onChange={(e) => setEmail(e.target.value)}
-                className={`w-full bg-[#F5F5F5] text-sm border-b px-2 py-3 outline-none transition-all duration-400 ${
+                className={`w-full bg-white text-sm border-b px-2 py-3 outline-none transition-all duration-400 ${
                   validation.email
                     ? "border-gray-300 focus:border-blue-600 hover:border-black-600 hover:placeholder-black-600"
                     : "border-red-600 placeholder-red-600"

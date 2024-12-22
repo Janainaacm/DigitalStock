@@ -235,7 +235,7 @@ const Header = () => {
                       strokeLinejoin="round"
                     >
                       <path stroke="none" d="M0 0h24v24H0z" />{" "}
-                      <rect x="6" y="6" width="12" height="12" rx="3" />{" "}
+                      <rect x="6" y="6" width="12" height="12" rx="3" />
                       <path d="M9 18v3h6v-3" /> <path d="M9 6v-3h6v3" />
                     </svg>
                     Watches
@@ -246,7 +246,7 @@ const Header = () => {
 
             <li className="max-lg:border-b max-lg:px-3 max-lg:py-3">
               <Link
-                href="javascript:void(0)"
+                href="./about"
                 className="hover:text-gray-600 text-gray-800 transition-all duration-300  text-gray-600 font-semibold text-[15px] block"
               >
                 About
@@ -254,7 +254,7 @@ const Header = () => {
             </li>
             <li className="max-lg:border-b max-lg:px-3 max-lg:py-3">
               <Link
-                href="javascript:void(0)"
+                href="./contact"
                 className="hover:text-gray-600 text-gray-800 transition-all duration-300 text-gray-600 font-semibold text-[15px] block"
               >
                 Contact

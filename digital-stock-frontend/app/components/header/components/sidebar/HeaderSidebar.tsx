@@ -260,7 +260,7 @@ export default function HeaderSidebar() {
                       </li>
                       <li className="w-full group text-xl border-b py-4 my-3 flex justify-between">
                       <button
-                          onClick={() => redirect("/")}
+                          onClick={() => redirect("./about")}
                           className="group-hover:text-blue-400 text-gray-600 block"
                         >
                           About
@@ -268,7 +268,7 @@ export default function HeaderSidebar() {
                       </li>
                       <li className="w-full group text-xl border-b py-4 my-3 flex justify-between">
                       <button
-                          onClick={() => redirect("/")}
+                          onClick={() => redirect("./contact")}
                           className="group-hover:text-blue-400 text-gray-600 block"
                         >
                           Contact
