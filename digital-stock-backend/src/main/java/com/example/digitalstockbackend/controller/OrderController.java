@@ -2,13 +2,11 @@ package com.example.digitalstockbackend.controller;
 
 import com.example.digitalstockbackend.authorities.OrderStatus;
 import com.example.digitalstockbackend.dto.OrderDTO;
-import com.example.digitalstockbackend.model.Order;
 import com.example.digitalstockbackend.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.security.Principal;
 import java.util.List;
 
 @RestController

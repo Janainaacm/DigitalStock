@@ -1,13 +1,9 @@
 package com.example.digitalstockbackend.service;
 
 import com.example.digitalstockbackend.dto.CartDTO;
-import com.example.digitalstockbackend.dto.CartItemDTO;
-import com.example.digitalstockbackend.dto.ProductDTO;
 import com.example.digitalstockbackend.model.Cart;
 import com.example.digitalstockbackend.model.CartItem;
 import com.example.digitalstockbackend.model.Product;
-import com.example.digitalstockbackend.model.Wishlist;
-import com.example.digitalstockbackend.model.roles.CustomUser;
 import com.example.digitalstockbackend.repository.CartItemRepository;
 import com.example.digitalstockbackend.repository.CartRepository;
 import com.example.digitalstockbackend.repository.ProductRepository;

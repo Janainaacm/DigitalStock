@@ -1,7 +1,5 @@
 package com.example.digitalstockbackend.dto;
 
-import java.util.Set;
-
 import jakarta.validation.constraints.*;
 
 public class SignupRequest {

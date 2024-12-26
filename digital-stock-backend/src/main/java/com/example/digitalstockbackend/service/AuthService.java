@@ -5,12 +5,9 @@ import com.example.digitalstockbackend.config.security.jwt.JwtUtils;
 import com.example.digitalstockbackend.dto.*;
 import com.example.digitalstockbackend.exception.UserNotFoundException;
 import com.example.digitalstockbackend.model.Address;
-import com.example.digitalstockbackend.model.Cart;
-import com.example.digitalstockbackend.model.Wishlist;
 import com.example.digitalstockbackend.model.roles.CustomUser;
 import com.example.digitalstockbackend.model.roles.ERole;
 import com.example.digitalstockbackend.model.roles.Role;
-import com.example.digitalstockbackend.model.Order;
 
 import com.example.digitalstockbackend.repository.RoleRepository;
 import com.example.digitalstockbackend.repository.UserRepository;
@@ -268,10 +265,6 @@ public class AuthService {
 
     private UserDTO convertToUserDTO(CustomUser user) {
         return new UserDTO(user);
-    }
-
-    private OrderDTO getOrderDTO(Order order) {
-        return new OrderDTO(order);
     }
 
 }

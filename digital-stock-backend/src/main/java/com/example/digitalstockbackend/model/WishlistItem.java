@@ -2,7 +2,6 @@ package com.example.digitalstockbackend.model;
 
 import jakarta.persistence.*;
 
-import java.time.LocalDateTime;
 
 @Entity
 public class WishlistItem {

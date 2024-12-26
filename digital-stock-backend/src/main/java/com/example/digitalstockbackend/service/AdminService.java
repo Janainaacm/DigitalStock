@@ -2,8 +2,6 @@ package com.example.digitalstockbackend.service;
 
 import com.example.digitalstockbackend.authorities.OrderStatus;
 import com.example.digitalstockbackend.dto.*;
-import com.example.digitalstockbackend.exception.UserNotFoundException;
-import com.example.digitalstockbackend.model.Address;
 import com.example.digitalstockbackend.model.Category;
 import com.example.digitalstockbackend.model.roles.CustomUser;
 import com.example.digitalstockbackend.model.Order;
@@ -15,10 +13,8 @@ import com.example.digitalstockbackend.repository.UserRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class AdminService {
@@ -144,10 +140,6 @@ public class AdminService {
         return ResponseEntity.noContent().build();
     }
 
-    private OrderDTO convertToOrderDTO(Order order) {
-        return new OrderDTO(order);
-
-    }
 
     private Product convertToProduct(ProductDTO productDTO) {
         Product product = new Product();
