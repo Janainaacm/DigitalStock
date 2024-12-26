@@ -61,7 +61,7 @@ export const useUserState = create<UserState>(() => ({
     if (!user) return;
 
     try {
-      await axiosInstance.put(`${API_URL}/user/${user.id}`, updatedUser);
+      await axiosInstance.put(`${API_URL}/auth/update/${user.id}`, updatedUser);
     } catch (error) {
       console.error("Error updating user profile:", error);
       throw error;

@@ -32,19 +32,12 @@ export default function ProductPage() {
   const [filterOpen, setFilterOpen] = useState(false);
 
   useEffect(() => {
-    if (productList.length === 0) {
-      fetchAllProducts();
-    }
-  }, [productList]);
-
-  useEffect(() => {
     fetchDisplayProducts();
 
     if (searchKeyword) {
       setTitle(`${searchKeyword}:`);
     }
 
-    console.log(displayProducts);
   }, [fetchDisplayProducts, searchKeyword]);
 
   const handleAddToWishlist = (productId: number) => {

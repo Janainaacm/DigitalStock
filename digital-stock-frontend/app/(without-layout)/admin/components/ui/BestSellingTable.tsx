@@ -4,8 +4,14 @@ import { useEffect, useState } from "react";
 
 
 const BestSellingTable = () => {
-  const { productList } = useAppState()
+  const { productList, fetchAllProducts } = useAppState()
   const [bestSelling, setBestSelling] = useState<ProductInterface[]>([])
+
+  useEffect(() => {
+    if (productList.length == 0) {
+      fetchAllProducts();
+    }
+  }, [productList])
 
   useEffect(() => {
     if (bestSelling.length == 0) {

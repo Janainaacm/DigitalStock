@@ -1,5 +1,6 @@
 import { WishlistItemsInterface } from "@/app/utils/Types";
 import { useUserState } from "@/app/store/UserState";
+import { useRouter } from "next/navigation";
 
 interface WishlistDropdownProps {
   wishlistItems: WishlistItemsInterface[];
@@ -7,6 +8,7 @@ interface WishlistDropdownProps {
 
 const WishlistDropdown = ({ wishlistItems }: WishlistDropdownProps) => {
   const { removeFromWishlist, addItemToCart } = useUserState();
+  const router = useRouter()
 
   const removeItemFromWishlist = (productId: number) => {
     removeFromWishlist(productId);
@@ -99,6 +101,7 @@ const WishlistDropdown = ({ wishlistItems }: WishlistDropdownProps) => {
       </div>
       <div className="p-6 w-full border-t bg-white">
         <button
+          onClick={() => router.push("/user?currentPage=wishlist")}
           type="button"
           className="text-sm font-semibold py-3 w-full border hover:bg-gray-50 hover:shadow-xl transition-all duration-300 rounded-md tracking-wide"
         >

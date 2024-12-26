@@ -12,7 +12,6 @@ import AdminProfilePage from "./components/AdminProfilePage";
 import AdminOrderManagementPage from "./components/AdminOrderManagement";
 import AdminOrderDetailsPage from "./components/AdminOrderDetailsPage";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useAdminState } from "../../store/AdminState";
 import Calendar from "./components/Calendar";
 
 type CurrentPage =
@@ -38,7 +37,7 @@ const AdminPage = () => {
   const renderComponent = () => {
     switch (currentPage) {
       case "dashboard":
-        return <AdminDashboard />;
+        return <AdminDashboard onOrders={() => setCurrentPage("orders")} onProducts={() => setCurrentPage("products")}/>;
   
       case "products":
         return (
@@ -107,6 +106,7 @@ const AdminPage = () => {
       <div className="grid grid-cols-[250px_1fr] h-full">
         <div className="col-span-1">
           <SideBar
+            currentPage={currentPage}
             onDashboard={() => setCurrentPage("dashboard")}
             onProducts={() => setCurrentPage("products")}
             onAddProduct={() => setCurrentPage("add-product")}

@@ -4,6 +4,7 @@ import DeleteProductButton from "./functions/DeleteProductButton";
 import { useState, useEffect } from "react";
 import { ProductInterface } from "@/app/utils/Types";
 import { useAdminState } from "@/app/store/AdminState";
+import ManageCategories from "./functions/ManageCategories";
 
 type Props = {
   onAddProduct: () => void;
@@ -80,9 +81,14 @@ const ProductManagementPage = ({onAddProduct, onEditProduct}: Props) => {
 
   return (
     <div className="relative font-[sans-serif] h-screen">
-      <h1 className="px-6 py-6 text-4xl font-extrabold text-gray-800">
+      <h1 className="px-6 pt-6 text-4xl font-extrabold text-gray-800">
         Products
       </h1>
+
+      <div className="flex justify-between items-center mx-8 pb-4">
+        <p className="text-gray-500 text-sm">Products: {productList.length}</p>
+        <ManageCategories/>
+      </div>
 
       <div className=" px-6 overflow-x-auto font-[sans-serif]">
         <table className="min-w-full bg-white">

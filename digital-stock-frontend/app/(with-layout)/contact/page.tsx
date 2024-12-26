@@ -1,6 +1,6 @@
 const ContactPage = () => {
   return (
-    <div className="max-w-5xl max-lg:max-w-3xl mx-auto bg-white my-6 font-[sans-serif]">
+    <div className="max-w-5xl mb-28 max-lg:max-w-3xl mx-auto bg-white my-6 font-[sans-serif]">
       <div className="text-center px-6">
         <h2 className="text-gray-800 text-3xl font-extrabold">Contact Us</h2>
         <p className="text-sm text-gray-500 mt-4">
@@ -263,7 +263,7 @@ const ContactPage = () => {
                       type="radio"
                       name="value1"
                       className="hidden peer"
-                      checked
+                      
                     />
                     <label
                       htmlFor="radio1"

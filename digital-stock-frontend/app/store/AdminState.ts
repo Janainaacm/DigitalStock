@@ -19,6 +19,7 @@ interface AdminState {
 
   // Admin Actions
   fetchAllUsers: () => Promise<void>;
+  deleteUser: (userId: number) => Promise<void>;
   addNewProduct: (productData: ProductInterface) => Promise<void>;
   editProduct: (productId: number, productDetails: ProductInterface) => Promise<void>;
   deleteProduct: (productId: number) => Promise<void>;
@@ -43,9 +44,24 @@ export const useAdminState = create<AdminState>((set) => ({
   fetchAllUsers: async (): Promise<void> => {
     try {
       const response = await axiosInstance.get(`${API_URL}/admin/users`);
-      set({ userList: response.data });
+      const list: UserInterface[] = response.data
+      const filtered = list.filter((user) => user.role == "ROLE_USER")
+
+      set({ userList: filtered });
     } catch (error) {
       console.error("Error fetching all users:", error);
+      throw error;
+    }
+  },
+
+  deleteUser: async (userId: number): Promise<void> => {
+    try {
+      await axiosInstance.delete(`${API_URL}/admin/delete/${userId}`);
+      set((state) => ({
+        userList: state.userList.filter((user) => user.id !== userId),
+      }));
+    } catch (error) {
+      console.error("Error deleting user:", error);
       throw error;
     }
   },

@@ -2,7 +2,12 @@ import CardDataStats from "./functions/CardDataStats";
 import BestSellingTable from "./ui/BestSellingTable";
 import Notifications from "./ui/NotificationsCard";
 
-const AdminDashboard = () => {
+type Props = {
+ onOrders: () => void;
+ onProducts: () => void;
+}
+
+const AdminDashboard = ({onOrders, onProducts}: Props) => {
   return (
     <div className="p-8">
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 xl:grid-cols-4 2xl:gap-7">
@@ -93,7 +98,7 @@ const AdminDashboard = () => {
         <div className="col-span-12 xl:col-span-8">
           <BestSellingTable />
         </div>
-        <Notifications />
+        <Notifications onOrders={onOrders} onProducts={onProducts}/>
       </div>
     </div>
   );

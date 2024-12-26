@@ -173,11 +173,11 @@ const UserInformationAdminPage = ({user}: Props) => {
                       <div
                         className="block ps-8 pe-0 pt-3 pb-2 w-full text-md text-gray-900 bg-transparent border-0 z-20 border-b border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600"
                       >
-                        {user.address.addressLine ? user.address.addressLine : "." }
+                        {user.address && user.address.addressLine ? user.address.addressLine : "." }
                       </div>
                       <div
                         className={`absolute text-sm text-gray-400 duration-300 transform ${
-                            user.address.addressLine
+                            user.address?.addressLine
                             ? "-translate-y-11 scale-75 top-3 origin-[0]"
                             : "start-8 scale-100 -translate-y-8 bg-white"
                         }`}
@@ -210,11 +210,11 @@ const UserInformationAdminPage = ({user}: Props) => {
                       <div
                         className="block ps-8 pe-0 pt-3 pb-2 w-full text-md text-gray-900 bg-transparent border-0 z-20 border-b border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600"
                       >
-                        {user.address.city ? user.address.city : "." }
+                        {user.address && user.address.city ? user.address.city : "." }
                       </div>
                       <div
                         className={`absolute text-sm text-gray-400 duration-300 transform ${
-                            user.address.city
+                            user.address?.city
                             ? "-translate-y-6 scale-75 top-3 origin-[0]"
                             : "start-8 scale-100 -translate-y-8 bg-white"
                         }`}
@@ -249,11 +249,11 @@ const UserInformationAdminPage = ({user}: Props) => {
                       <div
                         className="block ps-8 pe-0 pt-3 pb-2 w-full text-md text-gray-900 bg-transparent border-0 z-20 border-b border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600"
                       >
-                        {user.address.state ? user.address.state : "." }
+                        {user.address && user.address.state ? user.address.state : "." }
                       </div>
                       <div
                         className={`absolute text-sm text-gray-400 duration-300 transform ${
-                            user.address.state
+                            user.address?.state
                             ? "-translate-y-11 scale-75 top-3 origin-[0]"
                             : "start-8 scale-100 -translate-y-8 bg-white"
                         }`}
@@ -286,11 +286,11 @@ const UserInformationAdminPage = ({user}: Props) => {
                           <path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 0 1 -2.827 0l-4.244-4.243a8 8 0 1 1 11.314 0z" />
                         </svg>
                       </span>
-                        {user.address.zipCode ? user.address.zipCode : "." }
+                        {user.address && user.address.zipCode ? user.address.zipCode : "." }
                       </div>
                       <div
                         className={`absolute text-sm text-gray-400 duration-300 transform ${
-                            user.address.zipCode
+                            user.address?.zipCode
                             ? "-translate-y-11 scale-75 top-3 origin-[0]"
                             : "start-8 scale-100 -translate-y-8 bg-white"
                         }`}

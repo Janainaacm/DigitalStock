@@ -1,7 +1,7 @@
 import { useAdminState } from "@/app/store/AdminState";
 import { useAuthState } from "@/app/store/AuthState";
 import { useAppState } from "@/app/store/BackendAPIState";
-import { ProductInterface } from "@/app/utils/Types";
+import { CategoryInterface, ProductInterface } from "@/app/utils/Types";
 import LoadingIcon from "@/public/icons/LoadingIcon";
 import {
   Transition,
@@ -12,11 +12,11 @@ import {
 import { Fragment, useState } from "react";
 
 interface Props {
-  product: ProductInterface;
+    category: CategoryInterface;
 }
 
-export default function DeleteProductButton({ product }: Props) {
-  const { fetchAllProducts } = useAppState();
+export default function DeleteCategoryButton({ category }: Props) {
+  const { fetchAllProducts, productList } = useAppState();
   const [open, setOpen] = useState(false);
   const [validated, setValidated] = useState(false);
   const [verified, setVerified] = useState(false);
@@ -28,8 +28,9 @@ export default function DeleteProductButton({ product }: Props) {
     password: true,
   });
   const [isLoading, setIsLoading] = useState(false);
-  const { deleteProduct } = useAdminState();
+  const { deleteCategory } = useAdminState();
   const [success, setSuccess] = useState(false);
+  const [isEmpty, setIsEmpty] = useState(false);
 
   const toggleModal = () => setOpen((prev) => !prev);
 
@@ -49,9 +50,10 @@ export default function DeleteProductButton({ product }: Props) {
     try {
       const response = await verifyPassword(password);
       setValidated(response);
-      if (product.id && response) {
+      
+      if (category.id && validated) {
         try {
-          await deleteProduct(product.id);
+          await deleteCategory(category.id);
           setSuccess(true);
 
           setTimeout(() => {
@@ -75,16 +77,27 @@ export default function DeleteProductButton({ product }: Props) {
     setShowPassword(!showPassword);
   };
 
+  const verifyDeletion = () => {
+    const amount = productList.filter((product) => product.categoryName === category.name)
+
+    if (amount.length == 0) {
+      setIsEmpty(true)
+    } 
+    
+    setVerified(true)
+    
+  }
+
   const renderComponent = () => {
     if (!verified) {
       return (
         <div className="bg-[#F5F5F5] p-8 flex flex-col items-center">
           <h3 className="text-xl pt-2 font-bold">Do you want to delete:</h3>
-          <p className="text-sm pb-6 text-gray-600">{product.name}</p>
+          <p className="text-sm pb-6 text-gray-600">{category.name}</p>
           <div className="flex justify-between w-full px-14">
             <button
               className="border-2 py-3 px-8 text-lg rounded-md text-gray-700 font-semibold bg-gray-300 hover:bg-gray-700 hover:text-gray-300 hover:scale-[1.1] transition-all duration-400"
-              onClick={() => setVerified(true)}
+              onClick={() => verifyDeletion()}
             >
               YES
             </button>
@@ -97,7 +110,22 @@ export default function DeleteProductButton({ product }: Props) {
           </div>
         </div>
       );
-    } else if (verified && !validated) {
+    } else if (verified && !validated && !isEmpty) {
+      return (
+        <div className="bg-[#F5F5F5] p-8 flex flex-col items-center">
+          <h3 className="text-xl pt-2 font-bold">Could not delete category:</h3>
+          <p className="text-sm pb-6 text-gray-600">{category.name}</p>
+          <p className="text-xs pb-6 text-gray-600">There are still products in this category</p>
+          <button
+              className="border-2 py-3 px-8 text-lg rounded-md text-white font-semibold bg-gray-700 hover:bg-gray-600 hover:scale-[1.1] transition-all duration-400"
+              onClick={toggleModal}
+            >
+              BACK
+            </button>
+        </div>
+      );
+
+    } else if (verified && !validated && isEmpty) {
       return (
         <div className="bg-[#F5F5F5] p-8 flex flex-col items-center">
           <h3 className="text-xl py-2 font-bold">Are you sure?</h3>

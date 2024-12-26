@@ -13,18 +13,20 @@ type Props = {
 const Checkout = ({onOrderConfirmation, onViewCart, setOrder}: Props) => {
   const { cart, user } = useAuthState();
   const { placeOrder } = useUserState();
+
   if (!user) {
-    return
+    return <div>Please log in to proceed to checkout.</div>;
   }
+
   const [subtotal, setSubtotal] = useState(0);
   const [firstName, setFirstName] = useState(user.firstName || "");
   const [lastName, setLastName] = useState(user.lastName || "");
   const [email, setEmail] = useState(user.email || "");
   const [phoneNo, setPhoneNo] = useState(user.phoneNo || "");
-  const [addressLine, setAddressLine] = useState(user.address.addressLine || "");
-  const [city, setCity] = useState(user.address.city || "");
-  const [state, setState] = useState(user.address.state || "");
-  const [zipCode, setZipCode] = useState(user.address.zipCode || "");
+  const [addressLine, setAddressLine] = useState(user.address?.addressLine || "");
+  const [city, setCity] = useState(user.address?.city || "");
+  const [state, setState] = useState(user.address?.state || "");
+  const [zipCode, setZipCode] = useState(user.address?.zipCode || "");
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
 

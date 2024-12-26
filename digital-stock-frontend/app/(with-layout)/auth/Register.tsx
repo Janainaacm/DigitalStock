@@ -49,6 +49,16 @@ export default function Register({ onLogin }: RegisterProps) {
       }
     }
 
+    if (password.length < 7) {
+      setError("Password must be at least 7 characters");
+        return;
+    }
+
+    if (username.length < 4 || username.length > 32) {
+      setError("Username must be between 4-32 characters");
+      return;
+    }
+
     try {
       await registerUser(username, email, password);
       setUsername("");

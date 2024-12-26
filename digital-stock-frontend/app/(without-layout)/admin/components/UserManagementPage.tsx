@@ -2,6 +2,7 @@
 import { useAdminState } from "@/app/store/AdminState";
 import { UserInterface } from "@/app/utils/Types";
 import { useEffect } from "react";
+import DeleteUserButton from "./functions/DeleteUserButton";
 
 type Props = {
   onUserDetails: () => void;
@@ -90,6 +91,7 @@ const UserManagementPage = ({onUserDetails}: Props) => {
                             <path d="M2 12l1.5 -2a11 11 0 0 1 17 0l1.5 2" />
                           </svg>
                           </button>
+                          <DeleteUserButton user={user}/>
                         </td>
                       </tr>
                     ))}

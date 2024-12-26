@@ -11,6 +11,7 @@ const CategoriesGridSection = () => {
     fetchProductsByCategory(category);
     router.push("/products");
   };
+  
   return (
     <div>
       <div className="pb-6 pt-3 -mt-16 shadow-inner border-t border-gray-200">

@@ -1,7 +1,7 @@
 import { useAdminState } from "@/app/store/AdminState";
 import { useAuthState } from "@/app/store/AuthState";
 import { useAppState } from "@/app/store/BackendAPIState";
-import { ProductInterface } from "@/app/utils/Types";
+import { CategoryInterface, ProductInterface, UserInterface } from "@/app/utils/Types";
 import LoadingIcon from "@/public/icons/LoadingIcon";
 import {
   Transition,
@@ -12,11 +12,10 @@ import {
 import { Fragment, useState } from "react";
 
 interface Props {
-  product: ProductInterface;
+    user: UserInterface;
 }
 
-export default function DeleteProductButton({ product }: Props) {
-  const { fetchAllProducts } = useAppState();
+export default function DeleteUserButton({ user }: Props) {
   const [open, setOpen] = useState(false);
   const [validated, setValidated] = useState(false);
   const [verified, setVerified] = useState(false);
@@ -28,8 +27,10 @@ export default function DeleteProductButton({ product }: Props) {
     password: true,
   });
   const [isLoading, setIsLoading] = useState(false);
-  const { deleteProduct } = useAdminState();
+  const { deleteUser, fetchAllUsers, userList } = useAdminState();
   const [success, setSuccess] = useState(false);
+  const [hasOrders, setHasOrders] = useState(false);
+
 
   const toggleModal = () => setOpen((prev) => !prev);
 
@@ -49,14 +50,16 @@ export default function DeleteProductButton({ product }: Props) {
     try {
       const response = await verifyPassword(password);
       setValidated(response);
-      if (product.id && response) {
+      
+      if (user.id && response) {
         try {
-          await deleteProduct(product.id);
+          await deleteUser(user.id);
+          console.log("user deleted")
           setSuccess(true);
 
           setTimeout(() => {
             setSuccess(false);
-            fetchAllProducts()
+            fetchAllUsers()
             toggleModal()
           }, 3000);
         } catch (error) {}
@@ -75,16 +78,34 @@ export default function DeleteProductButton({ product }: Props) {
     setShowPassword(!showPassword);
   };
 
+  const verifyDeletion = () => {
+    const ongoingOrders = user.orders?.some(
+      (order) =>
+        order.status === "PENDING" ||
+        order.status === "CONFIRMED" ||
+        order.status === "DELIVERED"
+    );
+  
+    if (ongoingOrders) {
+      setHasOrders(true); 
+    } else {
+      setHasOrders(false); 
+    }
+  
+    setVerified(true);
+  };
+  
+
   const renderComponent = () => {
     if (!verified) {
       return (
         <div className="bg-[#F5F5F5] p-8 flex flex-col items-center">
-          <h3 className="text-xl pt-2 font-bold">Do you want to delete:</h3>
-          <p className="text-sm pb-6 text-gray-600">{product.name}</p>
+          <h3 className="text-xl pt-2 font-bold">Do you want to delete user:</h3>
+          <p className="text-sm pb-6 text-gray-600">{user.username}</p>
           <div className="flex justify-between w-full px-14">
             <button
               className="border-2 py-3 px-8 text-lg rounded-md text-gray-700 font-semibold bg-gray-300 hover:bg-gray-700 hover:text-gray-300 hover:scale-[1.1] transition-all duration-400"
-              onClick={() => setVerified(true)}
+              onClick={() => verifyDeletion()}
             >
               YES
             </button>
@@ -97,6 +118,21 @@ export default function DeleteProductButton({ product }: Props) {
           </div>
         </div>
       );
+    } else if (verified && hasOrders) {
+      return (
+        <div className="bg-[#F5F5F5] p-8 flex flex-col items-center">
+          <h3 className="text-xl pt-2 font-bold">Could not delete user:</h3>
+          <p className="text-sm pb-6 text-gray-600">{user.username}</p>
+          <p className="text-xs pb-6 text-gray-600">User has ongoing orders</p>
+          <button
+              className="border-2 py-3 px-8 text-lg rounded-md text-white font-semibold bg-gray-700 hover:bg-gray-600 hover:scale-[1.1] transition-all duration-400"
+              onClick={toggleModal}
+            >
+              BACK
+            </button>
+        </div>
+      );
+
     } else if (verified && !validated) {
       return (
         <div className="bg-[#F5F5F5] p-8 flex flex-col items-center">

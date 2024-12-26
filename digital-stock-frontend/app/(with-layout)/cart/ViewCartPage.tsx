@@ -175,7 +175,7 @@ const ViewCart = ({onCheckout}: Props) => {
               <span className="ml-auto font-bold">${subtotal.toFixed(2)}</span>
             </li>
             <li className="flex flex-wrap gap-4 text-sm">
-              Shipping <span className="ml-auto font-bold">$6.00</span>
+              Shipping <span className="ml-auto font-bold">$5.00</span>
             </li>
             <li className="flex flex-wrap gap-4 text-sm">
               Tax{" "}
@@ -185,18 +185,19 @@ const ViewCart = ({onCheckout}: Props) => {
             </li>
             <hr className="border-gray-300" />
             <li className="flex flex-wrap gap-4 text-sm font-bold">
-              Total{" "}
+              Total
               <span className="ml-auto">
-                ${(subtotal + 6 + subtotal * 0.1).toFixed(2)}
+                ${(subtotal + 5 + subtotal * 0.1).toFixed(2)}
               </span>
             </li>
           </ul>
 
           <div className="mt-8 space-y-2">
             <button
-            onClick={onCheckout}
+              onClick={onCheckout}
               type="button"
               className="text-sm px-4 py-2.5 w-full font-semibold tracking-wide bg-gray-800 hover:bg-gray-900 text-white rounded-md"
+              disabled={cart?.items.length == 0}
             >
               Buy Now
             </button>
@@ -205,7 +206,7 @@ const ViewCart = ({onCheckout}: Props) => {
               type="button"
               className="text-sm px-4 py-2.5 w-full font-semibold tracking-wide bg-transparent hover:bg-gray-100 text-gray-800 border border-gray-300 rounded-md"
             >
-              Continue Shopping{" "}
+              Continue Shopping
             </button>
           </div>
 

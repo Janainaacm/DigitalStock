@@ -15,7 +15,6 @@ const OrderConfirmationPage = ({ order }: Props) => {
   return (
     <>
       <section className="py-24 relative">
-        <h1></h1>
         <div className="w-full max-w-7xl px-4 md:px-5 lg:px-5 mx-auto">
           <div className="w-full flex-col justify-start items-center lg:gap-12 gap-8 inline-flex">
             <div className="flex-col justify-start items-center gap-3 flex">
@@ -131,7 +130,7 @@ const OrderConfirmationPage = ({ order }: Props) => {
                   </span>
                 </button>
                 <button 
-                onClick={() => router.push("./user")}
+                onClick={() => router.push("./user?currentPage=orders")}
                 className="md:w-fit w-full px-5 py-2.5 bg-indigo-600 hover:bg-indigo-800 transition-all duration-700 ease-in-out rounded-xl shadow-[0px_1px_2px_0px_rgba(16,_24,_40,_0.05)] justify-center items-center flex">
                   
                   <span className="px-2 py-px text-white text-base font-semibold leading-relaxed">

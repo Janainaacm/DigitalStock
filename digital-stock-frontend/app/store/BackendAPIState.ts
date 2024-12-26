@@ -81,7 +81,6 @@ export const useAppState = create<AppState>((set) => ({
         });
       }
     } else {
-      console.log("filteredProductList found")
       if (user && wishlist) {
         const wishlistProductIds = new Set(
           wishlist.items.map((item) => item.product.id)
@@ -106,7 +105,6 @@ export const useAppState = create<AppState>((set) => ({
   
 
   fetchAllProducts: async (): Promise<void> => {
-    
     try {
       console.log("Fetching products...");
 
@@ -162,10 +160,14 @@ export const useAppState = create<AppState>((set) => ({
       const response = await axios.get(
         `${API_URL}/products/category/${categoryName}`
       );
+      console.log("categoryName: ", categoryName)
+      console.log("api response: ", response.data)
 
-      set({ filteredProductList: response.data });
+      set({ filteredProductList: response.data});
       set({ chosenCategory: categoryName });
       set({ searchKeyword: categoryName });
+
+
       return response.data;
     } catch (error) {
       console.error("Error fetching products by category:", error);

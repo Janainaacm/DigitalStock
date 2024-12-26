@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 type Props = {
+  currentPage: string;
   onUsers: () => void;
   onProducts: () => void;
   onAddProduct: () => void;
@@ -14,13 +15,14 @@ type Props = {
 };
 
 const SideBar = ({
+  currentPage,
   onUsers,
   onProducts,
   onAddProduct,
   onOrders,
   onDashboard,
   onProfile,
-  onCalendar
+  onCalendar,
 }: Props) => {
   const { logout } = useAuthState();
   const router = useRouter();
@@ -45,10 +47,14 @@ const SideBar = ({
             <li>
               <button
                 onClick={onDashboard}
-                className="text-gray-800 w-full text-sm flex items-center hover:bg-gray-100 rounded-md px-4 py-2 transition-all"
+                className={`w-full text-sm flex items-center rounded-md px-4 py-2 transition-all ${
+                  currentPage === "dashboard"
+                  ? "text-white bg-blue-400 rounded-l-full"
+                  : "hover:bg-gray-100 text-gray-800 bg-white"
+                }`}
               >
                 <svg
-                  className="h-5 w-5 mr-2 text-gray-600"
+                  className="h-5 w-5 mr-2"
                   width="24"
                   height="24"
                   viewBox="0 0 24 24"
@@ -72,17 +78,25 @@ const SideBar = ({
             <li>
               <button
                 onClick={onCalendar}
-                className="text-gray-800 w-full text-sm flex items-center hover:bg-gray-100 rounded-md px-4 py-2 transition-all"
+                className={`w-full text-sm flex items-center rounded-md px-4 py-2 transition-all ${
+                  currentPage === "calendar"
+                  ? "text-white bg-blue-400 rounded-l-full"
+                  : "hover:bg-gray-100 text-gray-800 bg-white"
+                }`}
               >
                 <svg
-                  fill="currentColor"
-                  className="w-[18px] h-[18px] mr-3"
-                  viewBox="0 0 511.877 511.877"
+                  className="h-5 w-5 mr-2"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
                 >
-                  <path
-                    d="M442.706 340.677c-11-68.6-93.8-175.7-120.1-208.2 4.2-3.5 6.9-8.7 6.9-14.6 0-4.2-1.4-8-3.7-11.1 2.3-3.1 3.7-7 3.7-11.1 0-6.6-3.4-12.4-8.5-15.7 8.1-33.1 31.3-59.5 32.4-60.7.8-.9 1.3-1.9 1.6-3 .7-2.4.1-5.1-1.5-7.1-1-1.2-2.3-2.1-3.8-2.5-63.1-17.5-114.9 4.1-129.7 11.4-12.3-7.5-24.5-14-39.9-16.2-5-.7-10.1-1-15.7-1a7.719 7.719 0 0 0-6.9 11.2s.6 1.1 1 1.6c.3.3 26.7 31.7 35.2 66.2-5.1 3.4-8.5 9.2-8.5 15.7 0 4.2 1.4 8 3.7 11.1-2.3 3.1-3.7 7-3.7 11.1 0 5.1 2 9.7 5.3 13.1-25.1 31-110.2 140-121.3 209.8-1.2 5.8-17.4 86.9 23.1 135.8 19.4 23.5 48.5 35.4 86.4 35.4 1.5 0 2.9 0 4.4-.1h145.7c1.5 0 3 .1 4.4.1 37.9 0 66.9-11.9 86.4-35.4 40.4-48.9 24.3-130 23.1-135.8zm-239.2-219.5h-.1c-1.6-.3-2.7-1.7-2.7-3.3 0-1.9 1.5-3.4 3.4-3.4h106.6c1.9 0 3.4 1.5 3.4 3.4s-1.5 3.4-3.4 3.4h-106.7c-.2-.1-.3-.1-.5-.1zm-2.9-25.6c0-1.8 1.5-3.3 3.3-3.4h106.7c1.8 0 3.3 1.5 3.3 3.4s-1.5 3.4-3.4 3.4h-106.5c-1.9 0-3.4-1.5-3.4-3.4zm124.3-78.4c-1.1.7-2.2 1.4-3.2 2.1 0 0-.1.1-.2.1-2.3 1.5-4.5 2.9-6.8 4.3-9.5 5.8-19.2 9.3-29.5 10.9-11.2 1.7-22.9 1.1-33.9-1.5-4.8-1.2-9.4-2.8-14.2-5.1-.2-.1-.3-.2-.5-.2 17.1-6.9 49.6-16.2 88.3-10.6zm-106.8 17.9 1.3.8c9.7 6 18.7 9.9 28.2 12.2 12.9 3.1 26.7 3.7 39.8 1.8 12-1.8 23.1-5.8 34.1-12.2-6.2 11-12.3 24.4-15.9 39.1h-96.9c-5.7-23.4-18.7-45.4-28.1-59 13.7 2.5 24.8 9.4 37.5 17.3zm189.5 431.5c-17 20.6-43.5 30.6-78.5 29.7h-146.3c-35.1.8-61.5-9.1-78.5-29.7-36.3-43.7-20.1-122.1-19.9-122.9 0-.1.1-.3.1-.4 10.9-69.1 104.5-186 121.3-206.6h100.3c16.5 20.1 110.4 137.4 121.3 206.6 0 .1 0 .3.1.4.1.8 16.4 79-19.9 122.9zm-151.7-233.7c-46.1 0-83.6 37.5-83.6 83.6s37.5 83.6 83.6 83.6 83.6-37.5 83.6-83.6c.1-46.1-37.5-83.6-83.6-83.6zm0 151.7c-37.6 0-68.1-30.6-68.1-68.1s30.6-68.1 68.1-68.1 68.1 30.5 68.1 68.1-30.5 68.1-68.1 68.1zm28.1-53.6c0 11.6-9 21.2-20.3 22.1v4c0 4.3-3.5 7.8-7.8 7.8s-7.8-3.5-7.8-7.8v-3.9h-5.5c-4.3 0-7.8-3.5-7.8-7.8s3.5-7.8 7.8-7.8h19.1a6.7 6.7 0 0 0 0-13.4h-11.7c-12.3 0-22.2-10-22.2-22.2 0-11.6 9-21.2 20.3-22.1v-4c0-4.3 3.5-7.8 7.8-7.8s7.8 3.5 7.8 7.8v3.9h5.5c4.3 0 7.8 3.5 7.8 7.8s-3.5 7.8-7.8 7.8h-19.1a6.7 6.7 0 0 0 0 13.4h11.7c12.2-.1 22.2 9.9 22.2 22.2z"
-                    data-original="#000000"
-                  />
+                  <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+                  <line x1="16" y1="2" x2="16" y2="6" />
+                  <line x1="8" y1="2" x2="8" y2="6" />
+                  <line x1="3" y1="10" x2="21" y2="10" />
                 </svg>
                 <span>Calendar</span>
               </button>
@@ -95,7 +109,11 @@ const SideBar = ({
               <li>
                 <button
                   onClick={onUsers}
-                  className="text-gray-800 w-full text-sm flex items-center hover:bg-gray-100 rounded-md px-4 py-2 transition-all"
+                  className={`w-full text-sm flex items-center rounded-md px-4 py-2 transition-all ${
+                    currentPage === "users"
+                    ? "text-white bg-blue-400 rounded-l-full"
+                    : "hover:bg-gray-100 text-gray-800 bg-white"
+                  }`}
                 >
                   <svg
                     fill="currentColor"
@@ -113,7 +131,11 @@ const SideBar = ({
               <li>
                 <button
                   onClick={onOrders}
-                  className="text-gray-800 w-full text-sm flex items-center hover:bg-gray-100 rounded-md px-4 py-2 transition-all"
+                  className={`w-full text-sm flex items-center rounded-md px-4 py-2 transition-all ${
+                    currentPage === "orders"
+                    ? "text-white bg-blue-400 rounded-l-full"
+                    : "hover:bg-gray-100 text-gray-800 bg-white"
+                  }`}
                 >
                   <svg
                     className="w-5 h-5 mr-3"
@@ -143,7 +165,11 @@ const SideBar = ({
               <li>
                 <button
                   onClick={onProducts}
-                  className="text-gray-800 w-full text-sm flex items-center hover:bg-gray-100 rounded-md px-4 py-2 transition-all"
+                  className={`w-full text-sm flex items-center rounded-md px-4 py-2 transition-all ${
+                    currentPage === "products"
+                    ? "text-white bg-blue-400 rounded-l-full"
+                    : "hover:bg-gray-100 text-gray-800 bg-white"
+                  }`}
                 >
                   <svg
                     width="20px"
@@ -152,6 +178,7 @@ const SideBar = ({
                     viewBox="0 0 1700 1700"
                     strokeWidth="1.4"
                     stroke="currentColor"
+                    fill="currentColor"
                   >
                     <path
                       d="M916.7 1269.4c-10.7 0-20.4-7.2-23.2-18l-29.9-114.7c-3.3-12.8 4.3-25.9 17.2-29.3 12.8-3.3 25.9 4.3 29.3 17.2l29.9 114.7c3.3 12.8-4.3 25.9-17.2 29.3-2 .5-4.1.8-6.1.8zm-169.4 0c-2 0-4-.3-6.1-.8-12.8-3.3-20.5-16.4-17.2-29.3l29.9-114.7c3.3-12.8 16.4-20.5 29.3-17.2 12.8 3.3 20.5 16.4 17.2 29.3l-29.9 114.7c-2.8 10.8-12.6 18-23.2 18z"
@@ -180,10 +207,14 @@ const SideBar = ({
               <li>
                 <button
                   onClick={onAddProduct}
-                  className="text-gray-800 w-full text-sm flex items-center hover:bg-gray-100 rounded-md px-4 py-2 transition-all"
+                  className={`w-full text-sm flex items-center rounded-md px-4 py-2 transition-all ${
+                    currentPage === "add-product"
+                    ? "text-white bg-blue-400 rounded-l-full"
+                    : "hover:bg-gray-100 text-gray-800 bg-white"
+                  }`}
                 >
                   <svg
-                    className="h-5 w-5 text-gray-800 mr-2"
+                    className="h-5 w-5 mr-2"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
@@ -202,14 +233,17 @@ const SideBar = ({
             </ul>
           </div>
 
-          
           <div className="mt-6">
             <h6 className="text-blue-600 text-sm font-bold px-4">Actions</h6>
             <ul className="mt-3 space-y-2">
               <li>
                 <button
                   onClick={onProfile}
-                  className="text-gray-800 w-full text-sm flex items-center hover:bg-gray-100 rounded-md px-4 py-2 transition-all"
+                  className={`w-full text-sm flex items-center rounded-md px-4 py-2 transition-all ${
+                    currentPage === "profile"
+                    ? "text-white bg-blue-400 rounded-l-full"
+                    : "hover:bg-gray-100 text-gray-800 bg-white"
+                  }`}
                 >
                   <svg
                     fill="currentColor"
