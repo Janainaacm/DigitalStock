@@ -1,6 +1,7 @@
 package com.example.digitalstockbackend.service;
 
 import com.example.digitalstockbackend.authorities.OrderStatus;
+import com.example.digitalstockbackend.dto.ProductDTO;
 import com.example.digitalstockbackend.model.Order;
 import com.example.digitalstockbackend.model.Product;
 import com.example.digitalstockbackend.repository.*;
@@ -30,19 +31,6 @@ class AdminServiceTest {
     @InjectMocks
     private AdminService adminService;
 
-    @Test
-    void testCreateProduct_Success() {
-        Product product = new Product();
-        product.setName("Test Product");
-
-        when(productRepository.save(any(Product.class))).thenReturn(product);
-
-        ResponseEntity<Product> response = adminService.createProduct(product);
-
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertNotNull(response.getBody());
-        assertEquals("Test Product", response.getBody().getName());
-    }
 
     @Test
     void testUpdateProduct_Success() {

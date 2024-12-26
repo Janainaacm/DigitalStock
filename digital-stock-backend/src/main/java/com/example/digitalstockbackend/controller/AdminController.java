@@ -8,6 +8,7 @@ import com.example.digitalstockbackend.model.Order;
 import com.example.digitalstockbackend.model.Product;
 import com.example.digitalstockbackend.model.roles.CustomUser;
 import com.example.digitalstockbackend.service.AdminService;
+import com.example.digitalstockbackend.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -23,11 +24,15 @@ public class AdminController {
 
 
     private final AdminService adminService;
+    private final AuthService authService;
+
 
     @Autowired
-    public AdminController(AdminService adminService) {
+    public AdminController(AdminService adminService, AuthService authService) {
         this.adminService = adminService;
+        this.authService = authService;
     }
+
 
     // Handle user management
     @GetMapping("/users")
@@ -35,10 +40,15 @@ public class AdminController {
         return adminService.fetchAllUsers();
     }
 
+    @DeleteMapping("/delete/{userId}")
+    public ResponseEntity<String> deleteUser(@PathVariable Long userId) {
+        return adminService.deleteUser(userId);
+    }
+
 
     // Handle product management
     @PostMapping("/products/new")
-    public ResponseEntity<Product> createProduct(@RequestBody Product product) {
+    public ResponseEntity<Product> createProduct(@RequestBody ProductDTO product) {
         return adminService.createProduct(product);
     }
 

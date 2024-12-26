@@ -31,51 +31,6 @@ public class UserService {
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }
 
-    public ResponseEntity<UserDTO> updateUserProfile(Long userId, UserDTO userDTO) {
-        CustomUser updatedUser = userRepository.findById(userId)
-                .map(user -> {
-                    if (userDTO.getFirstName() != null && !userDTO.getFirstName().equals(user.getFirstName())) {
-                        user.setFirstName(userDTO.getFirstName());
-                    }
-                    if (userDTO.getLastName() != null && !userDTO.getLastName().equals(user.getLastName())) {
-                        user.setLastName(userDTO.getLastName());
-                    }
-                    if (userDTO.getEmail() != null && !userDTO.getEmail().equals(user.getEmail())) {
-                        user.setEmail(userDTO.getEmail());
-                    }
-                    if (userDTO.getPhoneNo() != null && !userDTO.getPhoneNo().equals(user.getPhoneNo())) {
-                        user.setPhoneNo(userDTO.getPhoneNo());
-                    }
-
-                    if (userDTO.getAddress() != null) {
-                        Address address = user.getAddress();
-                        if (address == null) {
-                            address = new Address();
-                            user.setAddress(address);
-                        }
-                        AddressDTO addressDTO = userDTO.getAddress();
-
-                        if (addressDTO.getAddressLine() != null && !addressDTO.getAddressLine().equals(address.getAddressLine())) {
-                            address.setAddressLine(addressDTO.getAddressLine());
-                        }
-                        if (addressDTO.getCity() != null && !addressDTO.getCity().equals(address.getCity())) {
-                            address.setCity(addressDTO.getCity());
-                        }
-                        if (addressDTO.getState() != null && !addressDTO.getState().equals(address.getState())) {
-                            address.setState(addressDTO.getState());
-                        }
-                        if (addressDTO.getZipCode() != null && !addressDTO.getZipCode().equals(address.getZipCode())) {
-                            address.setZipCode(addressDTO.getZipCode());
-                        }
-                    }
-
-                    return userRepository.save(user);
-                })
-                .orElseThrow(() -> new UserNotFoundException("User not found"));
-
-        return ResponseEntity.ok(new UserDTO(updatedUser));
-    }
-
 
     public ResponseEntity<Void> deleteUser(Long id) {
         if (!userRepository.existsById(id)) {

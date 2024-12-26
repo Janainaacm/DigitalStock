@@ -1,6 +1,7 @@
 package com.example.digitalstockbackend.controller;
 
 import com.example.digitalstockbackend.dto.PasswordDTO;
+import com.example.digitalstockbackend.dto.UserDTO;
 import com.example.digitalstockbackend.service.AuthService;
 import com.example.digitalstockbackend.dto.LoginRequest;
 import com.example.digitalstockbackend.dto.SignupRequest;
@@ -59,6 +60,11 @@ public class AuthController {
     @GetMapping("/role")
     public ResponseEntity<List<String>> getUserRoleByToken(HttpServletRequest request) {
         return authService.getUserRoleByToken(request);
+    }
+
+    @PutMapping("/update/{userId}")
+    public ResponseEntity<UserDTO> updateUserProfile(@RequestBody UserDTO userDetails, @PathVariable Long userId) {
+        return authService.updateUserProfile(userId, userDetails);
     }
 
 }

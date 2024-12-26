@@ -13,6 +13,7 @@ public class ProductDTO {
     private int stock;
     private BigDecimal price;
     private String categoryName;
+    private int sales;
 
     public ProductDTO() {
     }
@@ -26,8 +27,16 @@ public class ProductDTO {
         this.stock = product.getStock();
         this.price = product.getPrice();
         this.categoryName = product.getCategory() != null ? product.getCategory().getName() : null;
+        this.sales = product.getSales();
     }
 
+    public int getSales() {
+        return sales;
+    }
+
+    public void setSales(int sales) {
+        this.sales = sales;
+    }
 
     public Long getId() {
         return id;

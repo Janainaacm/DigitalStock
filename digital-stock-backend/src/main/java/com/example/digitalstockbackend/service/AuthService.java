@@ -3,6 +3,8 @@ package com.example.digitalstockbackend.service;
 import com.example.digitalstockbackend.config.security.CustomUserDetails;
 import com.example.digitalstockbackend.config.security.jwt.JwtUtils;
 import com.example.digitalstockbackend.dto.*;
+import com.example.digitalstockbackend.exception.UserNotFoundException;
+import com.example.digitalstockbackend.model.Address;
 import com.example.digitalstockbackend.model.Cart;
 import com.example.digitalstockbackend.model.Wishlist;
 import com.example.digitalstockbackend.model.roles.CustomUser;
@@ -217,28 +219,59 @@ public class AuthService {
     }
 
 
+    public ResponseEntity<UserDTO> updateUserProfile(Long userId, UserDTO userDTO) {
+        CustomUser updatedUser = userRepository.findById(userId)
+                .map(user -> {
+                    if (userDTO.getFirstName() != null && !userDTO.getFirstName().equals(user.getFirstName())) {
+                        user.setFirstName(userDTO.getFirstName());
+                    }
+                    if (userDTO.getLastName() != null && !userDTO.getLastName().equals(user.getLastName())) {
+                        user.setLastName(userDTO.getLastName());
+                    }
+                    if (userDTO.getEmail() != null && !userDTO.getEmail().equals(user.getEmail())) {
+                        user.setEmail(userDTO.getEmail());
+                    }
+                    if (userDTO.getPhoneNo() != null && !userDTO.getPhoneNo().equals(user.getPhoneNo())) {
+                        user.setPhoneNo(userDTO.getPhoneNo());
+                    }
+
+                    if (userDTO.getAddress() != null) {
+                        Address address = user.getAddress();
+                        if (address == null) {
+                            address = new Address();
+                            user.setAddress(address);
+                        }
+                        AddressDTO addressDTO = userDTO.getAddress();
+
+                        if (addressDTO.getAddressLine() != null && !addressDTO.getAddressLine().equals(address.getAddressLine())) {
+                            address.setAddressLine(addressDTO.getAddressLine());
+                        }
+                        if (addressDTO.getCity() != null && !addressDTO.getCity().equals(address.getCity())) {
+                            address.setCity(addressDTO.getCity());
+                        }
+                        if (addressDTO.getState() != null && !addressDTO.getState().equals(address.getState())) {
+                            address.setState(addressDTO.getState());
+                        }
+                        if (addressDTO.getZipCode() != null && !addressDTO.getZipCode().equals(address.getZipCode())) {
+                            address.setZipCode(addressDTO.getZipCode());
+                        }
+                    }
+
+                    return userRepository.save(user);
+                })
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
+
+        return ResponseEntity.ok(new UserDTO(updatedUser));
+    }
+
 
 
     private UserDTO convertToUserDTO(CustomUser user) {
         return new UserDTO(user);
     }
 
-    private WishlistDTO convertToWishlistDTO(Wishlist wishlist) {
-        return new WishlistDTO(wishlist);
-    }
-
-    private CartDTO convertToCartDTO(Cart cart) {
-        return new CartDTO(cart);
-    }
-
-    private OrderDTO convertToOrderDTO(Order order) {
-        return getOrderDTO(order);
-    }
-
     private OrderDTO getOrderDTO(Order order) {
         return new OrderDTO(order);
     }
-
-
 
 }

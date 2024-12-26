@@ -1,9 +1,9 @@
 package com.example.digitalstockbackend.service;
 
 import com.example.digitalstockbackend.authorities.OrderStatus;
-import com.example.digitalstockbackend.dto.CategoryDTO;
-import com.example.digitalstockbackend.dto.OrderDTO;
-import com.example.digitalstockbackend.dto.UserDTO;
+import com.example.digitalstockbackend.dto.*;
+import com.example.digitalstockbackend.exception.UserNotFoundException;
+import com.example.digitalstockbackend.model.Address;
 import com.example.digitalstockbackend.model.Category;
 import com.example.digitalstockbackend.model.roles.CustomUser;
 import com.example.digitalstockbackend.model.Order;
@@ -12,10 +12,13 @@ import com.example.digitalstockbackend.repository.CategoryRepository;
 import com.example.digitalstockbackend.repository.OrderRepository;
 import com.example.digitalstockbackend.repository.ProductRepository;
 import com.example.digitalstockbackend.repository.UserRepository;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class AdminService {
@@ -32,6 +35,8 @@ public class AdminService {
         this.categoryRepository = categoryRepository;
     }
 
+
+
     //Users
     public ResponseEntity<List<UserDTO>> fetchAllUsers() {
         List<CustomUser> users = userRepository.findAll();
@@ -41,6 +46,21 @@ public class AdminService {
 
         return ResponseEntity.ok(userDTOs);
     }
+
+    public ResponseEntity<String> deleteUser(Long userId) {
+        try {
+            CustomUser user = userRepository.findById(userId)
+                    .orElseThrow(() -> new RuntimeException("User not found"));
+
+            userRepository.deleteById(user.getId());
+            return ResponseEntity.ok("User deleted successfully");
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An unexpected error occurred");
+        }
+    }
+
 
 
     //Orders
@@ -71,7 +91,8 @@ public class AdminService {
 
 
     //Products
-    public ResponseEntity<Product> createProduct(Product product) {
+    public ResponseEntity<Product> createProduct(ProductDTO productDTO) {
+        Product product = convertToProduct(productDTO);
         Product savedProduct = productRepository.save(product);
         return ResponseEntity.ok(savedProduct);
     }
@@ -126,6 +147,20 @@ public class AdminService {
     private OrderDTO convertToOrderDTO(Order order) {
         return new OrderDTO(order);
 
+    }
+
+    private Product convertToProduct(ProductDTO productDTO) {
+        Product product = new Product();
+        product.setName(productDTO.getName());
+        product.setDescription(productDTO.getDescription());
+        product.setPrice(productDTO.getPrice());
+        product.setStock(productDTO.getStock());
+        product.setColorName(productDTO.getColorName());
+        product.setImageUrl(productDTO.getImageUrl());
+        product.setSales(productDTO.getSales());
+        product.setCategory(categoryRepository.findByName(productDTO.getCategoryName()));
+
+        return product;
     }
 }
 
