@@ -1,49 +1,39 @@
+version: '3.8'
 services:
-  backend:
-    build:
-      context: ./digital-stock-backend
-      dockerfile: Dockerfile
-    ports:
-      - "8080:8080"
-    environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/digital-stock-db
-      SPRING_DATASOURCE_USERNAME: janaina
-      SPRING_DATASOURCE_PASSWORD: enzo
-      SPRING_JPA_HIBERNATE_DDL_AUTO: update
-    depends_on:
-      - db
-    networks:
-      - app-network
-
   frontend:
     build:
       context: ./digital-stock-frontend
-      dockerfile: Dockerfile
     ports:
       - "3000:3000"
     depends_on:
       - backend
-    networks:
-      - app-network
+    environment:
+      - NEXT_PUBLIC_API_URL=http://localhost:8080
 
+  backend:
+    build:
+      context: ./digital-stock-backend
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/digital-stock-db
+      SPRING_DATASOURCE_USERNAME: janaina
+      SPRING_DATASOURCE_PASSWORD: enzo
 
   db:
     image: postgres:16
-    container_name: postgres-db
-    restart: "no"
-    ports:
-      - "5433:5432"
+    restart: always
     environment:
+      POSTGRES_DB: digital-stock-db
       POSTGRES_USER: janaina
       POSTGRES_PASSWORD: enzo
-      POSTGRES_DB: digital-stock-db
+    ports:
+      - "5432:5432"
     volumes:
-      - digital-stock-db:/var/lib/postgresql/data
-    networks:
-      - app-network
-
-networks:
-  app-network:
+      - db-data:/var/lib/postgresql/data
+      - ./dump.sql:/docker-entrypoint-initdb.d/dump.sql
 
 volumes:
-  digital-stock-db: {}
+  db-data:
