@@ -16,9 +16,11 @@ const AdminProfilePage = () => {
   const [city, setCity] = useState("");
   const [state, setState] = useState("");
   const [zipCode, setZipCode] = useState("");
-  const [validation, setValidation] = useState({ email: true });
   const [errorMsg, setErrorMsg] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [success, setSuccess] = useState(false)
+  const [error, setError] = useState(false)
+
 
   useEffect(() => {
     if (user) {
@@ -35,8 +37,6 @@ const AdminProfilePage = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    setValidation({ email: Boolean(email) });
 
     if (!email) {
       setErrorMsg("Email cannot be empty.");
@@ -61,9 +61,11 @@ const AdminProfilePage = () => {
   
       try {
         await updateUserProfile(updatedUser);
-        alert("Profile updated successfully!");
+        setSuccess(true)
       } catch (error) {
-        alert("An error occurred while updating the profile.");
+        console.log(error)
+        setErrorMsg("An error occurred while updating the profile.");
+        setError(true)
       } finally {
         setIsLoading(false);
       }
@@ -89,8 +91,9 @@ const AdminProfilePage = () => {
     setZipCode(user.address ? user.address.zipCode : "");
   };
 
-
   return (
+    <>
+    
     <div className="relative font-[sans-serif] bg-gray-100 shadow-inner py-6 px-10">
       <div className="p-6 rounded-xl shadow-md bg-white">
         <h1 className="text-4xl font-extrabold text-gray-800">
@@ -103,6 +106,16 @@ const AdminProfilePage = () => {
           <p className="mt-1 text-sm text-gray-500">
             Edit your personal information below.
           </p>
+          {error && (
+            <div className="bg-red-100 text-red-700 px-4 py-2 rounded-md mt-4">
+              {errorMsg}
+            </div>
+          )}
+          {success && (
+            <div className="bg-green-100 text-green-700 px-4 py-2 rounded-md mt-4">
+              Purchase completed successfully!
+            </div>
+          )}
         </div>
       </div>
 
@@ -427,6 +440,7 @@ const AdminProfilePage = () => {
         </div>
       </form>
     </div>
+    </>
   );
 };
 export default AdminProfilePage;

@@ -12,8 +12,7 @@ const ShopCategoryButton = ({ category, value }: Props) => {
 
 
   const searchByCategory = (category: string) => {
-    fetchProductsByCategory(category)
-    router.push("/products")
+    fetchProductsByCategory(category, router)
   };
 
   return (

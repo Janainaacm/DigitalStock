@@ -15,7 +15,7 @@ import {
   EffectCoverflow,
 } from "swiper/modules";
 import { useAppState } from "@/app/store/BackendAPIState";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { ProductInterface } from "@/app/utils/Types";
 import { useRouter } from "next/navigation";
 

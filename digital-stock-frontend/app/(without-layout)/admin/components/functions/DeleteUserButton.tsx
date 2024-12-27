@@ -1,7 +1,6 @@
 import { useAdminState } from "@/app/store/AdminState";
 import { useAuthState } from "@/app/store/AuthState";
-import { useAppState } from "@/app/store/BackendAPIState";
-import { CategoryInterface, ProductInterface, UserInterface } from "@/app/utils/Types";
+import { UserInterface } from "@/app/utils/Types";
 import LoadingIcon from "@/public/icons/LoadingIcon";
 import {
   Transition,
@@ -27,7 +26,7 @@ export default function DeleteUserButton({ user }: Props) {
     password: true,
   });
   const [isLoading, setIsLoading] = useState(false);
-  const { deleteUser, fetchAllUsers, userList } = useAdminState();
+  const { deleteUser, fetchAllUsers } = useAdminState();
   const [success, setSuccess] = useState(false);
   const [hasOrders, setHasOrders] = useState(false);
 
@@ -62,7 +61,9 @@ export default function DeleteUserButton({ user }: Props) {
             fetchAllUsers()
             toggleModal()
           }, 3000);
-        } catch (error) {}
+        } catch (error) {
+          console.log(error)
+        }
       } else {
         setError("Password incorrect")
         setIsLoading(false);

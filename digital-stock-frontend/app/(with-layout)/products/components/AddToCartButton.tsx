@@ -12,7 +12,7 @@ const AddToCartButton = ({productId, quantity}: AddToCartButtonProps) => {
 
   const handleClick = () => {
     if (!user) {
-      console.log("no user, open login pop up");
+      alert("Please log in to add products to your cart.");
       return;
     }
 

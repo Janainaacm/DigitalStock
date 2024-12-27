@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import SideBar from "./components/SideBar";
 import { useSearchParams, useRouter } from "next/navigation";
 import UserProfilePage from "./components/UserProfilePage";
@@ -10,7 +10,7 @@ import Header from "@/app/components/header/Header";
 
 type CurrentPage = "profile" | "orders" | "wishlist";
 
-const UserPage = () => {
+const UserContent = () => {
     const searchParams = useSearchParams();
     const router = useRouter();
     const initialPage = (searchParams.get("currentPage") as CurrentPage) || "profile";
@@ -38,10 +38,10 @@ const UserPage = () => {
 
   return (
     <>
-    <Header/>
       <div className="grid grid-cols-[250px_1fr] h-full">
         <div className="col-span-1">
           <SideBar
+            currentPage={currentPage}
             onProfile={() => setCurrentPage("profile")}
             onOrders={() => setCurrentPage("orders")}
             onWishlist={() => setCurrentPage("wishlist")}
@@ -51,6 +51,16 @@ const UserPage = () => {
         <div className="col-span-1 overflow-auto">{renderComponent()}</div>
       </div>
     </>
+  );
+};
+
+
+const UserPage = () => {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <Header/>
+      <UserContent />
+    </Suspense>
   );
 };
 export default UserPage;

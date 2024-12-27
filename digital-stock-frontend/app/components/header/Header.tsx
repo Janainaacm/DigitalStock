@@ -61,8 +61,7 @@ const Header = () => {
   }
 
   const searchByCategory = (category: string) => {
-    fetchProductsByCategory(category)
-    router.push("/products")
+    fetchProductsByCategory(category, router)
   };
 
   const redirect = (path: string) => {

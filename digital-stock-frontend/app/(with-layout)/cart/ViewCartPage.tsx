@@ -17,7 +17,6 @@ const ViewCart = ({onCheckout}: Props) => {
     isProductInWishlist,
     addToWishlist,
     removeFromWishlist,
-    clearCart,
   } = useUserState();
   const [subtotal, setSubtotal] = useState(0);
   const router = useRouter();
@@ -38,9 +37,6 @@ const ViewCart = ({onCheckout}: Props) => {
   const handleRemoveFromCart = (productId: number, quantity: number) => {
     removeItemFromCart(productId, quantity);
   };
-   const handleClearCart = () => {
-    clearCart();
-  }; 
 
   const handleAddToWishlist = (productId: number) => {
     const inWishlist = isProductInWishlist(productId);

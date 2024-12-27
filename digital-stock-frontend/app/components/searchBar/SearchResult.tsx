@@ -7,20 +7,21 @@ type SearchResultProps = {
 };
 
 const SearchResult = ({ product }: SearchResultProps) => {
-  const { setProductIdState } = useAppState();
+  const { setProductIdState, setSearchBar } = useAppState();
   const router = useRouter();
 
   const search = (product: ProductInterface) => {
     setProductIdState(product.id);
+    setSearchBar("")
     router.push(`/products/${product.id}`);
   };
 
   return (
-    <div 
+    <button 
     className="px-5 py-2 hover:bg-gray-200"
     onClick={() => search(product)}>
       {product.name}
-    </div>
+    </button>
   );
 };
 

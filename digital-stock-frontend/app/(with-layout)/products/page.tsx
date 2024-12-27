@@ -6,9 +6,6 @@ import { useAuthState } from "@/app/store/AuthState";
 import { useUserState } from "../../store/UserState";
 import AddToCartButton from "./components/AddToCartButton";
 import FilterProductsButton from "./components/filterButton/FilterProductsButton.tsx";
-import { ProductInterface } from "../../utils/Types";
-import LoadingPage from "../../components/loadingPage/LoadingPage";
-import { isEqual } from "lodash";
 
 export default function ProductPage() {
   const {
@@ -16,20 +13,22 @@ export default function ProductPage() {
     productList,
     displayProducts,
     fetchDisplayProducts,
-    filteredProductList,
     searchKeyword,
   } = useAppState();
   const {
     addToWishlist,
     removeFromWishlist,
     isProductInWishlist,
-    clearWishlist,
   } = useUserState();
   const { user } = useAuthState();
   const router = useRouter();
   const [title, setTitle] = useState("Products");
-  const [hasFilter, setHasFilter] = useState(false);
-  const [filterOpen, setFilterOpen] = useState(false);
+
+  useEffect(() => {
+    if (productList.length == 0) {
+      fetchAllProducts()
+    }
+  }, [productList, fetchAllProducts])
 
   useEffect(() => {
     fetchDisplayProducts();
@@ -55,18 +54,6 @@ export default function ProductPage() {
       addToWishlist(productId);
     }
   };
-
-  const clear = () => {
-    clearWishlist();
-  };
-
-  const toggleFilterDropdown = () => {};
-
-  /*   if (productDisplay.length == 0) {
-    return (
-      <LoadingPage/>
-    )
-  } */
 
   return (
     <div>

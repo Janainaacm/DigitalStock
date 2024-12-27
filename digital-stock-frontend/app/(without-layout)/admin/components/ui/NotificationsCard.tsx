@@ -1,7 +1,6 @@
 import { useAdminState } from "@/app/store/AdminState";
 import { useAppState } from "@/app/store/BackendAPIState";
 import { OrderInterface, ProductInterface } from "@/app/utils/Types";
-import Link from "next/link";
 import { useEffect, useState } from "react";
 
 type Props = {

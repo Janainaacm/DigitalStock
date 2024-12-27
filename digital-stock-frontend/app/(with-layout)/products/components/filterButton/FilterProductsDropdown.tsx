@@ -8,8 +8,14 @@ type Props = {
   onClose: () => void;
 };
 
-type SelectedFilter = "sold" | "price-lo-hi" | "price-hi-lo" | "name-az" | "name-za" | "stock" | "";
-
+type SelectedFilter =
+  | "sold"
+  | "price-lo-hi"
+  | "price-hi-lo"
+  | "name-az"
+  | "name-za"
+  | "stock"
+  | "";
 
 const FilterProductsDropdown = ({ onClose }: Props) => {
   const {
@@ -20,8 +26,12 @@ const FilterProductsDropdown = ({ onClose }: Props) => {
     setFilteredProductList,
     productList,
   } = useAppState();
+
+  const [tempFilteredProducts, setTempFilteredProducts] = useState<
+    ProductInterface[]
+  >([]);
   const [sortField, setSortField] = useState<keyof ProductInterface | "">("");
-  const [selectedField, setSelectedField] = useState<SelectedFilter>("")
+  const [selectedField, setSelectedField] = useState<SelectedFilter>("");
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
   const [categoryDropdown, setCategoryDropdown] = useState(false);
   const [categoriesInFilter, setCategoriesInFilter] = useState<string[]>([]);
@@ -30,8 +40,8 @@ const FilterProductsDropdown = ({ onClose }: Props) => {
   const [filterByStock, setFilterByStock] = useState(false);
   const [selectedColors, setSelectedColors] = useState<string[]>([]);
   const availableColors = Array.from(
-      new Set(productList.map((product) => product.colorName))
-    );
+    new Set(productList.map((product) => product.colorName))
+  );
 
   useEffect(() => {
     if (displayProducts.length == 0) {
@@ -45,51 +55,52 @@ const FilterProductsDropdown = ({ onClose }: Props) => {
 
   useEffect(() => {
     let filteredProducts = [...productList];
-  
+
     if (categoriesInFilter.length > 0) {
       filteredProducts = filteredProducts.filter((product) =>
         categoriesInFilter.includes(product.categoryName)
       );
     }
-  
+
     if (filterByStock) {
-      filteredProducts = filteredProducts.filter((product) => product.stock > 0);
+      filteredProducts = filteredProducts.filter(
+        (product) => product.stock > 0
+      );
     }
-  
+
     if (selectedColors.length > 0) {
       filteredProducts = filteredProducts.filter((product) =>
         selectedColors.includes(product.colorName)
       );
     }
-  
+
     if (sortField) {
-        filteredProducts.sort((a, b) => {
-          const valA = a[sortField];
-          const valB = b[sortField];
-      
-          if (
-            sortField === "price" ||
-            sortField === "sales" ||
-            sortField === "stock"
-          ) {
-            const numA = typeof valA === "number" ? valA : 0;
-            const numB = typeof valB === "number" ? valB : 0;
-      
-            return sortOrder === "asc" ? numA - numB : numB - numA;
-          } else if (sortField === "name") {
-            if (typeof valA === "string" && typeof valB === "string") {
-              return sortOrder === "asc"
-                ? valA.localeCompare(valB)
-                : valB.localeCompare(valA);
-            }
+      filteredProducts.sort((a, b) => {
+        const valA = a[sortField];
+        const valB = b[sortField];
+
+        if (
+          sortField === "price" ||
+          sortField === "sales" ||
+          sortField === "stock"
+        ) {
+          const numA = typeof valA === "number" ? valA : 0;
+          const numB = typeof valB === "number" ? valB : 0;
+
+          return sortOrder === "asc" ? numA - numB : numB - numA;
+        } else if (sortField === "name") {
+          if (typeof valA === "string" && typeof valB === "string") {
+            return sortOrder === "asc"
+              ? valA.localeCompare(valB)
+              : valB.localeCompare(valA);
           }
-      
-          return 0;
-        });
-      }      
-  
-    setFilteredProductList(filteredProducts);
-    fetchDisplayProducts()
+        }
+
+        return 0;
+      });
+    }
+
+    setTempFilteredProducts(filteredProducts);
   }, [
     productList,
     categoriesInFilter,
@@ -125,13 +136,19 @@ const FilterProductsDropdown = ({ onClose }: Props) => {
   };
 
   const resetFilter = () => {
-    setFilteredProductList(productList);
-    setSelectedField("")
-    setSortField("")
-    setCategoriesInFilter([])
-    setSelectedColors([])
-    fetchDisplayProducts()
+    setCategoriesInFilter([]);
+    setSortField("");
+    setSortOrder("asc");
+    setFilterByStock(false);
+    setSelectedColors([]);
+    setTempFilteredProducts(productList);
     onClose()
+  };
+
+  const applyGlobalFilter = () => {
+    setFilteredProductList(tempFilteredProducts);
+    fetchDisplayProducts();
+    onClose();
   };
 
   const setSorting = (field: keyof ProductInterface, order: "asc" | "desc") => {
@@ -141,8 +158,8 @@ const FilterProductsDropdown = ({ onClose }: Props) => {
 
   return (
     <div className="w-[300px] max-w-xl bg-white shadow-lg relative ml-auto h-screen">
-      <div className="overflow-auto p-6">
-        <div className="flex items-center border-b gap- pt-6 pb-4 text-gray-800">
+      <div className="overflow-auto p-6 h-full">
+        <div className="flex items-center border-b pt-6 pb-4 text-gray-800">
           <h3 className="text-2xl font-bold flex-1">Filter</h3>
           <button onClick={onClose}>
             <svg
@@ -160,8 +177,9 @@ const FilterProductsDropdown = ({ onClose }: Props) => {
             </svg>
           </button>
         </div>
-        <div>
-          <div className="max-h-full py-6 overflow-scroll no-scrollbar">
+
+        <div className="relative h-full">
+          <div className="h-auto py-6 overflow-scroll no-scrollbar">
             <div className="space-y-4">
               <ol className="flex flex-col justify-between">
                 <li className="group relative w-full text-xl border-b py-4">
@@ -239,13 +257,15 @@ const FilterProductsDropdown = ({ onClose }: Props) => {
                           : "bg-gray-50 text-gray-600 shadow-inner"
                       }`}
                     >
-                      <button 
-                      onClick={() => {
-                        setSorting("price", "asc"); 
-                        setSelectedField("price-lo-hi");
-                    }}
-                      className="text-sm w-full h-full text-left font-semibold tracking-wide ml-2"
-                      >Price $-$$$</button>
+                      <button
+                        onClick={() => {
+                          setSorting("price", "asc");
+                          setSelectedField("price-lo-hi");
+                        }}
+                        className="text-sm w-full h-full text-left font-semibold tracking-wide ml-2"
+                      >
+                        Price $-$$$
+                      </button>
                     </li>
                     <li
                       className={`border-b py-2 ${
@@ -254,12 +274,15 @@ const FilterProductsDropdown = ({ onClose }: Props) => {
                           : "bg-gray-50 text-gray-600 shadow-inner"
                       }`}
                     >
-                      <button 
-                      onClick={() => {
-                        setSorting("price", "desc");
-                        setSelectedField("price-hi-lo")}}
-                      className="text-sm w-full h-full text-left font-semibold tracking-wide ml-2"
-                      >Price $$$-$</button>
+                      <button
+                        onClick={() => {
+                          setSorting("price", "desc");
+                          setSelectedField("price-hi-lo");
+                        }}
+                        className="text-sm w-full h-full text-left font-semibold tracking-wide ml-2"
+                      >
+                        Price $$$-$
+                      </button>
                     </li>
                     <li
                       className={`border-b py-2 ${
@@ -268,10 +291,32 @@ const FilterProductsDropdown = ({ onClose }: Props) => {
                           : "bg-gray-50 text-gray-600 shadow-inner"
                       }`}
                     >
-                      <button 
-                      onClick={() => {setSorting("name", "asc"); setSelectedField("name-za")}}
-                      className="text-sm w-full h-full text-left font-semibold tracking-wide ml-2"
-                      >Name A-Z</button>
+                      <button
+                        onClick={() => {
+                          setSorting("name", "asc");
+                          setSelectedField("name-az");
+                        }}
+                        className="text-sm w-full h-full text-left font-semibold tracking-wide ml-2"
+                      >
+                        Name A-Z
+                      </button>
+                    </li>
+                    <li
+                      className={`border-b py-2 ${
+                        selectedField == "name-az"
+                          ? "bg-white text-blue-400"
+                          : "bg-gray-50 text-gray-600 shadow-inner"
+                      }`}
+                    >
+                      <button
+                        onClick={() => {
+                          setSorting("name", "desc");
+                          setSelectedField("name-za");
+                        }}
+                        className="text-sm w-full h-full text-left font-semibold tracking-wide ml-2"
+                      >
+                        Name Z-A
+                      </button>
                     </li>
                     <li
                       className={`border-b py-2 ${
@@ -280,22 +325,15 @@ const FilterProductsDropdown = ({ onClose }: Props) => {
                           : "bg-gray-50 text-gray-600 shadow-inner"
                       }`}
                     >
-                      <button 
-                      onClick={() => setSorting("name", "desc")}
-                      className="text-sm w-full h-full text-left font-semibold tracking-wide ml-2"
-                      >Name Z-A</button>
-                    </li>
-                    <li
-                      className={`border-b py-2 ${
-                        selectedField == "sold"
-                          ? "bg-white text-blue-400"
-                          : "bg-gray-50 text-gray-600 shadow-inner"
-                      }`}
-                    >
-                      <button 
-                      onClick={() => {setSorting("sales", "desc"); setSelectedField("sold")}}
-                      className="text-sm w-full h-full text-left font-semibold tracking-wide ml-2"
-                      >Best sold</button>
+                      <button
+                        onClick={() => {
+                          setSorting("sales", "desc");
+                          setSelectedField("sold");
+                        }}
+                        className="text-sm w-full h-full text-left font-semibold tracking-wide ml-2"
+                      >
+                        Best sold
+                      </button>
                     </li>
                     <li
                       className={`border-b py-2 ${
@@ -304,14 +342,15 @@ const FilterProductsDropdown = ({ onClose }: Props) => {
                           : "bg-gray-50 text-gray-600 shadow-inner"
                       }`}
                     >
-                      <button 
-                      onClick={() => 
-                        {setFilterByStock(!filterByStock);
-                        setSelectedField("stock")
-                        }
-                    }
-                      className="text-sm w-full h-full text-left font-semibold tracking-wide ml-2"
-                      >In Stock</button>
+                      <button
+                        onClick={() => {
+                          setFilterByStock(!filterByStock);
+                          setSelectedField("stock");
+                        }}
+                        className="text-sm w-full h-full text-left font-semibold tracking-wide ml-2"
+                      >
+                        In Stock
+                      </button>
                     </li>
                   </ul>
                 </li>
@@ -341,16 +380,18 @@ const FilterProductsDropdown = ({ onClose }: Props) => {
                     }`}
                   >
                     {availableColors.map((color) => (
-                      <li key={color}
-                      className={`border-b py-2 ${
-                        selectedColors.includes(color)
-                          ? "bg-white text-blue-400"
-                          : "bg-gray-50 text-gray-600 shadow-inner"
-                      }`}
-                    >
+                      <li
+                        key={color}
+                        className={`border-b py-2 ${
+                          selectedColors.includes(color)
+                            ? "bg-white text-blue-400"
+                            : "bg-gray-50 text-gray-600 shadow-inner"
+                        }`}
+                      >
                         <button
-                         className="text-sm w-full h-full text-left font-semibold tracking-wide ml-2"
-                         onClick={() => toggleColorFilter(color)}>
+                          className="text-sm w-full h-full text-left font-semibold tracking-wide ml-2"
+                          onClick={() => toggleColorFilter(color)}
+                        >
                           {color}
                         </button>
                       </li>
@@ -360,15 +401,20 @@ const FilterProductsDropdown = ({ onClose }: Props) => {
               </ol>
             </div>
           </div>
-          
-        </div>
-        <div className="mb-12">
-                  <button
-                   className="mt-3 text-sm font-semibold px-6 py-4 w-full bg-gray-300 hover:bg-gray-400 transition-all duration-300 text-white rounded-md tracking-wide"
-                  onClick={resetFilter}
-                  >
-                    Reset filter
-                  </button>
+          <div className="w-full absolute bottom-16">
+            <button
+              onClick={applyGlobalFilter}
+              className="mt-3 text-sm font-semibold px-6 py-2 w-full bg-blue-400 hover:bg-blue-500 transition-all duration-300 text-white rounded-md tracking-wide"
+            >
+              Apply
+            </button>
+            <button
+              className="mt-3 text-sm font-semibold px-6 py-2 w-full bg-gray-300 hover:bg-gray-400 transition-all duration-300 text-white rounded-md tracking-wide"
+              onClick={resetFilter}
+            >
+              Reset
+            </button>
+          </div>
         </div>
       </div>
     </div>

@@ -26,10 +26,6 @@ const EditProductPage = ({onProducts}: Props) => {
   const [error, setError] = useState<string[]>([]);
   const [success, setSuccess] = useState(false);
 
-    if (!productDetails) {
-    return <LoadingPage />;
-  }
-
   useEffect(() => {
     resetFields()
   }, [productDetails]);
@@ -91,7 +87,7 @@ const EditProductPage = ({onProducts}: Props) => {
   };
 
   const handleSaveChanges = async () => {
-    if (!validateFields()) {
+    if (!validateFields() || !productDetails) {
       return;
     }
   
@@ -123,7 +119,8 @@ const EditProductPage = ({onProducts}: Props) => {
   };
 
    const resetFields = () => {
-    setName(productDetails.name);
+    if (productDetails) {
+      setName(productDetails.name);
     setDescription(productDetails.description);
     setImageUrl(productDetails.imageUrl);
     setColorName(productDetails.colorName);
@@ -131,8 +128,12 @@ const EditProductPage = ({onProducts}: Props) => {
     setStock(productDetails.stock.toString());
     setCategory(productDetails.categoryName);
     setError([]);
+    }
   };
 
+  if (!productDetails) {
+    return <LoadingPage />;
+  }
   
 
   const SuccessPopup = () => (

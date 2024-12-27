@@ -59,7 +59,9 @@ export default function DeleteProductButton({ product }: Props) {
             fetchAllProducts()
             toggleModal()
           }, 3000);
-        } catch (error) {}
+        } catch (error) {
+          console.log(error)
+        }
       } else {
         setError("Password incorrect")
         setIsLoading(false);

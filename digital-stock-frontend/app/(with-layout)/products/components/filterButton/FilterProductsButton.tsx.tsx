@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import FilterProductsDropdown from "./FilterProductsDropdown";
-import { ProductInterface } from "@/app/utils/Types";
 
 
 const FilterProductsButton = () => {

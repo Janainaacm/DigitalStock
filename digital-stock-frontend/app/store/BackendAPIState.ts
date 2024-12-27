@@ -3,6 +3,7 @@ import axios from "axios";
 import { API_URL } from "./config/config";
 import { ProductInterface, CategoryInterface } from "../utils/Types";
 import { useAuthState } from "./AuthState";
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 
 interface AppState {
   productList: ProductInterface[];
@@ -24,10 +25,12 @@ interface AppState {
   fetchProductsBySearch: () => Promise<void>;
   setFilteredProductList: (searchResult: ProductInterface[]) => void;
   fetchProductById: (productId: number) => Promise<ProductInterface | null>;
-  fetchProductsByCategory: (categoryName: string) => Promise<void>;
+  fetchProductsByCategory: (
+    categoryName: string,
+    router: AppRouterInstance
+  ) => Promise<void>;
   fetchAllProductColorsByName: (
-    productName: string,
-    currentProductId: string
+    productName: string
   ) => Promise<ProductInterface[] | null>;
   setSearchBar: (searchInput: string) => void;
   setChosenCategory: (categoryName: string) => void;
@@ -55,22 +58,29 @@ export const useAppState = create<AppState>((set) => ({
   },
 
   fetchDisplayProducts: () => {
-    const {  productList, filteredProductList } = useAppState.getState();
+    const { productList, filteredProductList } = useAppState.getState();
+    console.log("Checking state in fetchDisplayProducts:", {
+      productList,
+      filteredProductList,
+    });
+
     const user = useAuthState.getState().user;
     const wishlist = useAuthState.getState().wishlist;
-      
+
     if (filteredProductList.length === 0) {
-      console.log("filteredProductList is 0")
+      console.log("filteredProductList is 0");
 
       if (user && wishlist) {
         const wishlistProductIds = new Set(
           wishlist.items.map((item) => item.product.id)
         );
 
-        const updatedProducts: ProductInterface[] = productList.map((product) => ({
-          ...product,
-          isInWishlist: wishlistProductIds.has(product.id),
-        }));
+        const updatedProducts: ProductInterface[] = productList.map(
+          (product) => ({
+            ...product,
+            isInWishlist: wishlistProductIds.has(product.id),
+          })
+        );
 
         set({
           displayProducts: updatedProducts,
@@ -81,15 +91,18 @@ export const useAppState = create<AppState>((set) => ({
         });
       }
     } else {
+      console.log("filteredProductList is:", filteredProductList);
       if (user && wishlist) {
         const wishlistProductIds = new Set(
           wishlist.items.map((item) => item.product.id)
         );
 
-        const updatedProducts: ProductInterface[] = filteredProductList.map((product) => ({
-          ...product,
-          isInWishlist: wishlistProductIds.has(product.id),
-        }));
+        const updatedProducts: ProductInterface[] = filteredProductList.map(
+          (product) => ({
+            ...product,
+            isInWishlist: wishlistProductIds.has(product.id),
+          })
+        );
 
         set({
           displayProducts: updatedProducts,
@@ -101,8 +114,6 @@ export const useAppState = create<AppState>((set) => ({
       }
     }
   },
-  
-  
 
   fetchAllProducts: async (): Promise<void> => {
     try {
@@ -110,10 +121,9 @@ export const useAppState = create<AppState>((set) => ({
 
       const response = await axios.get(`${API_URL}/products`);
 
-        set({
-          productList: response.data,
-        });
-
+      set({
+        productList: response.data,
+      });
     } catch (error) {
       console.error("Error fetching products:", error);
       throw error;
@@ -122,12 +132,11 @@ export const useAppState = create<AppState>((set) => ({
 
   fetchAllCategories: async (): Promise<void> => {
     try {
-      const response = await axios.get(`${API_URL}/products/categories`)
+      const response = await axios.get(`${API_URL}/products/categories`);
 
       set({
-        categories: response.data
+        categories: response.data,
       });
-      
     } catch (error) {
       console.error("Error fetching categories:", error);
       throw error;
@@ -140,6 +149,10 @@ export const useAppState = create<AppState>((set) => ({
     set({
       filteredProductList: searchResult,
     });
+    console.log(
+      "filtered list after problem: ",
+      useAppState.getState().filteredProductList
+    );
   },
 
   fetchProductById: async (
@@ -148,6 +161,7 @@ export const useAppState = create<AppState>((set) => ({
     try {
       const response = await axios.get(`${API_URL}/products/id/${productId}`);
       set({ product: response.data });
+      console.log(response.data);
       return response.data;
     } catch (error) {
       console.error("Error fetching product by ID:", error);
@@ -155,19 +169,27 @@ export const useAppState = create<AppState>((set) => ({
     }
   },
 
-  fetchProductsByCategory: async (categoryName: string): Promise<void> => {
+  fetchProductsByCategory: async (
+    categoryName: string,
+    router: AppRouterInstance
+  ): Promise<void> => {
     try {
       const response = await axios.get(
         `${API_URL}/products/category/${categoryName}`
       );
-      console.log("categoryName: ", categoryName)
-      console.log("api response: ", response.data)
 
-      set({ filteredProductList: response.data});
-      set({ chosenCategory: categoryName });
-      set({ searchKeyword: categoryName });
+      set((state) => ({
+        ...state,
+        filteredProductList: response.data,
+        chosenCategory: categoryName,
+        searchKeyword: categoryName,
+      }));
+      console.log(
+        "filtered productList: ",
+        useAppState.getState().filteredProductList
+      );
 
-
+      router.push("/products");
       return response.data;
     } catch (error) {
       console.error("Error fetching products by category:", error);
@@ -176,25 +198,16 @@ export const useAppState = create<AppState>((set) => ({
   },
 
   fetchAllProductColorsByName: async (
-    productName: string,
-    colorName: string
+    productName: string
   ): Promise<ProductInterface[] | null> => {
     try {
       const response = await axios.get(
         `${API_URL}/products/name/${productName}/colors`
       );
-      const allColors = response.data;
-      console.log("All Colors:", allColors);
-      console.log("Current colorName:", colorName);
 
-      const sendBackList = allColors.filter(
-        (p: ProductInterface) => p.colorName !== colorName
-      );
-      console.log("Filtered Colors:", sendBackList);
+      set({ allProductVariants: response.data });
 
-      set({ allProductVariants: sendBackList });
-
-      return sendBackList;
+      return response.data;
     } catch (error) {
       console.error("Error fetching product colors by name:", error);
       return null;
@@ -218,5 +231,4 @@ export const useAppState = create<AppState>((set) => ({
       searchKeyword: keyword,
     });
   },
-
 }));

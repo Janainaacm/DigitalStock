@@ -5,14 +5,12 @@ import {
   Transition,
   TransitionChild,
 } from "@headlessui/react";
-import { useAdminState } from "@/app/store/AdminState";
 import { useAppState } from "@/app/store/BackendAPIState";
 import DeleteCategoryButton from "./DeleteCategoryButton";
 
 const ManageCategories = () => {
   const [open, setOpen] = useState(false);
   const toggleModal = () => setOpen((prev) => !prev);
-  const {deleteCategory} = useAdminState()
   const { categories, fetchAllCategories, productList } = useAppState();
 
   useEffect(() => {

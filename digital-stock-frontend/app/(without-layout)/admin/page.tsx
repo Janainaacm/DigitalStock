@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import AdminBanner from "./components/ui/AdminBanner";
 import SideBar from "./components/SideBar";
 import AdminDashboard from "./components/AdminDashboard";
@@ -26,7 +26,7 @@ type CurrentPage =
   | "order-details"
   | "calendar";
 
-const AdminPage = () => {
+const AdminContent = () => {
   const searchParams = useSearchParams();
   const router = useRouter();
   const initialPage =
@@ -42,7 +42,6 @@ const AdminPage = () => {
       case "products":
         return (
           <ProductManagementPage
-            onAddProduct={() => setCurrentPage("add-product")}
             onEditProduct={() => setCurrentPage("edit-product")}
           />
         );
@@ -120,6 +119,14 @@ const AdminPage = () => {
         <div className="col-span-1 overflow-auto">{renderComponent()}</div>
       </div>
     </section>
+  );
+};
+
+const AdminPage = () => {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <AdminContent />
+    </Suspense>
   );
 };
 

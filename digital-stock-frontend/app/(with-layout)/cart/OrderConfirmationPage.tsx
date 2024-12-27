@@ -22,8 +22,8 @@ const OrderConfirmationPage = ({ order }: Props) => {
                 Thank You for Your Order, {user?.firstName || user?.username}!
               </h2>
               <p className="max-w-xl text-center text-gray-500 text-lg font-normal leading-8">
-                Your order is in good hands! We'll notify you once it's en
-                route. For now, here's a snapshot of your purchase
+                Your order is in good hands! We&apos;ll notify you once it&apos;s en
+                route. For now, here&apos;s a snapshot of your purchase
               </p>
             </div>
             <div className="w-full flex-col justify-start items-center lg:gap-10 gap-8 flex">

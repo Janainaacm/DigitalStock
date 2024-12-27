@@ -1,7 +1,7 @@
 import { useAdminState } from "@/app/store/AdminState";
 import { useAuthState } from "@/app/store/AuthState";
 import { useAppState } from "@/app/store/BackendAPIState";
-import { CategoryInterface, ProductInterface } from "@/app/utils/Types";
+import { CategoryInterface } from "@/app/utils/Types";
 import LoadingIcon from "@/public/icons/LoadingIcon";
 import {
   Transition,
@@ -61,7 +61,9 @@ export default function DeleteCategoryButton({ category }: Props) {
             fetchAllProducts()
             toggleModal()
           }, 3000);
-        } catch (error) {}
+        } catch (error) {
+          console.log(error)
+        }
       } else {
         setError("Password incorrect")
         setIsLoading(false);

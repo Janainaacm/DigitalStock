@@ -114,6 +114,7 @@ export const useAuthState = create<AuthState>((set) => ({
 
     return user;
   } catch (error) {
+    console.log(error)
     return null;
   }
 },
@@ -134,6 +135,7 @@ verifyPassword: async (password: string): Promise<boolean> => {
 
     return response.data === true;
   } catch (error) {
+    console.log(error)
     return false;
   }
 },

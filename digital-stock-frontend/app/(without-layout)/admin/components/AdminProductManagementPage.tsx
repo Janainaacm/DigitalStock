@@ -7,11 +7,10 @@ import { useAdminState } from "@/app/store/AdminState";
 import ManageCategories from "./functions/ManageCategories";
 
 type Props = {
-  onAddProduct: () => void;
   onEditProduct: () => void;
 };
 
-const ProductManagementPage = ({onAddProduct, onEditProduct}: Props) => {
+const ProductManagementPage = ({onEditProduct}: Props) => {
   const { productList, fetchAllProducts } = useAppState();
   const { setProductDetails } = useAdminState();
   const [currentPage, setCurrentPage] = useState(1);
@@ -29,7 +28,7 @@ const ProductManagementPage = ({onAddProduct, onEditProduct}: Props) => {
   }, [productList]);
 
   useEffect(() => {
-    let sorted = [...productList];
+    const sorted = [...productList];
 
     if (sortField) {
       sorted.sort((a, b) => {

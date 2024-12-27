@@ -3,7 +3,6 @@
 import LoadingPage from "@/app/components/loadingPage/LoadingPage";
 import { useAdminState } from "@/app/store/AdminState";
 import { OrderInterface, OrderItemInterface } from "@/app/utils/Types";
-import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
 type Props = {

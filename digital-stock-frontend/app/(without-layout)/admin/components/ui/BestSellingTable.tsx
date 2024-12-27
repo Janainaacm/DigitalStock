@@ -71,14 +71,14 @@ const BestSellingTable = () => {
           </div>
           <div className="col-span-1 flex items-center">
             <p className="text-sm text-gray-500">
-              ${product.price}
+              ${product.price.toFixed(2)}
             </p>
           </div>
-          <div className="col-span-1 flex items-center">
-            <p className="text-sm text-gray-500">{product.sales}</p>
+          <div className="col-span-1 flex items-center ml-4">
+            <p className="text-sm text-center text-gray-500">{product.sales}</p>
           </div>
           <div className="col-span-1 flex items-center">
-            <p className="text-sm text-meta-3">${product.sales * product.price}</p>
+            <p className="text-sm text-meta-3">${(product.sales * product.price).toFixed(2)}</p>
           </div>
         </div>
       ))}

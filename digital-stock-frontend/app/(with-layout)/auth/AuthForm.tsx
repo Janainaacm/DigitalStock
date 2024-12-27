@@ -31,6 +31,8 @@ export default function AuthForm({extraClass, children, auth}: Props) {
         router.push("/user"); 
       }
     }
+
+   
   }, [user, open, router]);
 
 

@@ -30,9 +30,17 @@ const UserDetailsPage = ({ onUsers }: Props) => {
 
   return (
     <div className="w-full max-w-7xl mt-8 mx-auto">
-      <h2 className="font-manrope font-extrabold px-4 md:px-8 text-3xl lead-10 text-black mb-9">
+      <div className="flex justify-between items-center">
+        <h2 className="font-manrope font-extrabold px-4 md:px-8 text-3xl lead-10 text-black mb-9">
         User information
       </h2>
+      <button 
+      className="px-8 py-1 mr-12 border mt-4 tracking-wide font-semibold text-gray-600 border-gray-400 bg-gray-50 hover:tracking-widest hover:scale-[1.1] hover:text-gray-500 hover:bg-white hover:shadow-md transition-all duration-400"
+      onClick={onUsers}>
+        Go back
+      </button>
+      </div>
+      
       <div className="flex sm:flex-col lg:flex-row px-4 md:px-8 sm:items-center justify-between">
         <ul className="flex gap-12 mb-5">
           {allPages.map((page) => (

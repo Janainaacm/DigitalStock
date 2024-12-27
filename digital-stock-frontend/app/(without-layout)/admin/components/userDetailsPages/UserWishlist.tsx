@@ -1,33 +1,36 @@
-import LoadingPage from "@/app/components/loadingPage/LoadingPage";
-import { WishlistInterface } from "@/app/utils/Types";
+import { WishlistInterface, WishlistItemsInterface } from "@/app/utils/Types";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 type Props = {
     wishlist: WishlistInterface;
 }
 
 const UserWishlistAdminPage = ({wishlist}: Props) => {
+  const [wishlistNumber, setWishlistNumber] = useState(0)
+  const [wishlistItems, setWishlistItems] = useState<WishlistItemsInterface[]>([])
+  const [extended, setExtended] = useState<number | null>(null); 
+  const router = useRouter();
 
-        if (!wishlist) {
-        return (
-            <div className="flex justify-center pt-24 shadow-inner">
-                Wishlist is empty :(
-            </div>
-        )
+  useEffect(() => {
+    if (wishlist) {
+      setWishlistNumber(wishlist.items.length)
+      setWishlistItems(wishlist.items)
     }
-
-    const [wishlistNumber, setWishlistNumber] = useState(wishlist.items.length)
-    const [wishlistItems, setWishlistItems] = useState(wishlist.items)
-    const [extended, setExtended] = useState<number | null>(null); 
-    const router = useRouter();
+  }, [wishlist])
   
   
     const toggleExtend = (id: number) => {
       setExtended((prev) => (prev === id ? null : id)); 
     };
 
-
+    if (!wishlist) {
+      return (
+          <div className="flex justify-center pt-24 shadow-inner">
+              Wishlist is empty :(
+          </div>
+      )
+  }
 
     return (
         <>

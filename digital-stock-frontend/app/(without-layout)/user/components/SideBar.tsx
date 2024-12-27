@@ -1,15 +1,15 @@
 "use client";
 import { useAuthState } from "@/app/store/AuthState";
 import { useRouter } from "next/navigation";
-import DeleteUserButton from "./functions/DeleteUserButton";
 
 type Props = {
+  currentPage: string;
   onProfile: () => void;
   onOrders: () => void;
   onWishlist: () => void;
 };
 
-const SideBar = ({onProfile, onOrders, onWishlist}: Props) => {
+const SideBar = ({currentPage, onProfile, onOrders, onWishlist}: Props) => {
   const { logout } = useAuthState();
   const router = useRouter();
 
@@ -33,7 +33,11 @@ const SideBar = ({onProfile, onOrders, onWishlist}: Props) => {
             <li>
                 <button
                   onClick={onProfile}
-                  className="text-gray-800 text-sm w-full flex items-center hover:bg-gray-100 rounded-md px-4 py-2 transition-all"
+                  className={`w-full text-sm flex items-center rounded-md px-4 py-2 transition-all ${
+                    currentPage === "profile"
+                    ? "text-white bg-blue-400 rounded-l-full"
+                    : "hover:bg-gray-100 text-gray-800 bg-white"
+                  }`}
                 >
                   <svg
                     fill="currentColor"
@@ -51,7 +55,11 @@ const SideBar = ({onProfile, onOrders, onWishlist}: Props) => {
               <li>
                 <button
                   onClick={onOrders}
-                  className="text-gray-800 w-full text-sm flex items-center hover:bg-gray-100 rounded-md px-4 py-2 transition-all"
+                  className={`w-full text-sm flex items-center rounded-md px-4 py-2 transition-all ${
+                    currentPage === "orders"
+                    ? "text-white bg-blue-400 rounded-l-full"
+                    : "hover:bg-gray-100 text-gray-800 bg-white"
+                  }`}
                 >
                   <svg
                     className="w-[26px] h-[26px] -ml-1 mr-2"
@@ -75,8 +83,13 @@ const SideBar = ({onProfile, onOrders, onWishlist}: Props) => {
               <li>
                 <button
                   onClick={onWishlist}
-                  className="text-gray-800 text-sm flex items-center w-full hover:bg-gray-100 rounded-md px-4 py-2 transition-all"
+                  className={`w-full text-sm flex items-center rounded-md px-4 py-2 transition-all ${
+                    currentPage === "wishlist"
+                    ? "text-white bg-blue-400 rounded-l-full"
+                    : "hover:bg-gray-100 text-gray-800 bg-white"
+                  }`}
                 >
+                
                  <svg className="h-5 w-5 mr-3 -ml-0.5"  
                  viewBox="0 0 24 24"  
                  fill="none"  

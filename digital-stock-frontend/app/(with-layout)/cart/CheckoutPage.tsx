@@ -14,21 +14,30 @@ const Checkout = ({onOrderConfirmation, onViewCart, setOrder}: Props) => {
   const { cart, user } = useAuthState();
   const { placeOrder } = useUserState();
 
-  if (!user) {
-    return <div>Please log in to proceed to checkout.</div>;
-  }
-
   const [subtotal, setSubtotal] = useState(0);
-  const [firstName, setFirstName] = useState(user.firstName || "");
-  const [lastName, setLastName] = useState(user.lastName || "");
-  const [email, setEmail] = useState(user.email || "");
-  const [phoneNo, setPhoneNo] = useState(user.phoneNo || "");
-  const [addressLine, setAddressLine] = useState(user.address?.addressLine || "");
-  const [city, setCity] = useState(user.address?.city || "");
-  const [state, setState] = useState(user.address?.state || "");
-  const [zipCode, setZipCode] = useState(user.address?.zipCode || "");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phoneNo, setPhoneNo] = useState("");
+  const [addressLine, setAddressLine] = useState("");
+  const [city, setCity] = useState("");
+  const [state, setState] = useState("");
+  const [zipCode, setZipCode] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
+
+  useEffect(() => {
+    if (user) {
+      setFirstName(user.firstName || "");
+      setLastName(user.lastName || "");
+      setEmail(user.email || "");
+      setPhoneNo(user.phoneNo || "");
+      setAddressLine(user.address?.addressLine || "");
+      setCity(user.address?.city || "");
+      setState(user.address?.state || "");
+      setZipCode(user.address?.zipCode || "");
+    }
+  }, [user]);
 
   useEffect(() => {
     if (cart) {
@@ -97,14 +106,16 @@ const Checkout = ({onOrderConfirmation, onViewCart, setOrder}: Props) => {
       setCity("");
       setState("");
       setZipCode("");
-    } catch (error: any) {
+    } catch (error) {
       console.error("Error completing purchase:", error);
-      setError(
-        error.response?.data?.message || "Failed to complete the purchase. Please try again."
-      );
+      setError("Failed to complete the purchase. Please try again.");
     }
   }    
   };
+
+  if (!user) {
+    return <div>Please log in to proceed to checkout.</div>;
+  }
 
 
   const SuccessPopup = () => (
@@ -137,6 +148,7 @@ const Checkout = ({onOrderConfirmation, onViewCart, setOrder}: Props) => {
                   <div key={item.id} className="flex items-start gap-4">
                     <div className="w-32 h-28 max-lg:w-24 max-lg:h-24 flex p-3 shrink-0 bg-white rounded-md">
                       <img
+                        alt={item.product.name}
                         src={item.product.imageUrl}
                         className="w-full object-contain"
                       />

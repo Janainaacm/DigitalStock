@@ -3,6 +3,7 @@ import { useAuthState } from "@/app/store/AuthState";
 import { useEffect, useState } from "react";
 import { UserInterface } from "../../../utils/Types";
 import { useUserState } from "../../../store/UserState";
+import DeleteUserButton from "./functions/DeleteUserButton";
 
 const UserProfilePage = () => {
   const { user } = useAuthState();
@@ -16,9 +17,10 @@ const UserProfilePage = () => {
   const [city, setCity] = useState("");
   const [state, setState] = useState("");
   const [zipCode, setZipCode] = useState("");
-  const [validation, setValidation] = useState({ email: true });
   const [errorMsg, setErrorMsg] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [success, setSuccess] = useState(false)
+  const [error, setError] = useState(false)
 
   useEffect(() => {
     if (user) {
@@ -36,10 +38,9 @@ const UserProfilePage = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    setValidation({ email: Boolean(email) });
-
     if (!email) {
       setErrorMsg("Email cannot be empty.");
+      setError(true)
       return;
     }
 
@@ -61,9 +62,11 @@ const UserProfilePage = () => {
   
       try {
         await updateUserProfile(updatedUser);
-        alert("Profile updated successfully!");
+        setSuccess(true)
       } catch (error) {
-        alert("An error occurred while updating the profile.");
+        console.log(error)
+        setErrorMsg("An error occurred while updating the profile.");
+        setError(true)
       } finally {
         setIsLoading(false);
       }
@@ -91,6 +94,7 @@ const UserProfilePage = () => {
 
 
   return (
+    <>
     <div className="relative font-[sans-serif] bg-gray-100 shadow-inner py-6 px-10">
       <div className="p-6 rounded-xl shadow-md bg-white">
         <h1 className="text-4xl font-extrabold text-gray-800">
@@ -103,6 +107,16 @@ const UserProfilePage = () => {
           <p className="mt-1 text-sm text-gray-500">
             Edit your personal information below.
           </p>
+          {error && (
+            <div className="bg-red-100 text-red-700 px-4 py-2 rounded-md mt-4">
+              {errorMsg}
+            </div>
+          )}
+          {success && (
+            <div className="bg-green-100 text-green-700 px-4 py-2 rounded-md mt-4">
+              Profile updated successfully!
+            </div>
+          )}
         </div>
       </div>
 
@@ -426,7 +440,11 @@ const UserProfilePage = () => {
           </div>
         </div>
       </form>
+      <div className="p-6">
+      <DeleteUserButton/>
+      </div>
     </div>
+    </>
   );
 };
 export default UserProfilePage;
