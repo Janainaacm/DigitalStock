@@ -62,20 +62,26 @@ const AdminOrderManagementPage = ({ onOrderDetails }: Props) => {
   
 
   const handleCancelOrder = (order: OrderInterface) => {
-    if (
-      order.status == "CONFIRMED" ||
-      order.status == "SHIPPED" ||
-      order.status == "DELIVERED"
-    ) {
-      return;
-    }
+    if (order.status == "CONFIRMED" ||
+    order.status == "SHIPPED" ||
+    order.status == "DELIVERED") {
+        alert("Cannot cancel order unless status is pending")
+        return
+    };
+
+    if (order.status == "CANCELLED") {
+        alert("Order is already cancelled")
+        return
+    };
 
     try {
-      cancelOrder(order.id);
+        cancelOrder(order.id)
+        alert("Order cancelled successfully")
     } catch (error) {
-      console.log(error);
+        console.log(error)   
     }
-  };
+
+  }
 
   const handleConfirm = (orderId: number) => {
     updateOrderStatus(orderId, "CONFIRMED");
