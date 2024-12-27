@@ -25,6 +25,7 @@ const FilterProductsDropdown = ({ onClose }: Props) => {
     categories,
     setFilteredProductList,
     productList,
+    setSearchKeyword
   } = useAppState();
 
   const [tempFilteredProducts, setTempFilteredProducts] = useState<
@@ -125,6 +126,7 @@ const FilterProductsDropdown = ({ onClose }: Props) => {
           );
 
     setFilteredProductList(filteredProducts);
+    setSearchKeyword("Products")
   };
 
   const toggleColorFilter = (color: string) => {
@@ -147,6 +149,7 @@ const FilterProductsDropdown = ({ onClose }: Props) => {
 
   const applyGlobalFilter = () => {
     setFilteredProductList(tempFilteredProducts);
+    setSearchKeyword("Products")
     fetchDisplayProducts();
     onClose();
   };

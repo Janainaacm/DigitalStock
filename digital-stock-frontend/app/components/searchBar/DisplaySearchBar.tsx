@@ -4,11 +4,9 @@ import { useAppState } from "@/app/store/BackendAPIState";
 import SearchBar from "./SearchBar";
 import SearchResultsList from "./SearchResultsList";
 import { useEffect, useRef, useState } from "react";
-import { ProductInterface } from "@/app/utils/Types";
 
 const DisplaySearchBar = ({ inSideBar = false }) => {
   const {
-    searchBar,
     productList,
     fetchAllProducts: fetchProducts,
   } = useAppState();
