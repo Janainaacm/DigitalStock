@@ -1,6 +1,5 @@
 import type { NextConfig } from "next"
 
-// https://example.com/images/smartphone-x.jpg
 const nextConfig: NextConfig = {
   images: {
     remotePatterns: [

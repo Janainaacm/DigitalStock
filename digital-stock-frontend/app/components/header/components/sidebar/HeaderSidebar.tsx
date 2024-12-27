@@ -241,15 +241,15 @@ export default function HeaderSidebar() {
                                 strokeLinecap="round"
                                 strokeLinejoin="round"
                               >
-                                <path stroke="none" d="M0 0h24v24H0z" />{" "}
+                                <path stroke="none" d="M0 0h24v24H0z" />
                                 <rect
                                   x="6"
                                   y="6"
                                   width="12"
                                   height="12"
                                   rx="3"
-                                />{" "}
-                                <path d="M9 18v3h6v-3" />{" "}
+                                />
+                                <path d="M9 18v3h6v-3" />
                                 <path d="M9 6v-3h6v3" />
                               </svg>
                               Watches
@@ -259,7 +259,7 @@ export default function HeaderSidebar() {
                       </li>
                       <li className="w-full group text-xl border-b py-4 my-3 flex justify-between">
                       <button
-                          onClick={() => redirect("./about")}
+                          onClick={() => redirect("/about")}
                           className="group-hover:text-blue-400 text-gray-600 block"
                         >
                           About
@@ -267,7 +267,7 @@ export default function HeaderSidebar() {
                       </li>
                       <li className="w-full group text-xl border-b py-4 my-3 flex justify-between">
                       <button
-                          onClick={() => redirect("./contact")}
+                          onClick={() => redirect("/contact")}
                           className="group-hover:text-blue-400 text-gray-600 block"
                         >
                           Contact
