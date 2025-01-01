@@ -72,7 +72,7 @@ const Footer = () => {
                   href="javascript:void(0)"
                   className="text-gray-500 hover:text-gray-800 text-sm"
                 >
-                  Headphones
+                  Earphones
                 </a>
               </li>
             </ul>

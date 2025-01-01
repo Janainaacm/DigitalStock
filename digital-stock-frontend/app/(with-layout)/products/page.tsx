@@ -1,10 +1,7 @@
 "use client";
-import { useRouter } from "next/navigation";
 import { useAppState } from "../../store/BackendAPIState";
 import { useEffect, useState } from "react";
 import { useAuthState } from "@/app/store/AuthState";
-import { useUserState } from "../../store/UserState";
-import AddToCartButton from "./components/AddToCartButton";
 import FilterProductsButton from "./components/filterButton/FilterProductsButton.tsx";
 import ProductCard from "./components/ProductCard";
 
@@ -15,11 +12,9 @@ export default function ProductPage() {
     displayProducts,
     fetchDisplayProducts,
     searchKeyword,
+    filteredProductList,
   } = useAppState();
-  const { addToWishlist, removeFromWishlist, isProductInWishlist } =
-    useUserState();
   const { user } = useAuthState();
-  const router = useRouter();
   const [title, setTitle] = useState("Products");
 
   useEffect(() => {
@@ -36,12 +31,12 @@ export default function ProductPage() {
     } else {
       setTitle("Products")
     }
-  }, [fetchDisplayProducts, searchKeyword]);
+  }, [fetchDisplayProducts, searchKeyword, filteredProductList]);
 
   
 
   return (
-    <div>
+    <div className="font-[sans-serif] bg-white p-4 mx-auto max-w-[1400px]">
       <div className="font-sans bg-white p-4 mx-autow-full px-14 shadow-inner">
         <h2 className="text-4xl font-extrabold text-gray-800 mb-2">{title}</h2>
 

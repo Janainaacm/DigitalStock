@@ -55,7 +55,7 @@ const CategoriesGridSection = () => {
 
               <div className="relative row-span-2 col-span-4 group">
                 <img
-                  src="/images/Headphones.jpg"
+                  src="/images/Earphones.jpg"
                   alt="Gallery image"
                   className="gallery-image object-cover rounded-3xl group-hover:grayscale transition-all duration-700 ease-in-out mx-auto w-full h-full"
                 />
@@ -63,7 +63,7 @@ const CategoriesGridSection = () => {
                   onClick={() => searchByCategory("Earphones")}
                   className="absolute inset-0 bg-gray-900 bg-opacity-50  flex items-center justify-center text-white text-lg font-semibold rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 ease-in-out"
                 >
-                  Shop Headphones
+                  Shop Earphones
                 </button>
               </div>
             </div>

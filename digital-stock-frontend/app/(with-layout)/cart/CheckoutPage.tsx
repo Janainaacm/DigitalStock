@@ -163,7 +163,7 @@ const Checkout = ({onOrderConfirmation, onViewCart, setOrder}: Props) => {
                           Quantity <span className="ml-auto">{item.quantity}</span>
                         </li>
                         <li className="flex flex-wrap gap-4">
-                          Total Price <span className="ml-auto">${item.product.price * item.quantity}</span>
+                          Total Price <span className="ml-auto">${(item.product.price * item.quantity).toFixed(2)}</span>
                         </li>
                       </ul>
                     </div>

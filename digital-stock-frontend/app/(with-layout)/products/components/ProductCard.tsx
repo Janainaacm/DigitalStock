@@ -16,12 +16,11 @@ const ProductCard = ({ product, showProps }: Props) => {
     <div
     onClick={() => router.push(`./products/${product.id}`)}
      className="group overflow-hidden cursor-pointer relative">
-      <div className="bg-white aspect-w-16 p-2 h-44 lg:h-80 overflow-hidden">
-        <Image
-          fill
+      <div className="bg-white w-full overflow-hidden">
+        <img
           src={product.imageUrl}
           alt={product.name}
-          className="p-3 pt-5 w-full object-contain object-top group-hover:scale-110 transition-all duration-700"
+          className="p-3 w-full object-cover object-top hover:scale-110 transition-all duration-700" 
         />
       </div>
 

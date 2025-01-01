@@ -18,7 +18,7 @@ import { useRouter } from "next/compat/router";
 const Header = () => {
   const [scrolled, setScrolled] = useState<boolean>(false);
   const [showAuthForm, setShowAuthForm] = useState(false);
-  const { fetchProductsByCategory } = useAppState();
+  const { fetchProductsByCategory, setFilteredProductList, setSearchKeyword } = useAppState();
   const router = useNavRouter();
   const Rrouter = useRouter();
 
@@ -47,8 +47,10 @@ const Header = () => {
     fetchProductsByCategory(category, router);
   };
 
-  const redirect = (path: string) => {
-    router.push(`${path}`);
+  const getAllProducts = () => {
+    setFilteredProductList([])
+    setSearchKeyword("")
+    router.push("/products");
   };
 
   return (
@@ -69,7 +71,7 @@ const Header = () => {
             <ul className={`flex-0 pt-1 lg:flex-1 flex ${styles.leftMenu}`}>
               <li className="max-lg:border-b max-lg:px-3 max-lg:py-3">
                 <button
-                  onClick={() => redirect("/")}
+                  onClick={() => router.push("/")}
                   className="hover:text-gray-600 text-gray-800 transition-all duration-300 font-semibold block text-[15px]"
                 >
                   Home
@@ -78,7 +80,7 @@ const Header = () => {
               <li className="group max-lg:border-b max-lg:px-3 max-lg:py-3 relative">
                 <button
                   className="hover:text-gray-600 text-gray-800 transition-all duration-300 group-hover:fill-gray-600 fill-gray-800 font-semibold text-[15px] block"
-                  onClick={() => redirect("/products")}
+                  onClick={() => getAllProducts()}
                 >
                   Store
                   <svg
@@ -98,7 +100,7 @@ const Header = () => {
                 <ul className="top-5 left-0 z-50 block space-y-2 bg-white overflow-hidden w-[200px] max-h-0 absolute shadow-lg group-hover:opacity-100 group-hover:max-h-[700px] px-6 group-hover:pb-4 group-hover:pt-6 transition-all duration-500">
                   <li className="border-b border-gray-300 w-full pb-3">
                     <button
-                      onClick={() => redirect("/products")}
+                      onClick={() => getAllProducts()}
                       className="hover:text-blue-400 hover:fill-blue-400 transition-all duration-300 text-gray-600 font-semibold text-[15px] block"
                     >
                       <svg
@@ -195,7 +197,7 @@ const Header = () => {
                         <path d="M3 18v-6a9 9 0 0 1 18 0v6" />
                         <path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z" />
                       </svg>
-                      Headphones
+                      Earphones
                     </button>
                   </li>
                   <li className="border-b border-gray-300 w-full py-3">

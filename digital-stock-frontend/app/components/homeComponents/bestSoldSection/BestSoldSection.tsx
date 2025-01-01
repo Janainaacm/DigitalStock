@@ -77,8 +77,8 @@ const BestSoldSection = () => {
             effect={"coverflow"}
             loop={true}
             autoplay={{
-              delay: 3000,
-              disableOnInteraction: true,
+              delay: 2500,
+              disableOnInteraction: false,
             }}
             spaceBetween={10}
             slidesPerView={3}

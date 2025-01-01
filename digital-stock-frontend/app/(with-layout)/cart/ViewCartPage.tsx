@@ -21,19 +21,35 @@ const ViewCart = ({onCheckout}: Props) => {
   const [subtotal, setSubtotal] = useState(0);
   const router = useRouter();
 
+  const handleAddToCart = (productId: number) => {
+    const product = cart?.items.find((item) => item.product.id === productId);
+    if (product && product.quantity < product.product.stock) {
+      addItemToCart(productId, 1);
+    } else {
+      alert("Cannot add more items than available in stock.");
+    }
+  };
+  
   useEffect(() => {
     if (cart) {
-      const newSubtotal = cart.items.reduce((acc, item) => {
+      const updatedItems = cart.items.map((item) => {
+        if (item.quantity > item.product.stock) {
+          const correctedQuantity = item.product.stock;
+          removeItemFromCart(item.product.id, item.quantity - correctedQuantity);
+          return { ...item, quantity: correctedQuantity };
+        }
+        return item;
+      });
+  
+      const newSubtotal = updatedItems.reduce((acc, item) => {
         return acc + item.product.price * item.quantity;
       }, 0);
-
+  
       setSubtotal(Number(newSubtotal.toFixed(2)));
     }
   }, [cart]);
+  
 
-  const handleAddToCart = (productId: number) => {
-    addItemToCart(productId, 1);
-  };
   const handleRemoveFromCart = (productId: number, quantity: number) => {
     removeItemFromCart(productId, quantity);
   };

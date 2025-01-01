@@ -1,6 +1,6 @@
 import image1 from "@/public/images/Apple-watch-home.jpg";
 import image2 from "@/public/images/Macbook-home.jpg";
-import image3 from "@/public/images/Headphones-home.jpg";
+import image3 from "@/public/images/Earphones-home.jpg";
 
 import React from "react";
 import Image from "next/image";
@@ -19,7 +19,7 @@ export default function SlideShow() {
       id: 1,
       image: image3,
       subtitle:
-        "Silence is golden, but with the right headphones, every sound becomes priceless.",
+        "Silence is golden, but with the right Earphones, every sound becomes priceless.",
       titleUp: "Discover The World With",
       titleDown: "Music",
       rightText: false,

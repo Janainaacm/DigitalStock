@@ -29,9 +29,9 @@ const UserDetailsPage = ({ onUsers }: Props) => {
   }
 
   return (
-    <div className="w-full max-w-7xl mt-8 mx-auto">
-      <div className="flex justify-between items-center">
-        <h2 className="font-manrope font-extrabold px-4 md:px-8 text-3xl lead-10 text-black mb-9">
+    <div className="w-full max-w-7xl mt-16 mx-auto">
+      <div className="flex justify-between mt-16 items-center">
+        <h2 className="font-manrope mt-16 font-extrabold px-4 md:px-8 text-3xl lead-10 text-black mb-9">
         User information
       </h2>
       <button 
