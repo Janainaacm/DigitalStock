@@ -25,7 +25,8 @@ const FilterProductsDropdown = ({ onClose }: Props) => {
     categories,
     setFilteredProductList,
     productList,
-    setSearchKeyword
+    setSearchKeyword,
+    searchKeyword,
   } = useAppState();
 
   const [tempFilteredProducts, setTempFilteredProducts] = useState<
@@ -45,14 +46,25 @@ const FilterProductsDropdown = ({ onClose }: Props) => {
   );
 
   useEffect(() => {
-    if (displayProducts.length == 0) {
+    if (displayProducts.length === 0) {
       fetchDisplayProducts();
     }
-
-    if (categories.length == 0) {
+  
+    if (categories.length === 0) {
       fetchAllCategories();
     }
-  }, [fetchDisplayProducts, displayProducts, fetchAllCategories, categories]);
+  
+    if (searchKeyword) {
+      const matchedCategories = categories
+        .filter((category) => searchKeyword.split(",").includes(category.name))
+        .map((category) => category.name); 
+      if (matchedCategories.length > 0) {
+        setCategoriesInFilter(matchedCategories);
+      }
+    }
+  }, [fetchDisplayProducts, displayProducts, fetchAllCategories, categories, searchKeyword]);
+  
+  
 
   useEffect(() => {
     let filteredProducts = [...productList];
@@ -126,7 +138,7 @@ const FilterProductsDropdown = ({ onClose }: Props) => {
           );
 
     setFilteredProductList(filteredProducts);
-    setSearchKeyword("Products")
+    
   };
 
   const toggleColorFilter = (color: string) => {
@@ -143,13 +155,15 @@ const FilterProductsDropdown = ({ onClose }: Props) => {
     setSortOrder("asc");
     setFilterByStock(false);
     setSelectedColors([]);
-    setTempFilteredProducts(productList);
+    setFilteredProductList(productList);
+    setSearchKeyword("")
+    fetchDisplayProducts();
     onClose()
   };
 
   const applyGlobalFilter = () => {
     setFilteredProductList(tempFilteredProducts);
-    setSearchKeyword("Products")
+    setSearchKeyword(categoriesInFilter.toString().replace(",", ", "))
     fetchDisplayProducts();
     onClose();
   };
@@ -160,8 +174,8 @@ const FilterProductsDropdown = ({ onClose }: Props) => {
   };
 
   return (
-    <div className="w-[300px] max-w-xl bg-white shadow-lg relative ml-auto h-screen">
-      <div className="overflow-auto p-6 h-full">
+    <div className="w-[300px] bg-white shadow-lg relative ml-auto h-screen">
+      <div className="relative w-full overflow-auto p-6 h-full">
         <div className="flex items-center border-b pt-6 pb-4 text-gray-800">
           <h3 className="text-2xl font-bold flex-1">Filter</h3>
           <button onClick={onClose}>
@@ -181,8 +195,7 @@ const FilterProductsDropdown = ({ onClose }: Props) => {
           </button>
         </div>
 
-        <div className="relative h-full">
-          <div className="h-auto py-6 overflow-scroll no-scrollbar">
+          <div className="h-auto py-6 overflow-scroll no-scrollbar pb-24">
             <div className="space-y-4">
               <ol className="flex flex-col justify-between">
                 <li className="group relative w-full text-xl border-b py-4">
@@ -404,7 +417,8 @@ const FilterProductsDropdown = ({ onClose }: Props) => {
               </ol>
             </div>
           </div>
-          <div className="w-full absolute bottom-16">
+        
+          <div className="fixed bg-white bottom-0 py-4 w-full pr-10">
             <button
               onClick={applyGlobalFilter}
               className="mt-3 text-sm font-semibold px-6 py-2 w-full bg-blue-400 hover:bg-blue-500 transition-all duration-300 text-white rounded-md tracking-wide"
@@ -418,7 +432,6 @@ const FilterProductsDropdown = ({ onClose }: Props) => {
               Reset
             </button>
           </div>
-        </div>
       </div>
     </div>
   );

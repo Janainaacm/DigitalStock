@@ -30,8 +30,10 @@ export default function ProductPage() {
   useEffect(() => {
     fetchDisplayProducts();
 
-    if (searchKeyword) {
-      setTitle(`${searchKeyword}:`);
+    if (searchKeyword && searchKeyword.length > 1) {
+      setTitle(`Products found in: ${searchKeyword}`);
+    } else {
+      setTitle("Products")
     }
   }, [fetchDisplayProducts, searchKeyword]);
 
