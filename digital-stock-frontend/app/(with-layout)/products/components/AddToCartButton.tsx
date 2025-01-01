@@ -2,11 +2,11 @@ import { useAuthState } from "@/app/store/AuthState";
 import { useUserState } from "@/app/store/UserState";
 
 interface AddToCartButtonProps {
-    productId: number,
-    quantity: number
+  productId: number;
+  quantity: number;
 }
 
-const AddToCartButton = ({productId, quantity}: AddToCartButtonProps) => {
+const AddToCartButton = ({ productId, quantity }: AddToCartButtonProps) => {
   const { addItemToCart } = useUserState();
   const { user } = useAuthState();
 
@@ -21,23 +21,17 @@ const AddToCartButton = ({productId, quantity}: AddToCartButtonProps) => {
 
   return (
     <button
-      className="absolute bottom-2 opacity-80 right-2 bg-gray-50 w-10 h-10 flex items-center justify-center rounded-full cursor-pointer hover:scale-[1.15] transition-all duration-200"
+      className="bg-transparent outline-none border-none"
       onClick={(e) => {
         e.stopPropagation();
-        handleClick();}}
+        handleClick();
+      }}
     >
-      <svg
-        className="h-5 w-5 text-gray-900"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
-      >
+      <svg className="fill-gray-800 w-5 h-5 inline-block" viewBox="0 0 512 512">
         <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth="2"
-          d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
-        />
+          d="M164.96 300.004h.024c.02 0 .04-.004.059-.004H437a15.003 15.003 0 0 0 14.422-10.879l60-210a15.003 15.003 0 0 0-2.445-13.152A15.006 15.006 0 0 0 497 60H130.367l-10.722-48.254A15.003 15.003 0 0 0 105 0H15C6.715 0 0 6.715 0 15s6.715 15 15 15h77.969c1.898 8.55 51.312 230.918 54.156 243.71C131.184 280.64 120 296.536 120 315c0 24.812 20.188 45 45 45h272c8.285 0 15-6.715 15-15s-6.715-15-15-15H165c-8.27 0-15-6.73-15-15 0-8.258 6.707-14.977 14.96-14.996zM477.114 90l-51.43 180H177.032l-40-180zM150 405c0 24.813 20.188 45 45 45s45-20.188 45-45-20.188-45-45-45-45 20.188-45 45zm45-15c8.27 0 15 6.73 15 15s-6.73 15-15 15-15-6.73-15-15 6.73-15 15-15zm167 15c0 24.813 20.188 45 45 45s45-20.188 45-45-20.188-45-45-45-45 20.188-45 45zm45-15c8.27 0 15 6.73 15 15s-6.73 15-15 15-15-6.73-15-15 6.73-15 15-15zm0 0"
+          data-original="#000000"
+        ></path>
       </svg>
     </button>
   );
