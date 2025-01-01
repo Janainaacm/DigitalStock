@@ -13,6 +13,7 @@ export default function Register({ onLogin }: RegisterProps) {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [touched, setTouched] = useState(false);
+  const [loading, setLoading] = useState(false);
   const { registerUser } = useAuthState();
 
 
@@ -28,6 +29,7 @@ export default function Register({ onLogin }: RegisterProps) {
   };
 
   const handleRegister = async () => {
+    setLoading(true)
     setTouched(true);
 
     setValidation({
@@ -40,22 +42,26 @@ export default function Register({ onLogin }: RegisterProps) {
     if (!username || !password || !email || !checkbox) {
       if (!username || !password || !email) {
         setError("All fields are required.");
+        setLoading(false)
         return;
       }
 
       if (!checkbox) {
         setError("Terms and conditions must be accepted");
+        setLoading(false)
         return;
       }
     }
 
     if (password.length < 7) {
       setError("Password must be at least 7 characters");
+      setLoading(false)
         return;
     }
 
     if (username.length < 4 || username.length > 32) {
       setError("Username must be between 4-32 characters");
+      setLoading(false)
       return;
     }
 
@@ -64,9 +70,10 @@ export default function Register({ onLogin }: RegisterProps) {
       setUsername("");
       setPassword("");
       setEmail("");
+      setLoading(false)
     } catch (err) {
       console.error("Registration error:", err);
-
+      setLoading(false)
       if (err instanceof Error) {
         setError(err.message || "Failed to register user. Please try again.");
       } else {
@@ -220,13 +227,7 @@ export default function Register({ onLogin }: RegisterProps) {
                     : "text-gray-600"
                 }`}
               >
-                I accept the{" "}
-                <a
-                  href="./TermsAndConditions"
-                  className="text-blue-600 font-semibold hover:underline ml-1"
-                >
-                  Terms and Conditions
-                </a>
+                I accept the <span className="text-blue-600 font-semibold hover:underline ml-1">Terms and Conditions</span>
               </label>
             </div>
           </div>
@@ -240,8 +241,19 @@ export default function Register({ onLogin }: RegisterProps) {
               type="button"
               onClick={() => handleRegister()}
               className="w-full py-3 px-4 tracking-wider text-sm rounded-md text-white bg-gray-700 hover:bg-gray-800 focus:outline-none transition-all duration-800"
-            >
-              Register User
+              disabled={loading}
+              >
+                {loading ? (
+                  <div className="flex items-center justify-center">
+                    <div
+                      className="inline-block h-5 w-5 animate-spin rounded-full border-2 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"
+                      role="status"
+                    ></div>
+                    <p className="ml-3">Loading...</p>
+                  </div>
+                ) : (
+                  "Register User"
+                )}
             </button>
           </div>
           <p className="text-gray-800 text-sm mt-5 text-center">

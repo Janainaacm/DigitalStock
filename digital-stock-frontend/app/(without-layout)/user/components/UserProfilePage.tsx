@@ -95,7 +95,7 @@ const UserProfilePage = () => {
 
   return (
     <>
-    <div className="relative font-[sans-serif] bg-gray-100 shadow-inner py-6 px-10">
+    <div className="relative font-[sans-serif] bg-gray-100 shadow-inner py-6 px-10 pt-12 -ml-2">
       <div className="p-6 rounded-xl shadow-md bg-white">
         <h1 className="text-4xl font-extrabold text-gray-800">
           Hello, {user.username}

@@ -66,7 +66,7 @@ const UserOrderPage = () => {
 
   return (
     <>
-      <section className="py-6 relative">
+      <section className="pb-6 relative pt-12">
         <div className="w-full max-w-7xl mx-auto">
           <h2 className="font-manrope font-extrabold px-4 md:px-8 text-3xl lead-10 text-black mb-9">
             Order History

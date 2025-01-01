@@ -37,7 +37,7 @@ const WishlistPage = () => {
 
   return (
     <>
-      <div className="mx-auto relative flex justify-center items-center mb-36">
+      <div className="mx-auto relative flex justify-center items-center mb-36 pt-6">
         <div className="flex flex-col jusitfy-start items-start">
         <div className="p-6">
           <div className="mt-3">

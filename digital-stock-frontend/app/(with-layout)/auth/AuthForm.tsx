@@ -24,15 +24,15 @@ export default function AuthForm({extraClass, children, auth}: Props) {
   
   useEffect(() => {
     if (user && open) {
-      setOpen(false); 
       if (user.role === "ROLE_ADMIN") {
         router.push("/admin");
       } else {
         router.push("/user"); 
       }
+
+      setOpen(false); 
     }
 
-   
   }, [user, open, router]);
 
 

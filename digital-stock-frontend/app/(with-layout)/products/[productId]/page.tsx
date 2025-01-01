@@ -17,11 +17,17 @@ const ProductDetails = () => {
     fetchAllProductColorsByName,
   } = useAppState();
   const { user } = useAuthState();
-  const {addItemToCart, addToWishlist, isProductInWishlist, removeFromWishlist} = useUserState()
+  const {
+    addItemToCart,
+    addToWishlist,
+    isProductInWishlist,
+    removeFromWishlist,
+  } = useUserState();
   const [quantity, setQuantity] = useState(1);
-  const [selectedColor, setSelectedColor] = useState<ProductInterface | null>(null);
+  const [selectedColor, setSelectedColor] = useState<ProductInterface | null>(
+    null
+  );
   const [isInWishlist, setIsInWishlist] = useState(false);
-
 
   useEffect(() => {
     if (productId) {
@@ -37,7 +43,7 @@ const ProductDetails = () => {
   useEffect(() => {
     if (product) {
       fetchAllProductColorsByName(product.name);
-      setSelectedColor(product); 
+      setSelectedColor(product);
     }
   }, [product, fetchAllProductColorsByName]);
 
@@ -51,7 +57,6 @@ const ProductDetails = () => {
     setSelectedColor(variant);
   };
 
-
   const handleAddToCart = () => {
     if (!user) {
       alert("Please log in to add products to your cart.");
@@ -59,7 +64,7 @@ const ProductDetails = () => {
     }
 
     if (!selectedColor) {
-      return
+      return;
     }
 
     addItemToCart(selectedColor.id, quantity);
@@ -81,7 +86,6 @@ const ProductDetails = () => {
     }
     setIsInWishlist(!isInWishlist);
   };
-
 
   if (!product || !selectedColor) {
     return <p>Loading...</p>;
@@ -159,13 +163,8 @@ const ProductDetails = () => {
                   }
                 }}
               >
-                <svg
-                  className="w-3 fill-current inline"
-                  viewBox="0 0 124 124"
-                >
-                  <path
-                    d="M112 50H12C5.4 50 0 55.4 0 62s5.4 12 12 12h100c6.6 0 12-5.4 12-12s-5.4-12-12-12z"
-                  ></path>
+                <svg className="w-3 fill-current inline" viewBox="0 0 124 124">
+                  <path d="M112 50H12C5.4 50 0 55.4 0 62s5.4 12 12 12h100c6.6 0 12-5.4 12-12s-5.4-12-12-12z"></path>
                 </svg>
               </button>
               <button
@@ -183,40 +182,34 @@ const ProductDetails = () => {
                   }
                 }}
               >
-                <svg
-                  className="w-3 fill-current inline"
-                  viewBox="0 0 42 42"
-                >
-                  <path
-                    d="M37.059 16H26V4.941C26 2.224 23.718 0 21 0s-5 2.224-5 4.941V16H4.941C2.224 16 0 18.282 0 21s2.224 5 4.941 5H16v11.059C16 39.776 18.282 42 21 42s5-2.224 5-4.941V26h11.059C39.776 26 42 23.718 42 21s-2.224-5-4.941-5z"
-                  ></path>
+                <svg className="w-3 fill-current inline" viewBox="0 0 42 42">
+                  <path d="M37.059 16H26V4.941C26 2.224 23.718 0 21 0s-5 2.224-5 4.941V16H4.941C2.224 16 0 18.282 0 21s2.224 5 4.941 5H16v11.059C16 39.776 18.282 42 21 42s5-2.224 5-4.941V26h11.059C39.776 26 42 23.718 42 21s-2.224-5-4.941-5z"></path>
                 </svg>
               </button>
             </div>
           </div>
 
-          <div className="flex flex-wrap gap-4 mt-8">
-            <button
-              onClick={() => handleAddToCart()}
-              type="button"
-              className="min-w-[200px] px-4 py-3 bg-gray-800 hover:bg-gray-900 text-white text-sm font-semibold rounded"
-            >
-              Add to cart
-            </button>
-            <button
-              onClick={() => handleAddToWishlist(selectedColor.id)}
-              type="button"
-              className="min-w-[200px] px-4 py-2.5 border border-gray-800 bg-transparent hover:bg-gray-50 text-gray-800 text-sm font-semibold rounded"
-            >
-              {isInWishlist ? "Remove from wishlist" : "Add to wishlist"} 
-            </button>
-          </div>
+          {user && user.role == "ROLE_ADMIN" ? null : (
+            <div className="flex flex-wrap gap-4 mt-8">
+              <button
+                onClick={() => handleAddToCart()}
+                type="button"
+                className="min-w-[200px] px-4 py-3 bg-gray-800 hover:bg-gray-900 text-white text-sm font-semibold rounded"
+              >
+                Add to cart
+              </button>
+              <button
+                onClick={() => handleAddToWishlist(selectedColor.id)}
+                type="button"
+                className="min-w-[200px] px-4 py-2.5 border border-gray-800 bg-transparent hover:bg-gray-50 text-gray-800 text-sm font-semibold rounded"
+              >
+                {isInWishlist ? "Remove from wishlist" : "Add to wishlist"}
+              </button>
+            </div>
+          )}
 
           <div className="flex flex-wrap items-center text-sm text-gray-800 mt-8">
-            <svg
-              className="fill-current w-6 mr-3"
-              viewBox="0 0 48 48"
-            >
+            <svg className="fill-current w-6 mr-3" viewBox="0 0 48 48">
               <path d="M15.5 33.3h19.1v2H15.5z" data-original="#000000" />
               <path
                 d="M45.2 35.3H43v-2h2.2c.4 0 .8-.4.8-.8v-9.1c0-.4-.3-.6-.5-.7l-3.2-1.3c-.3-.2-.8-.5-1.1-1l-6.5-10c-.1-.2-.4-.3-.7-.3H2.8c-.4 0-.8.4-.8.8v21.6c0 .4.4.8.8.8h3.9v2H2.8C1.3 35.3 0 34 0 32.5V10.9c0-1.5 1.3-2.8 2.8-2.8h31.3c1 0 1.9.5 2.4 1.3l6.5 10 .4.4 2.9 1.2c1.1.5 1.7 1.4 1.7 2.5v9.1c0 1.4-1.3 2.7-2.8 2.7z"
@@ -234,7 +227,9 @@ const ProductDetails = () => {
 
       <div className="mt-8 mb-16 max-w-2x px-6">
         <div className="mt-8 mb-6">
-          <h3 className="text-lg font-bold text-gray-800">Product Description</h3>
+          <h3 className="text-lg font-bold text-gray-800">
+            Product Description
+          </h3>
           <p className="text-sm text-gray-600 mt-2">
             {selectedColor.description}
           </p>

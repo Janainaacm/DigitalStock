@@ -38,18 +38,15 @@ const UserContent = () => {
 
   return (
     <>
-      <div className="grid grid-cols-[250px_1fr] h-full">
-        <div className="col-span-1">
           <SideBar
             currentPage={currentPage}
             onProfile={() => setCurrentPage("profile")}
             onOrders={() => setCurrentPage("orders")}
             onWishlist={() => setCurrentPage("wishlist")}
           />
-        </div>
 
-        <div className="col-span-1 overflow-auto">{renderComponent()}</div>
-      </div>
+        <div className="lg:ml-64 max-lg:shadow-inner">{renderComponent()}</div>
+      
     </>
   );
 };

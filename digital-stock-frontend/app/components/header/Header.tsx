@@ -17,44 +17,31 @@ import { useRouter } from "next/compat/router";
 
 const Header = () => {
   const [scrolled, setScrolled] = useState<boolean>(false);
-  const [didMount, setDidMount] = useState<boolean>(false);
+  const [showAuthForm, setShowAuthForm] = useState(false);
   const { fetchProductsByCategory } = useAppState();
   const router = useNavRouter();
   const Rrouter = useRouter();
-  const [showAuthForm, setShowAuthForm] = useState(false);
 
   const handleScroll = useCallback(() => {
-    const offset = window.scrollY;
-    if (offset > 0) {
-      setScrolled(true);
-    } else {
-      setScrolled(false);
-    }
-  }, [setScrolled]);
+    setScrolled(window.scrollY > 0);
+  }, []);
 
   useEffect(() => {
-    if (Rrouter && !Rrouter.isReady) {
-      return;
+    const handleAuthParam = () => {
+      const search = new URLSearchParams(window.location.search).get("auth");
+      setShowAuthForm(search === "true");
+    };
+
+    if (Rrouter?.isReady) {
+      handleAuthParam();
     }
 
-    const search = new URLSearchParams(window.location.search).get("auth");
-
-    if (search === "true") {
-      setShowAuthForm(true);
-    } else {
-      setShowAuthForm(false);
-    }
-  }, [router]);
-
-  useEffect(() => {
-    setDidMount(true);
     window.addEventListener("scroll", handleScroll);
-    return () => setDidMount(false);
-  }, [handleScroll]);
 
-  if (!didMount) {
-    return null;
-  }
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, [Rrouter, handleScroll]);
 
   const searchByCategory = (category: string) => {
     fetchProductsByCategory(category, router);

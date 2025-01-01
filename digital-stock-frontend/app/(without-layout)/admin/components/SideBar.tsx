@@ -2,6 +2,7 @@
 import { useAuthState } from "@/app/store/AuthState";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 type Props = {
   currentPage: string;
@@ -26,31 +27,42 @@ const SideBar = ({
 }: Props) => {
   const { logout } = useAuthState();
   const router = useRouter();
+  const [isOpen, setIsOpen] = useState(false);
 
   const handleLogOut = () => {
     logout();
+    setIsOpen(false);
     router.push("/");
+  };
+
+  const toggleSidebar = () => {
+    setIsOpen(!isOpen);
   };
 
   return (
     <div className="absolute left-0 w-full bg-blue-500">
       <nav
         id="sidebar"
-        className="bg-white shadow-lg h-screen w-[250px] fixed left-0 top-0"
+        className={`bg-white shadow-lg h-screen w-[250px] fixed left-0 transition-transform duration-300 z-[100] ${
+          isOpen ? "translate-x-0" : "-translate-x-full"
+        } lg:translate-x-0`}
       >
         <div
           id="sidebar-collapse-menu"
-          className="bg-white shadow-lg h-screen fixed py-6 px-4 top-[70px] left-0 overflow-auto z-[99] lg:min-w-[250px] lg:w-max max-lg:w-0 max-lg:invisible transition-all duration-500"
+          className="bg-white shadow-lg h-screen py-6 px-4 top-[70px] left-0 overflow-auto"
         >
           <h6 className="text-blue-600 mt-4 text-sm font-bold px-4">Main</h6>
           <ul className="space-y-2 mt-3">
             <li>
               <button
-                onClick={onDashboard}
+                onClick={() => {
+                  onDashboard();
+                  setIsOpen(false);
+                }}
                 className={`w-full text-sm flex items-center rounded-md px-4 py-2 transition-all ${
                   currentPage === "dashboard"
-                  ? "text-white bg-blue-400 rounded-l-full"
-                  : "hover:bg-gray-100 text-gray-800 bg-white"
+                    ? "text-white bg-blue-400 rounded-l-full"
+                    : "hover:bg-gray-100 text-gray-800 bg-white"
                 }`}
               >
                 <svg
@@ -77,11 +89,14 @@ const SideBar = ({
             </li>
             <li>
               <button
-                onClick={onCalendar}
+                onClick={() => {
+                  onCalendar();
+                  setIsOpen(false);
+                }}
                 className={`w-full text-sm flex items-center rounded-md px-4 py-2 transition-all ${
                   currentPage === "calendar"
-                  ? "text-white bg-blue-400 rounded-l-full"
-                  : "hover:bg-gray-100 text-gray-800 bg-white"
+                    ? "text-white bg-blue-400 rounded-l-full"
+                    : "hover:bg-gray-100 text-gray-800 bg-white"
                 }`}
               >
                 <svg
@@ -108,11 +123,14 @@ const SideBar = ({
             <ul className="mt-3 space-y-2">
               <li>
                 <button
-                  onClick={onUsers}
+                  onClick={() => {
+                    onUsers();
+                    setIsOpen(false);
+                  }}
                   className={`w-full text-sm flex items-center rounded-md px-4 py-2 transition-all ${
                     currentPage === "users"
-                    ? "text-white bg-blue-400 rounded-l-full"
-                    : "hover:bg-gray-100 text-gray-800 bg-white"
+                      ? "text-white bg-blue-400 rounded-l-full"
+                      : "hover:bg-gray-100 text-gray-800 bg-white"
                   }`}
                 >
                   <svg
@@ -130,11 +148,14 @@ const SideBar = ({
               </li>
               <li>
                 <button
-                  onClick={onOrders}
+                  onClick={() => {
+                    onOrders();
+                    setIsOpen(false);
+                  }}
                   className={`w-full text-sm flex items-center rounded-md px-4 py-2 transition-all ${
                     currentPage === "orders"
-                    ? "text-white bg-blue-400 rounded-l-full"
-                    : "hover:bg-gray-100 text-gray-800 bg-white"
+                      ? "text-white bg-blue-400 rounded-l-full"
+                      : "hover:bg-gray-100 text-gray-800 bg-white"
                   }`}
                 >
                   <svg
@@ -164,11 +185,14 @@ const SideBar = ({
             <ul className="mt-3 space-y-2">
               <li>
                 <button
-                  onClick={onProducts}
+                  onClick={() => {
+                    onProducts();
+                    setIsOpen(false);
+                  }}
                   className={`w-full text-sm flex items-center rounded-md px-4 py-2 transition-all ${
                     currentPage === "products"
-                    ? "text-white bg-blue-400 rounded-l-full"
-                    : "hover:bg-gray-100 text-gray-800 bg-white"
+                      ? "text-white bg-blue-400 rounded-l-full"
+                      : "hover:bg-gray-100 text-gray-800 bg-white"
                   }`}
                 >
                   <svg
@@ -206,11 +230,14 @@ const SideBar = ({
               </li>
               <li>
                 <button
-                  onClick={onAddProduct}
+                  onClick={() => {
+                    onAddProduct();
+                    setIsOpen(false);
+                  }}
                   className={`w-full text-sm flex items-center rounded-md px-4 py-2 transition-all ${
                     currentPage === "add-product"
-                    ? "text-white bg-blue-400 rounded-l-full"
-                    : "hover:bg-gray-100 text-gray-800 bg-white"
+                      ? "text-white bg-blue-400 rounded-l-full"
+                      : "hover:bg-gray-100 text-gray-800 bg-white"
                   }`}
                 >
                   <svg
@@ -238,11 +265,14 @@ const SideBar = ({
             <ul className="mt-3 space-y-2">
               <li>
                 <button
-                  onClick={onProfile}
+                  onClick={() => {
+                    onProfile();
+                    setIsOpen(false);
+                  }}
                   className={`w-full text-sm flex items-center rounded-md px-4 py-2 transition-all ${
                     currentPage === "profile"
-                    ? "text-white bg-blue-400 rounded-l-full"
-                    : "hover:bg-gray-100 text-gray-800 bg-white"
+                      ? "text-white bg-blue-400 rounded-l-full"
+                      : "hover:bg-gray-100 text-gray-800 bg-white"
                   }`}
                 >
                   <svg
@@ -260,6 +290,7 @@ const SideBar = ({
               </li>
               <li>
                 <Link
+                  onClick={() => setIsOpen(false)}
                   href="/"
                   className="text-gray-800 text-sm flex items-center hover:bg-gray-100 rounded-md px-4 py-2 transition-all"
                 >
@@ -306,14 +337,49 @@ const SideBar = ({
 
       <button
         id="toggle-sidebar"
-        className="lg:hidden w-8 h-8 z-[100] fixed top-[74px] left-[10px] cursor-pointer bg-[#007bff] flex items-center justify-center rounded-full outline-none transition-all duration-500"
+        onClick={toggleSidebar}
+        className="lg:hidden w-8 h-8 z-[200] fixed ml-3 -mt-14 cursor-pointer flex items-center justify-center rounded-full outline-none transition-all duration-500"
       >
-        <svg fill="#fff" className="w-3 h-3" viewBox="0 0 55.752 55.752">
-          <path
-            d="M43.006 23.916a5.36 5.36 0 0 0-.912-.727L20.485 1.581a5.4 5.4 0 0 0-7.637 7.638l18.611 18.609-18.705 18.707a5.398 5.398 0 1 0 7.634 7.635l21.706-21.703a5.35 5.35 0 0 0 .912-.727 5.373 5.373 0 0 0 1.574-3.912 5.363 5.363 0 0 0-1.574-3.912z"
-            data-original="#000000"
-          />
-        </svg>
+        <div
+          className={`transition-transform duration-200 ${
+            isOpen ? "rotate-90 opacity-0" : "rotate-0 opacity-100"
+          }`}
+        >
+          <svg
+            className="h-8 w-8 text-gray-100"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <line x1="3" y1="12" x2="21" y2="12" />
+            <line x1="3" y1="6" x2="21" y2="6" />
+            <line x1="3" y1="18" x2="21" y2="18" />
+          </svg>
+        </div>
+        <div
+          className={`absolute transition-transform duration-200 ${
+            isOpen ? "rotate-0 opacity-100" : "-rotate-90 opacity-0"
+          }`}
+        >
+          <svg
+            className="h-8 w-8 text-gray-100"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            strokeWidth="2"
+            stroke="currentColor"
+            fill="none"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <path stroke="none" d="M0 0h24v24H0z" />
+            <line x1="18" y1="6" x2="6" y2="18" />
+            <line x1="6" y1="6" x2="18" y2="18" />
+          </svg>
+        </div>
       </button>
     </div>
   );

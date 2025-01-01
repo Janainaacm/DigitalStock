@@ -30,7 +30,7 @@ const AdminContent = () => {
   const searchParams = useSearchParams();
   const router = useRouter();
   const initialPage =
-    (searchParams.get("currentPage") as CurrentPage) || "profile";
+    (searchParams.get("currentPage") as CurrentPage) || "dashboard";
   const [currentPage, setCurrentPage] = useState<CurrentPage>(initialPage);
 
 
@@ -102,9 +102,7 @@ const AdminContent = () => {
     <section className="h-screen w-full mt-20">
       <AdminBanner />
 
-      <div className="grid grid-cols-[250px_1fr] h-full">
-        <div className="col-span-1">
-          <SideBar
+      <SideBar
             currentPage={currentPage}
             onDashboard={() => setCurrentPage("dashboard")}
             onProducts={() => setCurrentPage("products")}
@@ -114,10 +112,10 @@ const AdminContent = () => {
             onProfile={() => setCurrentPage("profile")}
             onCalendar={() => setCurrentPage("calendar")}
           />
-        </div>
 
-        <div className="col-span-1 overflow-auto">{renderComponent()}</div>
-      </div>
+
+        <div className="lg:ml-64">{renderComponent()}</div>
+      
     </section>
   );
 };

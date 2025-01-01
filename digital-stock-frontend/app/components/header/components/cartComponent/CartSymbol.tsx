@@ -5,7 +5,7 @@ import CartDropdown from "./CartDropdown";
 import BagIcon from "@/public/icons/BagIcon";
 
 const CartSymbol = () => {
-  const { cart } = useAuthState();
+  const { cart, user } = useAuthState();
   const [cartItems, setCartItems] = useState<CartItemInterface[]>([]);
   const [cartNumber, setCartNumber] = useState(0);
   const [open, setOpen] = useState(false);
@@ -43,6 +43,11 @@ const CartSymbol = () => {
     }, 1000);
   }, [handleAnimate]);
 
+  if (user && user.role == "ROLE_ADMIN") {
+    return (
+      null
+    )
+  }
 
   return (
     <div className="relative">

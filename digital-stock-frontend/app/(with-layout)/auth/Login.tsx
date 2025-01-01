@@ -11,6 +11,7 @@ export default function Login({ onRegister, onForgotPassword }: LoginProps) {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
   const { signIn } = useAuthState();
 
 
@@ -24,6 +25,7 @@ export default function Login({ onRegister, onForgotPassword }: LoginProps) {
   };
 
   const handleLogin = async () => {
+    setLoading(true)
 
     setValidation({
       username: Boolean(username),
@@ -32,17 +34,19 @@ export default function Login({ onRegister, onForgotPassword }: LoginProps) {
 
     if (!username || !password) {
         setError("All fields are required.");
+        setLoading(false)
         return;
-      
     }
 
     try {
       await signIn(username, password);
       setUsername("");
       setPassword("");
+      setLoading(false)
+      
     } catch (err) {
       console.error("Login error:", err);
-
+      setLoading(false)
       if (err instanceof Error) {
         setError(err.message || "Failed to login user. Please try again.");
       } else {
@@ -152,8 +156,19 @@ export default function Login({ onRegister, onForgotPassword }: LoginProps) {
               type="submit"
               onClick={() => handleLogin()}
               className="w-full py-3 px-4 tracking-wider text-sm rounded-md text-white bg-gray-700 hover:bg-gray-800 focus:outline-none transition-all duration-800"
-            >
-              Log in
+              disabled={loading}
+              >
+                {loading ? (
+                  <div className="flex items-center justify-center">
+                    <div
+                      className="inline-block h-5 w-5 animate-spin rounded-full border-2 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"
+                      role="status"
+                    ></div>
+                    <p className="ml-3">Loading...</p>
+                  </div>
+                ) : (
+                  "Log in"
+                )}
             </button>
           </div>
           <div className="mt-5">
