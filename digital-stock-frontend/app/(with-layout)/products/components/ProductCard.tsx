@@ -2,7 +2,6 @@ import { ProductInterface } from "@/app/utils/Types";
 import AddToCartButton from "./AddToCartButton";
 import AddToWishlistButton from "./AddToWishlistButton";
 import { useRouter } from "next/navigation";
-import Image from "next/image";
 
 type Props = {
   product: ProductInterface;
