@@ -32,6 +32,7 @@ const CartDropdown = ({ cartItems, onClose }: CartItemProps) => {
   const handleAddToCart = (productId: number) => {
     addItemToCart(productId, 1);
   };
+
   const handleRemoveFromCart = (productId: number, quantity: number) => {
     removeItemFromCart(productId, quantity);
   };
@@ -83,11 +84,11 @@ const CartDropdown = ({ cartItems, onClose }: CartItemProps) => {
 
                           <button
                             type="button"
-                            onClick={() =>
+                            onClick={(e) => {e.stopPropagation();
                               handleRemoveFromCart(
                                 product.product.id,
                                 product.quantity
-                              )
+                              )}
                             }
                             className="mt-6 font-semibold text-red-500 text-xs flex items-center gap-1 shrink-0"
                           >

@@ -149,7 +149,7 @@ const EditProductPage = ({onProducts}: Props) => {
         >
           <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
         </svg>
-        <p className="text-lg font-semibold text-gray-700">Product added successfully!</p>
+        <p className="text-lg font-semibold text-gray-700">Changes saved successfully!</p>
       </div>
     </div>
   );

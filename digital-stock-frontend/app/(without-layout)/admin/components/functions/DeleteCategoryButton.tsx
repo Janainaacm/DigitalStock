@@ -36,11 +36,12 @@ export default function DeleteCategoryButton({ category }: Props) {
 
   const validateInput = async (password: string) => {
     setIsLoading(true);
-
+    console.log("1")
     setValidation({
       password: Boolean(password),
     });
 
+    console.log("2")
     if (!password) {
       setError("Password cannot be empty.");
       setIsLoading(false);
@@ -50,8 +51,9 @@ export default function DeleteCategoryButton({ category }: Props) {
     try {
       const response = await verifyPassword(password);
       setValidated(response);
+
       
-      if (category.id && validated) {
+      if (category.id && response) {
         try {
           await deleteCategory(category.id);
           setSuccess(true);
