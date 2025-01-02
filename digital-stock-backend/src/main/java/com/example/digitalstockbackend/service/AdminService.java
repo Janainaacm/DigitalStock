@@ -93,17 +93,19 @@ public class AdminService {
         return ResponseEntity.ok(savedProduct);
     }
 
-    public ResponseEntity<Product> updateProduct(Long id, Product productDetails) {
+    public ResponseEntity<Product> updateProduct(Long id, ProductDTO productDetails) {
+        Product newData = convertToProduct(productDetails);
+
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Product not found"));
 
-        product.setName(productDetails.getName());
-        product.setDescription(productDetails.getDescription());
-        product.setPrice(productDetails.getPrice());
-        product.setCategory(productDetails.getCategory());
-        product.setColorName(productDetails.getColorName());
-        product.setImageUrl(productDetails.getImageUrl());
-        product.setStock(productDetails.getStock());
+        product.setName(newData.getName());
+        product.setDescription(newData.getDescription());
+        product.setPrice(newData.getPrice());
+        product.setCategory(newData.getCategory());
+        product.setColorName(newData.getColorName());
+        product.setImageUrl(newData.getImageUrl());
+        product.setStock(newData.getStock());
 
         Product updatedProduct = productRepository.save(product);
 

@@ -95,11 +95,6 @@ public class ProductService {
 
 
     //In code
-    public Product getProductById(Long id) {
-
-        return productRepository.findById(id)
-                .orElse(null);
-    }
 
     public int getStock(Long productId) {
         Product product = productRepository.findById(productId)
@@ -113,6 +108,9 @@ public class ProductService {
                 .orElseThrow();
 
         product.setSales(product.getSales() + quantity);
+        product.setStock(product.getStock() - quantity);
+
+        productRepository.save(product);
     }
 
 }

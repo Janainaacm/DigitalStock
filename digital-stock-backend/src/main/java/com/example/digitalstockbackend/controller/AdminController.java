@@ -49,7 +49,7 @@ public class AdminController {
     }
 
     @PutMapping("/products/{productId}")
-    public ResponseEntity<Product> updateProduct(@PathVariable Long productId, @RequestBody Product productDetails) {
+    public ResponseEntity<Product> updateProduct(@PathVariable Long productId, @RequestBody ProductDTO productDetails) {
         return adminService.updateProduct(productId, productDetails);
     }
 

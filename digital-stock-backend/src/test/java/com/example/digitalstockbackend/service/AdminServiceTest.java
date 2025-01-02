@@ -1,6 +1,8 @@
 package com.example.digitalstockbackend.service;
 
 import com.example.digitalstockbackend.authorities.OrderStatus;
+import com.example.digitalstockbackend.dto.ProductDTO;
+import com.example.digitalstockbackend.model.Category;
 import com.example.digitalstockbackend.model.Order;
 import com.example.digitalstockbackend.model.Product;
 import com.example.digitalstockbackend.repository.*;
@@ -27,6 +29,9 @@ class AdminServiceTest {
     @Mock
     private OrderRepository orderRepository;
 
+    @Mock
+    private CategoryRepository categoryRepository;
+
     @InjectMocks
     private AdminService adminService;
 
@@ -37,24 +42,38 @@ class AdminServiceTest {
         existingProduct.setId(1L);
         existingProduct.setName("Old Name");
 
-        Product updatedDetails = new Product();
+        ProductDTO updatedDetails = new ProductDTO();
         updatedDetails.setName("New Name");
+        updatedDetails.setCategoryName("Electronics");
+
+        Category newCategory = new Category();
+        newCategory.setName("Electronics");
+
+        Product expectedUpdatedProduct = new Product();
+        expectedUpdatedProduct.setId(1L);
+        expectedUpdatedProduct.setName("New Name");
+        expectedUpdatedProduct.setCategory(newCategory);
 
         when(productRepository.findById(1L)).thenReturn(Optional.of(existingProduct));
-        when(productRepository.save(any(Product.class))).thenReturn(existingProduct);
+        when(categoryRepository.findByName("Electronics")).thenReturn(newCategory);
+        when(productRepository.save(any(Product.class))).thenReturn(expectedUpdatedProduct);
 
         ResponseEntity<Product> response = adminService.updateProduct(1L, updatedDetails);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals("New Name", response.getBody().getName());
+        assertEquals("Electronics", response.getBody().getCategory().getName());
     }
 
     @Test
     void testUpdateProduct_ProductNotFound() {
+        ProductDTO updatedDetails = new ProductDTO();
+        updatedDetails.setName("New Name");
+
         when(productRepository.findById(1L)).thenReturn(Optional.empty());
 
         assertThrows(RuntimeException.class, () -> {
-            adminService.updateProduct(1L, new Product());
+            adminService.updateProduct(1L, updatedDetails);
         });
     }
 
