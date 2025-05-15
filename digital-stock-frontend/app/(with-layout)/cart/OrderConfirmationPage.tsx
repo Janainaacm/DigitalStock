@@ -44,7 +44,7 @@ const OrderConfirmationPage = ({ order }: Props) => {
                         <div className="w-28 h-28 max-sm:w-24 max-sm:h-24 shrink-0">
                           <img
                           className="object-cover p-2"
-                          src={item.product.imageUrl}
+                          src={item.product.image}
                           alt={item.product.name}
                         />
                         </div>

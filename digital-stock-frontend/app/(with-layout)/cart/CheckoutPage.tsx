@@ -149,7 +149,7 @@ const Checkout = ({onOrderConfirmation, onViewCart, setOrder}: Props) => {
                     <div className="w-32 h-28 max-lg:w-24 max-lg:h-24 flex p-3 shrink-0 bg-white rounded-md">
                       <img
                         alt={item.product.name}
-                        src={item.product.imageUrl}
+                        src={item.product.image}
                         className="w-full object-contain"
                       />
                     </div>

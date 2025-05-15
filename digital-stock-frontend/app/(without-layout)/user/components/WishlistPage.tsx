@@ -57,7 +57,7 @@ const WishlistPage = () => {
                 <div className="relative">
                   <img
                     className="lg:block p-6"
-                    src={item.product.imageUrl}
+                    src={item.product.image}
                   />
                   <button
                     onClick={() => removeItem(item.product.id)}

@@ -136,7 +136,7 @@ const ProductManagementPage = ({onEditProduct}: Props) => {
                 <td className="p-4 text-sm">
                   <div className="flex items-center cursor-pointer">
                     <img
-                      src={product.imageUrl}
+                      src={product.image}
                       className="w-10 h-10 shrink-0 bg-gray-100"
                     />
                     <div className="mx-4">

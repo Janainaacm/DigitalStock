@@ -78,7 +78,7 @@ const ViewCart = ({onCheckout}: Props) => {
               <div className="flex gap-4">
                 <div className="w-28 h-28 max-sm:w-24 max-sm:h-24 shrink-0">
                   <img
-                    src={item.product.imageUrl}
+                    src={item.product.image}
                     className="w-full h-full object-contain"
                   />
                 </div>

@@ -315,7 +315,7 @@ const AdminOrderDetailsPage = ({ onBack }: Props) => {
                     <div className="flex items-center gap-3">
                       <div className="img-box">
                         <img
-                          src={item.product.imageUrl}
+                          src={item.product.image}
                           alt={item.product.name}
                           className="w-full md:max-w-[122px] p-1 bg-white rounded-lg object-cover"
                         />

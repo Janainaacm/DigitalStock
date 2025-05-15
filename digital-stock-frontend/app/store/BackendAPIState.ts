@@ -59,10 +59,6 @@ export const useAppState = create<AppState>((set) => ({
 
   fetchDisplayProducts: () => {
     const { productList, filteredProductList } = useAppState.getState();
-    console.log("Checking state in fetchDisplayProducts:", {
-      productList,
-      filteredProductList,
-    });
 
     const user = useAuthState.getState().user;
     const wishlist = useAuthState.getState().wishlist;

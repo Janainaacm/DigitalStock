@@ -4,30 +4,29 @@ import SuccessIcon from "@/public/icons/SuccessIcon";
 import UploadIcon from "@/public/icons/UploadIcon";
 import Image from "next/image";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 
 interface Props {
-  setChosenImageUrl: (url: string) => void;
+  setBase64Image: (base64String: string | null) => void;
   error: string[];
   success: boolean; 
-  url?: string;
+  existingBase64Image?: string;
 }
 
-const RenderImage = ({ error, setChosenImageUrl, success, url }: Props) => {
-  const [shownImageUrl, setShownImageUrl] = useState("");
-  const [imageUrl, setImageUrl] = useState("");
+const RenderImage = ({ error, setBase64Image, success, existingBase64Image }: Props) => {
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [loadingImage, setLoadingImage] = useState(false);
   const [imageCompiled, setImageCompiled] = useState(false);
-  const [uploadClicked, setUploadClicked] = useState(false);
   const [errorIcon, setErrorIcon] = useState(false);
   const [imageErrorMsg, setImageErrorMsg] = useState("");
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    if (url) {
-      setImageUrl(url.trim())
-      handleUpload(url.trim())
+    if (existingBase64Image) {
+      setImagePreview(existingBase64Image);
+      setImageCompiled(true);
     }
-  }, [url])
+  }, [existingBase64Image]);
 
   const handleImageLoad = () => {
     setLoadingImage(false);
@@ -40,32 +39,54 @@ const RenderImage = ({ error, setChosenImageUrl, success, url }: Props) => {
     setErrorIcon(true);
   };
 
-  const isValidUrl = (url: string) => {
-    try {
-      new URL(url);
-      setChosenImageUrl(url)
-      return true;
-    } catch (err) {
-      if (err instanceof Error) {
-        setImageErrorMsg(err.message);
-        setErrorIcon(true);
-      }
-      return false;
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    // Validate file type
+    if (!file.type.startsWith('image/')) {
+      setImageErrorMsg("Please select an image file");
+      setErrorIcon(true);
+      return;
     }
+
+    // Validate file size (max 5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      setImageErrorMsg("Image size should be less than 5MB");
+      setErrorIcon(true);
+      return;
+    }
+
+    setLoadingImage(true);
+    setErrorIcon(false);
+    setImageErrorMsg("");
+    
+    // Create a preview URL for the UI
+    const previewUrl = URL.createObjectURL(file);
+    setImagePreview(previewUrl);
+    
+    // Convert file to base64
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      if (event.target?.result) {
+        // The base64 string format should be: "data:[mime-type];base64,[base64-data]"
+        const base64String = event.target.result as string;
+        setBase64Image(base64String);
+        setLoadingImage(false);
+        setImageCompiled(true);
+      }
+    };
+    reader.onerror = () => {
+      setErrorIcon(true);
+      setImageErrorMsg("Failed to read file");
+      setLoadingImage(false);
+    };
+    reader.readAsDataURL(file); // This creates a data URL that includes the MIME type
   };
 
-  const handleUpload = (inputUrl?: string) => {
-    setUploadClicked(true);
-    setLoadingImage(true);
-    const urlToValidate = inputUrl || imageUrl.trim(); 
-    if (isValidUrl(urlToValidate)) {
-      setShownImageUrl(urlToValidate);
-      setChosenImageUrl(urlToValidate);
-    } else {
-      setImageCompiled(false);
-    }
+  const handleUploadClick = () => {
+    fileInputRef.current?.click();
   };
-  
 
   const renderSymbol = () => {
     if (loadingImage && !errorIcon) {
@@ -82,66 +103,65 @@ const RenderImage = ({ error, setChosenImageUrl, success, url }: Props) => {
 
   useEffect(() => {
     if (success) {
-      setImageUrl("");
-      setShownImageUrl("");
+      setImagePreview(null);
       setImageCompiled(false);
       setLoadingImage(false);
-      setUploadClicked(false);
       setErrorIcon(false);
       setImageErrorMsg("");
+      setBase64Image(null);
     }
-  }, [success]);
+  }, [success, setBase64Image]);
 
-
-  const isError = error.includes("category");
-
+  const isError = error.includes("image");
 
   return (
     <div className="px-6 py-3">
       <div className={`border w-full aspect-square bg-white rounded-lg relative ${isError ? "border-red-500" : ""}`}>
-        {shownImageUrl && (
+        {imagePreview && (
           <Image
-            src={shownImageUrl}
+            src={imagePreview}
             alt={"Product image"}
             className="p-5"
             fill
             style={{ objectFit: "cover" }}
-            onLoadingComplete={handleImageLoad}
+            onLoad={handleImageLoad}
             onError={handleImageError}
           />
         )}
+        {!imagePreview && (
+          <div className="flex items-center justify-center h-full text-gray-400">
+            No image selected
+          </div>
+        )}
       </div>
-      <div className="py-3 w-full flex items-center space-x-3">
-      <input
-        type="text"
-        value={imageUrl}
-        onChange={(e) => {
-          setImageUrl(e.target.value);
-          setUploadClicked(false);
-          setImageCompiled(false);
-          setLoadingImage(false);
-          setErrorIcon(false);
-          setImageErrorMsg("");
-          setShownImageUrl("");
-        }}
-        placeholder={isError ? "Image URL is required" : "Image URL"}
-        className={`px-3 py-1.5 rounded-lg border tracking-wider flex-1 ${
-          isError ? "border-red-500 placeholder-red-500" : "border-gray-200 placeholder-gray-400"
-        }`}
-      />
+      
+      <div className="py-3 w-full flex items-center">
+        <input
+          type="file"
+          ref={fileInputRef}
+          onChange={handleFileChange}
+          accept="image/*"
+          className="hidden"
+        />
+        
         <button
-          onClick={() => handleUpload()}
-          className={`px-3 py-2 rounded-lg text-white
-    ${loadingImage && !errorIcon ? "bg-gray-600" : ""}
-    ${errorIcon ? "bg-red-600" : ""}
-    ${imageCompiled ? "bg-green-600" : ""}
-    ${!uploadClicked && !loadingImage && !imageCompiled ? "bg-blue-400" : ""}`}
+          onClick={handleUploadClick}
+          className={`px-4 py-2 rounded-lg text-white w-full flex items-center justify-center
+            ${loadingImage && !errorIcon ? "bg-gray-600" : ""}
+            ${errorIcon ? "bg-red-600" : ""}
+            ${imageCompiled ? "bg-green-600" : ""}
+            ${!loadingImage && !errorIcon && !imageCompiled ? "bg-blue-400" : ""}`}
         >
-          {renderSymbol()}
+          <span className="mr-2">{renderSymbol()}</span>
+          {imageCompiled ? "Change Image" : "Upload Image"}
         </button>
       </div>
+      
       <div className="h-3">
         <p className="text-red-500 text-xs text-center">{imageErrorMsg}</p>
+        {isError && !imageErrorMsg && (
+          <p className="text-red-500 text-xs text-center">Image is required</p>
+        )}
       </div>
     </div>
   );

@@ -54,7 +54,7 @@ const UserWishlistAdminPage = ({wishlist}: Props) => {
                     <div className="relative">
                       <img
                         className="lg:block p-6"
-                        src={item.product.imageUrl}
+                        src={item.product.image}
                       />
                     </div>
                     <div className="mt-6 flex justify-between items-center">

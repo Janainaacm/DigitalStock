@@ -375,7 +375,7 @@ const UserOrderPage = () => {
                     <div className="grid grid-cols-4 py-2 w-full">
                       <div className="col-span-4 sm:col-span-1">
                         <img
-                          src={item.product.imageUrl}
+                          src={item.product.image}
                           alt=""
                           className="max-sm:mx-auto p-7 -ml-7 object-cover"
                         />

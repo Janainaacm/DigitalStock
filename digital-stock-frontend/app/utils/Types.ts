@@ -57,7 +57,7 @@ export interface ProductInterface {
   price: number;
   categoryName: string;
   colorName: string;
-  imageUrl: string;
+  image: string;
   stock: number;
   sales: number;
   isInWishlist?: boolean;

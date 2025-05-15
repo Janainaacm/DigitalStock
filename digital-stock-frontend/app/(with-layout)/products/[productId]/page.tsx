@@ -100,7 +100,7 @@ const ProductDetails = () => {
           </div>
           <div className="relative h-full flex items-center justify-center lg:min-h-[580px]">
             <img
-              src={selectedColor.imageUrl}
+              src={selectedColor.image}
               alt="Product"
               className="lg:w-3/5 w-3/4 h-full w-full object-contain max-lg:p-8"
             />
@@ -132,7 +132,7 @@ const ProductDetails = () => {
                   <button
                     type="button"
                     style={{
-                      backgroundImage: `url(${variant.imageUrl})`,
+                      backgroundImage: `url(${variant.image})`,
                       backgroundSize: "cover",
                       backgroundPosition: "center",
                     }}

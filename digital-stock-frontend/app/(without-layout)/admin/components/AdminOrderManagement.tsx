@@ -38,7 +38,7 @@ const AdminOrderManagementPage = ({ onOrderDetails }: Props) => {
     if (orders.length == 0) {
       fetchAllOrders();
     }
-  }, [orders, fetchAllOrders]);
+  }, []);
 
   if (!user) {
     return <p>No user found.</p>;
@@ -232,7 +232,7 @@ const AdminOrderManagementPage = ({ onOrderDetails }: Props) => {
                       <div className="grid grid-cols-7 w-full border-b">
                         <div className="col-span-3 sm:col-span-1">
                           <img
-                            src={item.product.imageUrl}
+                            src={item.product.image}
                             alt=""
                             className="max-sm:mx-auto p-4 -ml-7 object-cover"
                           />

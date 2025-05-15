@@ -15,22 +15,23 @@ const Notifications = ({onOrders, onProducts}: Props) => {
     const [productsOutOfStock, setProductsOutOfStock] = useState<ProductInterface[]>([])
 
     useEffect(() => {
-      if (orders.length == 0) {
-        fetchAllOrders()
-      } else if (newOrdersList.length == 0) {
+      fetchAllOrders();
+      fetchAllProducts();
+    }, []);
+    
+    useEffect(() => {
+      if (orders.length > 0) {
         const pendingOrders = orders.filter(order => order.status === 'PENDING');
         setNewOrdersList(pendingOrders);
       }
-
-      if (productList.length == 0) {
-        fetchAllProducts()
-      } else if (productsOutOfStock.length == 0) {
+    }, [orders]);
+    
+    useEffect(() => {
+      if (productList.length > 0) {
         const outOfStockProducts = productList.filter(product => product.stock === 0);
         setProductsOutOfStock(outOfStockProducts);
       }
-
-    }, [orders, productList])
-
+    }, [productList]);
     
     if (newOrdersList.length == 0 && productsOutOfStock.length == 0){
       return (
@@ -88,7 +89,7 @@ const Notifications = ({onOrders, onProducts}: Props) => {
                 key={key}
               >
                 <div className="relative h-14 w-14 rounded-full">
-                  <img src={product.imageUrl} alt="Product" />
+                  <img src={product.image} alt="Product" />
                   <span
                     className="absolute right-0 bottom-0 h-3 w-3 rounded-full border-2 border-white"
                   ></span>

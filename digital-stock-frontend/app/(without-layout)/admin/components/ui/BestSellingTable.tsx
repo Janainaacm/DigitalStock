@@ -57,7 +57,7 @@ const BestSellingTable = () => {
           <div className="col-span-3 flex items-center">
             <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
               <div className="h-12 w-15 rounded-md">
-                <img className="object-cover h-12 w-15" src={product.imageUrl} alt="Product" />
+                <img className="object-cover h-12 w-15" src={product.image} alt="Product" />
               </div>
               <p className="text-sm text-gray-500">
                 {product.name}

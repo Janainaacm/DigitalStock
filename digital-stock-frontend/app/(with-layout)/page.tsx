@@ -27,9 +27,6 @@ export default function Home() {
         <OurShop/>
       </section>
 
-      <main className="flex flex-col items-center px-4 justify-evenly md:flex-row md:justify-center md:h-5/6">
-        
-      </main>
     </>
   );
 }

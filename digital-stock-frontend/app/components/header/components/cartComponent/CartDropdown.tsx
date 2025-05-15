@@ -69,7 +69,7 @@ const CartDropdown = ({ cartItems, onClose }: CartItemProps) => {
                       >
                         <div className="w-28 h-28 max-sm:w-24 max-sm:h-24 shrink-0 bg-white border border-gray-100 shadow-sm p-4 rounded-md">
                           <img
-                            src={product.product.imageUrl}
+                            src={product.product.image}
                             className="w-full h-full object-contain"
                           />
                         </div>

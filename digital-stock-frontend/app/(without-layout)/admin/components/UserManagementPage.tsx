@@ -13,15 +13,10 @@ const UserManagementPage = ({onUserDetails}: Props) => {
 
   useEffect(() => {
     if (userList.length === 0) {
-      console.log("Fetching users...");
       fetchAllUsers();
     }
-  }, [userList, fetchAllUsers]); 
+  }, []); 
 
-  useEffect(() => {
-    console.log("Users:", userList);
-    console.log("Is users an array?", Array.isArray(userList));
-  })
 
   const onViewUser = (user: UserInterface) => {
     setUserDetails(user);

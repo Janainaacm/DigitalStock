@@ -89,7 +89,7 @@ export default function HeaderSidebar() {
                     <div className="pt-5 pb-3 bg-white z-[200] flex w-full">
                       <DisplaySearchBar inSideBar={true} />
                     </div>
-                    <ul className="space-y-3 min-w-[300px] h-full overflow-auto z-50">
+                    <ul className="space-y-3  h-full overflow-auto z-50">
                       <li className="group w-full text-xl border-b py-4 my-3 flex justify-between">
                         <button
                           onClick={() => redirect("/")}

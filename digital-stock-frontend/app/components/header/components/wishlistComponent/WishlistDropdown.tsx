@@ -32,7 +32,7 @@ const WishlistDropdown = ({ wishlistItems }: WishlistDropdownProps) => {
                     <div className="flex items-start gap-4">
                       <div className="w-28 h-28 max-sm:w-24 max-sm:h-24 shrink-0 bg-white border p-3 rounded-md">
                         <img
-                          src={item.product.imageUrl}
+                          src={item.product.image}
                           className="w-full h-full object-contain"
                         />
                       </div>

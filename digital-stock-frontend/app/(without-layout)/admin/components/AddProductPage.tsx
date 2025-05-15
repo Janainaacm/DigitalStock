@@ -13,7 +13,7 @@ type Props = {
 const AddProductPage = ({onProducts}: Props) => {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
-  const [imageUrl, setImageUrl] = useState("");
+  const [image, setimage] = useState("");
 
   const [colorName, setColorName] = useState("");
   const [price, setPrice] = useState<string>("");
@@ -69,8 +69,8 @@ const AddProductPage = ({onProducts}: Props) => {
     if (!colorName.trim()) {
       newErrors.push("colorName");
     }
-    if (!imageUrl.trim()) {
-      newErrors.push("imageUrl");
+    if (!image.trim()) {
+      newErrors.push("image");
     }
     if (!stock || isNaN(parseInt(stock, 10)) || parseInt(stock, 10) < 0) {
       newErrors.push("stock");
@@ -97,7 +97,7 @@ const AddProductPage = ({onProducts}: Props) => {
       price: parseFloat(price),
       categoryName: category.trim(),
       colorName: colorName.trim(),
-      imageUrl: imageUrl.trim(),
+      image: image.trim(),
       stock: parseInt(stock, 10),
       sales: 0
     };
@@ -139,7 +139,7 @@ const AddProductPage = ({onProducts}: Props) => {
   const resetFields = () => {
     setName("");
     setDescription("");
-    setImageUrl("");
+    setimage("");
     setColorName("");
     setPrice("");
     setStock("");
@@ -316,7 +316,7 @@ const AddProductPage = ({onProducts}: Props) => {
               </div>
             </div>
             <div className="border-2 border-gray-200 rounded-lg bg-gray-100 shadow-lg h-auto">
-              <RenderImage error={error} setChosenImageUrl={setImageUrl} success={success}/>
+              <RenderImage error={error} setChosenimage={setimage} success={success}/>
             </div>
           </div>
         </div>

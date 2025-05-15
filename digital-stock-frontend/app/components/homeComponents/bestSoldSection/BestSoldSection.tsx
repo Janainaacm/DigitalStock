@@ -102,7 +102,7 @@ const BestSoldSection = () => {
                 <div>
                   <img
                     className="p-3 bg-white"
-                    src={product.imageUrl}
+                    src={product.image}
                     alt={product.name}
                   />
                   {activeIndex === index && (
