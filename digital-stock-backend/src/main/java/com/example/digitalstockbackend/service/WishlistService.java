@@ -21,12 +21,14 @@ public class WishlistService {
     private final WishlistRepository wishlistRepository;
     private final UserService userService;
     private final ProductRepository productRepository;
+    private final DTOConverter dto;
 
     @Autowired
-    public WishlistService(WishlistRepository wishlistRepository, UserService userService, ProductRepository productRepository) {
+    public WishlistService(WishlistRepository wishlistRepository, UserService userService, ProductRepository productRepository, DTOConverter dto) {
         this.wishlistRepository = wishlistRepository;
         this.userService = userService;
         this.productRepository = productRepository;
+        this.dto = dto;
     }
 
     public ResponseEntity<WishlistDTO> fetchWishlistByUserId(Long userId) {
@@ -44,7 +46,7 @@ public class WishlistService {
         }
 
         Product product = optionalProduct.get();
-        WishlistItem newWishlistItem = new WishlistItem(wishlist, product);
+        WishlistItem newWishlistItem = WishlistItem.builder().wishlist(wishlist).product(product).build();
         wishlist.getItems().add(newWishlistItem);
 
         Wishlist updatedWishlist = wishlistRepository.save(wishlist);
@@ -103,7 +105,7 @@ public class WishlistService {
                 .map(WishlistItem::getProduct)
                 .map(product -> productRepository.findById(product.getId()))
                 .flatMap(Optional::stream)
-                .map(ProductDTO::new)
+                .map(dto::convertToProductDTO)
                 .toList();
 
         return ResponseEntity.ok(productDTOList);
@@ -124,7 +126,7 @@ public class WishlistService {
 
     // Helper: Convert Wishlist to WishlistDTO
     private WishlistDTO convertToWishlistDTO(Wishlist wishlist) {
-        return new WishlistDTO(wishlist);
+        return dto.convertToWishlistDTO(wishlist);
     }
 }
 

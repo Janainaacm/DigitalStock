@@ -4,10 +4,17 @@ import com.example.digitalstockbackend.authorities.OrderStatus;
 import com.example.digitalstockbackend.model.roles.CustomUser;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
 @Entity
+@Data
+@Builder
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "orders")
 public class Order {
 
@@ -48,113 +55,4 @@ public class Order {
     @Column(name = "subtotal", nullable = false)
     private Long subtotal;
 
-    public Order() {
-    }
-
-    public Order(Long id, CustomUser user, List<OrderItem> orderItems, OrderStatus status, LocalDateTime orderDate,
-                 String firstName, String lastName, String phoneNo, String email,
-                 Address address, Long subtotal) {
-        this.id = id;
-        this.user = user;
-        this.orderItems = orderItems;
-        this.status = status;
-        this.orderDate = orderDate;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.phoneNo = phoneNo;
-        this.email = email;
-        this.address = address;
-        this.subtotal = subtotal;
-    }
-
-    // Getters and Setters
-
-
-    public Address getAddress() {
-        return address;
-    }
-
-    public void setAddress(Address address) {
-        this.address = address;
-    }
-
-    public Long getSubtotal() {
-        return subtotal;
-    }
-
-    public void setSubtotal(Long subtotal) {
-        this.subtotal = subtotal;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public CustomUser getUser() {
-        return user;
-    }
-
-    public void setUser(CustomUser user) {
-        this.user = user;
-    }
-
-    public List<OrderItem> getOrderItems() {
-        return orderItems;
-    }
-
-    public void setOrderItems(List<OrderItem> orderItems) {
-        this.orderItems = orderItems;
-    }
-
-    public OrderStatus getStatus() {
-        return status;
-    }
-
-    public void setStatus(OrderStatus status) {
-        this.status = status;
-    }
-
-    public LocalDateTime getOrderDate() {
-        return orderDate;
-    }
-
-    public void setOrderDate(LocalDateTime orderDate) {
-        this.orderDate = orderDate;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public String getPhoneNo() {
-        return phoneNo;
-    }
-
-    public void setPhoneNo(String phoneNo) {
-        this.phoneNo = phoneNo;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
 }

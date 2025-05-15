@@ -1,9 +1,17 @@
 package com.example.digitalstockbackend.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 
 @Entity
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class WishlistItem {
 
     @Id
@@ -17,36 +25,4 @@ public class WishlistItem {
     @ManyToOne
     @JoinColumn(name = "product_id")
     private Product product;
-
-
-    public WishlistItem() {
-    }
-    public WishlistItem(Wishlist wishlist, Product product) {
-        this.wishlist = wishlist;
-        this.product = product;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Product getProduct() {
-        return product;
-    }
-
-    public void setProduct(Product product) {
-        this.product = product;
-    }
-
-    public Wishlist getWishlist() {
-        return wishlist;
-    }
-
-    public void setWishlist(Wishlist wishlist) {
-        this.wishlist = wishlist;
-    }
 }

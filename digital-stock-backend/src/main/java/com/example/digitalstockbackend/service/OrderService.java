@@ -31,15 +31,17 @@ public class OrderService {
     private final CartRepository cartRepository;
     private final OrderItemRepository orderItemRepository;
     private final ProductService productService;
+    private final DTOConverter dto;
 
     @Autowired
     public OrderService(OrderRepository orderRepository, UserService userService, CartRepository cartRepository,
-                        OrderItemRepository orderItemRepository, ProductService productService) {
+                        OrderItemRepository orderItemRepository, ProductService productService, DTOConverter dto) {
         this.orderRepository = orderRepository;
         this.userService = userService;
         this.cartRepository = cartRepository;
         this.orderItemRepository = orderItemRepository;
         this.productService = productService;
+        this.dto = dto;
     }
 
     // Fetch Order by ID
@@ -169,7 +171,7 @@ public class OrderService {
 
     // Helper: Convert Order to OrderDTO
     private OrderDTO convertToOrderDTO(Order order) {
-        return new OrderDTO(order);
+        return dto.convertToOrderDTO(order);
     }
 
     private Address convertToAddressEntity(AddressDTO addressDTO) {

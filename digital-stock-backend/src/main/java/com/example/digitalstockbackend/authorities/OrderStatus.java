@@ -1,5 +1,9 @@
 package com.example.digitalstockbackend.authorities;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
+@Getter
 public enum OrderStatus {
     PENDING("PENDING"),
     CONFIRMED("CONFIRMED"),
@@ -13,7 +17,4 @@ public enum OrderStatus {
         this.status = status1;
     }
 
-    public String getStatus() {
-        return status;
-    }
 }

@@ -18,11 +18,13 @@ import java.util.Optional;
 public class ProductService {
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
+    private final DTOConverter dto;
 
     @Autowired
-    public ProductService(ProductRepository productRepository, CategoryRepository categoryRepository) {
+    public ProductService(ProductRepository productRepository, CategoryRepository categoryRepository, DTOConverter dto) {
         this.productRepository = productRepository;
         this.categoryRepository = categoryRepository;
+        this.dto = dto;
     }
 
     public ResponseEntity<List<ProductDTO>> fetchAllProducts() {
@@ -33,7 +35,7 @@ public class ProductService {
         }
 
         List<ProductDTO> productDTOs = allProducts.stream()
-                .map(ProductDTO::new)
+                .map(dto::convertToProductDTO)
                 .toList();
 
         return ResponseEntity.ok(productDTOs);
@@ -47,7 +49,7 @@ public class ProductService {
         }
 
         List<ProductDTO> productDTOs = list.stream()
-                .map(ProductDTO::new)
+                .map(dto::convertToProductDTO)
                 .toList();
 
         return ResponseEntity.ok(productDTOs);
@@ -61,7 +63,7 @@ public class ProductService {
         }
 
         List<ProductDTO> productDTOs = list.stream()
-                .map(ProductDTO::new)
+                .map(dto::convertToProductDTO)
                 .toList();
 
         return ResponseEntity.ok(productDTOs);
@@ -71,7 +73,7 @@ public class ProductService {
         Optional<Product> product = productRepository.findById(id);
 
         if (product.isPresent()) {
-            ProductDTO productDTO = new ProductDTO(product.get());
+            ProductDTO productDTO = dto.convertToProductDTO(product.get());
 
             return ResponseEntity.ok(productDTO);
         }
@@ -87,7 +89,7 @@ public class ProductService {
         }
 
         List<CategoryDTO> categoriesDTO = allCategories.stream()
-                .map(CategoryDTO::new)
+                .map(dto::convertToCategoryDTO)
                 .toList();
         return ResponseEntity.ok(categoriesDTO);
     }

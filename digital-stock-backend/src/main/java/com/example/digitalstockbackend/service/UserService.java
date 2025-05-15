@@ -14,10 +14,12 @@ import org.springframework.stereotype.Service;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final DTOConverter dto;
 
     @Autowired
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, DTOConverter dto) {
         this.userRepository = userRepository;
+        this.dto = dto;
     }
 
     // Fetch User by ID
@@ -53,7 +55,7 @@ public class UserService {
     }
 
     private UserDTO convertToUserDTO(CustomUser user) {
-        return new UserDTO(user);
+        return dto.convertToUserDTO(user);
     }
 
 

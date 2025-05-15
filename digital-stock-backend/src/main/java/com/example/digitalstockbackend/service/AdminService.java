@@ -23,22 +23,22 @@ public class AdminService {
     private final ProductRepository productRepository;
     private final UserRepository userRepository;
     private final CategoryRepository categoryRepository;
+    private final DTOConverter dto;
 
-    public AdminService(OrderRepository orderRepository, ProductRepository productRepository, UserRepository userRepository, CategoryRepository categoryRepository) {
+    public AdminService(OrderRepository orderRepository, ProductRepository productRepository, UserRepository userRepository, CategoryRepository categoryRepository, DTOConverter dto) {
         this.orderRepository = orderRepository;
         this.productRepository = productRepository;
         this.userRepository = userRepository;
         this.categoryRepository = categoryRepository;
+        this.dto = dto;
     }
-
-
 
     //Users
     public ResponseEntity<List<UserDTO>> fetchAllUsers() {
         List<CustomUser> users = userRepository.findAll();
 
         List<UserDTO> userDTOs = users.stream()
-                .map(UserDTO::new).toList();
+                .map(dto::convertToUserDTO).toList();
 
         return ResponseEntity.ok(userDTOs);
     }
@@ -63,7 +63,7 @@ public class AdminService {
     public ResponseEntity<List<OrderDTO>> fetchAllOrders() {
         List<Order> list = orderRepository.findAll();
 
-        List<OrderDTO> dtoList = list.stream().map(OrderDTO::new).toList();
+        List<OrderDTO> dtoList = list.stream().map(dto::convertToOrderDTO).toList();
 
         return ResponseEntity.ok(dtoList);
     }
@@ -88,13 +88,13 @@ public class AdminService {
 
     //Products
     public ResponseEntity<Product> createProduct(ProductDTO productDTO) {
-        Product product = convertToProduct(productDTO);
+        Product product = dto.convertToProduct(productDTO);
         Product savedProduct = productRepository.save(product);
         return ResponseEntity.ok(savedProduct);
     }
 
     public ResponseEntity<Product> updateProduct(Long id, ProductDTO productDetails) {
-        Product newData = convertToProduct(productDetails);
+        Product newData = dto.convertToProduct(productDetails);
 
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Product not found"));
@@ -104,7 +104,7 @@ public class AdminService {
         product.setPrice(newData.getPrice());
         product.setCategory(newData.getCategory());
         product.setColorName(newData.getColorName());
-        product.setImageUrl(newData.getImageUrl());
+        product.setImage(newData.getImage());
         product.setStock(newData.getStock());
 
         Product updatedProduct = productRepository.save(product);
@@ -127,9 +127,7 @@ public class AdminService {
 
         Category savedCategory = categoryRepository.save(category);
 
-        CategoryDTO createdCategoryDTO = new CategoryDTO();
-        createdCategoryDTO.setId(savedCategory.getId());
-        createdCategoryDTO.setName(savedCategory.getName());
+        CategoryDTO createdCategoryDTO = new CategoryDTO(savedCategory.getId(), savedCategory.getName());
 
         return ResponseEntity.ok(createdCategoryDTO);
     }
@@ -140,21 +138,6 @@ public class AdminService {
         }
         categoryRepository.deleteById(categoryId);
         return ResponseEntity.noContent().build();
-    }
-
-
-    private Product convertToProduct(ProductDTO productDTO) {
-        Product product = new Product();
-        product.setName(productDTO.getName());
-        product.setDescription(productDTO.getDescription());
-        product.setPrice(productDTO.getPrice());
-        product.setStock(productDTO.getStock());
-        product.setColorName(productDTO.getColorName());
-        product.setImageUrl(productDTO.getImageUrl());
-        product.setSales(productDTO.getSales());
-        product.setCategory(categoryRepository.findByName(productDTO.getCategoryName()));
-
-        return product;
     }
 }
 

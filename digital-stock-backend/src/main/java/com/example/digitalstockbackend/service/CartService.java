@@ -23,12 +23,14 @@ public class CartService {
     private final CartItemRepository cartItemRepository;
     private final UserService userService;
     private final ProductRepository productRepository;
+    private final DTOConverter dto;
 
-    public CartService(CartRepository cartRepository, CartItemRepository cartItemRepository, UserService userService, ProductRepository productRepository) {
+    public CartService(CartRepository cartRepository, CartItemRepository cartItemRepository, UserService userService, ProductRepository productRepository, DTOConverter dto) {
         this.cartRepository = cartRepository;
         this.cartItemRepository = cartItemRepository;
         this.userService = userService;
         this.productRepository = productRepository;
+        this.dto = dto;
     }
 
     // Fetch Cart by User ID
@@ -61,7 +63,11 @@ public class CartService {
             cartItem.setQuantity(cartItem.getQuantity() + quantity);
         } else {
             Product product = optionalProduct.get();
-            CartItem newCartItem = new CartItem(cart, product, quantity);
+            CartItem newCartItem = CartItem.builder()
+                    .cart(cart)
+                    .product(product)
+                    .quantity(quantity)
+                    .build();
             cart.getItems().add(newCartItem);
         }
 
@@ -113,7 +119,7 @@ public class CartService {
 
     // Helper: Convert Cart to CartDTO
     private CartDTO convertToCartDTO(Cart cart) {
-        return new CartDTO(cart);
+        return dto.convertToCartDTO(cart);
     }
 
     public Cart findOrCreateCartByUserId(Long userId) {

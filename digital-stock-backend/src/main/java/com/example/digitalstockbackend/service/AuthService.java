@@ -42,16 +42,18 @@ public class AuthService {
     private final PasswordEncoder encoder;
     private final JwtUtils jwtUtils;
     private final UserService userService;
+    private final DTOConverter dto;
 
 
     @Autowired
-    public AuthService(AuthenticationManager authenticationManager, UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder encoder, JwtUtils jwtUtils, UserService userService) {
+    public AuthService(AuthenticationManager authenticationManager, UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder encoder, JwtUtils jwtUtils, UserService userService, DTOConverter dto) {
         this.authenticationManager = authenticationManager;
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.encoder = encoder;
         this.jwtUtils = jwtUtils;
         this.userService = userService;
+        this.dto = dto;
     }
 
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
@@ -74,13 +76,13 @@ public class AuthService {
                 .sameSite("Strict")
                 .build();
 
-        JwtResponse jwtResponse = new JwtResponse(
-                jwt,
-                userDetails.getId(),
-                userDetails.getUsername(),
-                userDetails.getEmail(),
-                role
-        );
+        JwtResponse jwtResponse = JwtResponse.builder()
+                .token(jwt)
+                .id(userDetails.getId())
+                .username(userDetails.getUsername())
+                .email(userDetails.getEmail())
+                .role(role)
+                .build();
 
         return ResponseEntity.ok()
                 .header(HttpHeaders.SET_COOKIE, cookie.toString())
@@ -258,13 +260,13 @@ public class AuthService {
                 })
                 .orElseThrow(() -> new UserNotFoundException("User not found"));
 
-        return ResponseEntity.ok(new UserDTO(updatedUser));
+        return ResponseEntity.ok(dto.convertToUserDTO(updatedUser));
     }
 
 
 
     private UserDTO convertToUserDTO(CustomUser user) {
-        return new UserDTO(user);
+        return dto.convertToUserDTO(user);
     }
 
 }
