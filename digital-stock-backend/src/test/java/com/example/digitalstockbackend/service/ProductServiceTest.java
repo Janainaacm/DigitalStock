@@ -24,21 +24,34 @@ class ProductServiceTest {
     @Mock
     private ProductRepository productRepository;
 
+    @Mock
+    private DTOConverter dto;
+
+
     @InjectMocks
     private ProductService productService;
 
     @Test
     void testFetchAllByName_Success() {
         Product product = new Product();
+        product.setId(1L);
         product.setName("Product1");
 
+        ProductDTO productDTO = new ProductDTO();
+        productDTO.setId(1L);
+        productDTO.setName("Product1");
+
         when(productRepository.findAllByName("Product1")).thenReturn(List.of(product));
+        when(dto.convertToProductDTO(product)).thenReturn(productDTO);
 
         ResponseEntity<List<ProductDTO>> response = productService.fetchAllByName("Product1");
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertNotNull(response.getBody());
         assertFalse(response.getBody().isEmpty());
+        assertEquals("Product1", response.getBody().get(0).getName());
     }
+
 
     @Test
     void testFetchAllByName_NoResults() {
@@ -53,14 +66,22 @@ class ProductServiceTest {
     void testFetchProductById_Success() {
         Product product = new Product();
         product.setId(1L);
+        product.setName("Test Product");
+
+        ProductDTO productDTO = new ProductDTO();
+        productDTO.setId(1L);
+        productDTO.setName("Test Product");
 
         when(productRepository.findById(1L)).thenReturn(Optional.of(product));
+        when(dto.convertToProductDTO(product)).thenReturn(productDTO);
 
         ResponseEntity<ProductDTO> response = productService.fetchProductById(1L);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertNotNull(response.getBody());
+        assertEquals("Test Product", response.getBody().getName());
     }
+
 
     @Test
     void testFetchProductById_ProductNotFound() {

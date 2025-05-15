@@ -30,6 +30,9 @@ class WishlistServiceTest {
     private WishlistRepository wishlistRepository;
 
     @Mock
+    private DTOConverter dto;
+
+    @Mock
     private UserService userService;
 
     @InjectMocks
@@ -45,8 +48,12 @@ class WishlistServiceTest {
         wishlist.setId(1L);
         wishlist.setItems(new ArrayList<>());
 
+        WishlistDTO wishlistDTO = new WishlistDTO();
+        wishlistDTO.setId(1L);
+
         when(productRepository.findById(1L)).thenReturn(Optional.of(product));
         when(wishlistRepository.save(any(Wishlist.class))).thenReturn(wishlist);
+        when(dto.convertToWishlistDTO(wishlist)).thenReturn(wishlistDTO);
 
         ResponseEntity<WishlistDTO> response = wishlistService.addProductToWishlist(1L, 1L);
 
@@ -54,6 +61,7 @@ class WishlistServiceTest {
         assertNotNull(response.getBody());
         assertEquals(1L, response.getBody().getId());
     }
+
 
     @Test
     void testAddProductToWishlist_ProductNotFound() {

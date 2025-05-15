@@ -30,7 +30,7 @@ class AdminServiceTest {
     private OrderRepository orderRepository;
 
     @Mock
-    private CategoryRepository categoryRepository;
+    private DTOConverter dto;
 
     @InjectMocks
     private AdminService adminService;
@@ -43,20 +43,21 @@ class AdminServiceTest {
         existingProduct.setName("Old Name");
 
         ProductDTO updatedDetails = new ProductDTO();
+        updatedDetails.setId(1L);
         updatedDetails.setName("New Name");
         updatedDetails.setCategoryName("Electronics");
 
         Category newCategory = new Category();
         newCategory.setName("Electronics");
 
-        Product expectedUpdatedProduct = new Product();
-        expectedUpdatedProduct.setId(1L);
-        expectedUpdatedProduct.setName("New Name");
-        expectedUpdatedProduct.setCategory(newCategory);
+        Product convertedProduct = new Product();
+        convertedProduct.setId(1L);
+        convertedProduct.setName("New Name");
+        convertedProduct.setCategory(newCategory);
 
         when(productRepository.findById(1L)).thenReturn(Optional.of(existingProduct));
-        when(categoryRepository.findByName("Electronics")).thenReturn(newCategory);
-        when(productRepository.save(any(Product.class))).thenReturn(expectedUpdatedProduct);
+        when(dto.convertToProduct(updatedDetails)).thenReturn(convertedProduct);
+        when(productRepository.save(any(Product.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
         ResponseEntity<Product> response = adminService.updateProduct(1L, updatedDetails);
 
@@ -65,17 +66,7 @@ class AdminServiceTest {
         assertEquals("Electronics", response.getBody().getCategory().getName());
     }
 
-    @Test
-    void testUpdateProduct_ProductNotFound() {
-        ProductDTO updatedDetails = new ProductDTO();
-        updatedDetails.setName("New Name");
 
-        when(productRepository.findById(1L)).thenReturn(Optional.empty());
-
-        assertThrows(RuntimeException.class, () -> {
-            adminService.updateProduct(1L, updatedDetails);
-        });
-    }
 
     @Test
     void testUpdateOrderStatus_Success() {

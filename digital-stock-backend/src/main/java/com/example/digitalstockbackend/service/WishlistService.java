@@ -33,7 +33,7 @@ public class WishlistService {
 
     public ResponseEntity<WishlistDTO> fetchWishlistByUserId(Long userId) {
         Wishlist wishlist = findOrCreateWishlistByUserId(userId);
-        WishlistDTO wishlistDTO = convertToWishlistDTO(wishlist);
+        WishlistDTO wishlistDTO = dto.convertToWishlistDTO(wishlist);
         return ResponseEntity.ok(wishlistDTO);
     }
 
@@ -50,7 +50,7 @@ public class WishlistService {
         wishlist.getItems().add(newWishlistItem);
 
         Wishlist updatedWishlist = wishlistRepository.save(wishlist);
-        WishlistDTO wishlistDTO = convertToWishlistDTO(updatedWishlist);
+        WishlistDTO wishlistDTO = dto.convertToWishlistDTO(updatedWishlist);
         return ResponseEntity.ok(wishlistDTO);
     }
 
@@ -68,7 +68,7 @@ public class WishlistService {
         Wishlist updatedWishlist = wishlistRepository.save(wishlist);
 
 
-        WishlistDTO wishlistDTO = convertToWishlistDTO(updatedWishlist);
+        WishlistDTO wishlistDTO = dto.convertToWishlistDTO(updatedWishlist);
         return ResponseEntity.ok(wishlistDTO);
 
     }
@@ -77,7 +77,7 @@ public class WishlistService {
         Wishlist wishlist = findOrCreateWishlistByUserId(userId);
         wishlist.getItems().clear();
         Wishlist updatedWishlist = wishlistRepository.save(wishlist);
-        WishlistDTO wishlistDTO = convertToWishlistDTO(updatedWishlist);
+        WishlistDTO wishlistDTO = dto.convertToWishlistDTO(updatedWishlist);
         return ResponseEntity.ok(wishlistDTO);
     }
 
@@ -124,9 +124,5 @@ public class WishlistService {
                 });
     }
 
-    // Helper: Convert Wishlist to WishlistDTO
-    private WishlistDTO convertToWishlistDTO(Wishlist wishlist) {
-        return dto.convertToWishlistDTO(wishlist);
-    }
 }
 
