@@ -41,9 +41,15 @@ const FilterProductsDropdown = ({ onClose }: Props) => {
   const [colorDropdown, setColorDropdown] = useState(false);
   const [filterByStock, setFilterByStock] = useState(false);
   const [selectedColors, setSelectedColors] = useState<string[]>([]);
-  const availableColors = Array.from(
-    new Set(productList.map((product) => product.colorName))
-  );
+  const [availableColors, setAvailableColors] = useState<string[]>([]);
+
+  useEffect(() => {
+    if (productList.length > 0) {
+      setAvailableColors(Array.from(
+        new Set(productList.map((product) => product.colorName))
+      ))
+    }
+  })
 
   useEffect(() => {
     if (displayProducts.length === 0) {

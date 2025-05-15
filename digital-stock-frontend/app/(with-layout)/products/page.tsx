@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useAuthState } from "@/app/store/AuthState";
 import FilterProductsButton from "./components/filterButton/FilterProductsButton.tsx";
 import ProductCard from "./components/ProductCard";
+import LoadingIcon from "@/public/icons/LoadingIcon";
 
 export default function ProductPage() {
   const {
@@ -50,9 +51,14 @@ export default function ProductPage() {
         </div>
 
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6 mt-4">
-          {displayProducts.map((product) => (
+          {displayProducts.length > 0 ? 
+           (displayProducts.map((product) => (
             <ProductCard key={product.id} product={product} showProps={!!user && user.role == "ROLE_ADMIN"}/>
-          ))}
+          )))
+        : 
+        <LoadingIcon/>
+        }
+         
         </div>
       </div>
     </div>

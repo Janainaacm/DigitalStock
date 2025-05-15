@@ -17,21 +17,20 @@ const Notifications = ({onOrders, onProducts}: Props) => {
     useEffect(() => {
       if (orders.length == 0) {
         fetchAllOrders()
+      } else if (newOrdersList.length == 0) {
+        const pendingOrders = orders.filter(order => order.status === 'PENDING');
+        setNewOrdersList(pendingOrders);
       }
 
       if (productList.length == 0) {
         fetchAllProducts()
+      } else if (productsOutOfStock.length == 0) {
+        const outOfStockProducts = productList.filter(product => product.stock === 0);
+        setProductsOutOfStock(outOfStockProducts);
       }
 
     }, [orders, productList])
 
-    useEffect(() => {
-        const pendingOrders = orders.filter(order => order.status === 'PENDING');
-        setNewOrdersList(pendingOrders);
-    
-        const outOfStockProducts = productList.filter(product => product.stock === 0);
-        setProductsOutOfStock(outOfStockProducts);
-    }, [orders, productList]);
     
     if (newOrdersList.length == 0 && productsOutOfStock.length == 0){
       return (

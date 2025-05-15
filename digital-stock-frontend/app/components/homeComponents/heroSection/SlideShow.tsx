@@ -56,7 +56,7 @@ export default function SlideShow() {
         autoplay={{
           delay: 2500,
           disableOnInteraction: true,
-        }} 
+        }}
         navigation={true}
         pagination={{
           clickable: true,
@@ -70,34 +70,38 @@ export default function SlideShow() {
           <SwiperSlide key={slider.id}>
             <div className="relative w-full h-[90vh]">
               <Image
-                layout="responsive"
+                fill
                 src={slider.image}
                 alt="slider image"
-                style={{ objectFit: "cover" }}
+                className="object-cover w-full h-full"
               />
             </div>
             <div
               className={
                 slider.rightText
-                  ? "absolute bg-white p-4 opacity-90 sm:bg-transparent sm:p-0 sm:opacity-100 bottom-10 right-1/2 transform translate-x-1/2 sm:transform-none sm:top-1/3 sm:right-12 md:right-20 lg:right-40 flex flex-col items-center sm:items-end"
+                  ? "absolute bg-white p-4 opacity-90 sm:bg-transparent sm:p-0 sm:opacity-100 bottom-10 right-1/2 transform translate-x-1/2 sm:transform-none sm:top-1/3 sm:right-12 flex flex-col items-center sm:items-end"
                   : "absolute bg-white p-4 opacity-90 sm:bg-transparent sm:p-0 sm:opacity-100 bottom-10 right-1/2 transform translate-x-1/2 sm:transform-none sm:top-1/3 sm:left-12 md:left-20 lg:left-40 flex flex-col items-center sm:items-start"
               }
             >
-              <span className="bg-gray-600 text-gray-100 italic inline-block text-base sm:text-xs p-1 rounded-md">
-                {slider.subtitle}
+              <div className="flex flex-col-reverse sm:flex-col items-center sm:items-start gap-2">
+                <span className="bg-gray-600 text-gray-100 italic inline-block text-xs p-1 rounded-md order-2 sm:order-1">
+                  {slider.subtitle}
+                </span>
+                <span
+                  className={`text-4xl sm:text-5xl md:text-6xl lg:text-7xl my-4 text-center order-1 sm:order-2 ${
+                    slider.rightText ? "sm:text-right" : "sm:text-left"
+                  }`}
+                >
+                  {slider.titleUp} <br />
+                  {slider.titleDown}
+                </span>
+              </div>
+              <span>
+                <ShopCategoryButton
+                  category={slider.category}
+                  value={`Shop ${slider.category}`}
+                />
               </span>
-              <span
-                className={`text-4xl sm:text-5xl md:text-6xl lg:text-7xl my-4 text-center ${
-                  slider.rightText ? "sm:text-right" : "sm:text-left"
-                }`}
-              >
-                {slider.titleUp} <br />
-                {slider.titleDown}
-              </span>
-              <span className="">
-                <ShopCategoryButton category={slider.category} value={`Shop ${slider.category}`} />
-              </span>
-              
             </div>
           </SwiperSlide>
         ))}
