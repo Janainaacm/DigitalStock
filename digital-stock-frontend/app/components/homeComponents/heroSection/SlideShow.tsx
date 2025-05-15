@@ -76,7 +76,6 @@ export default function SlideShow() {
                 className="object-cover w-full h-full"
               />
             </div>
-            {/* ✅ Mobile Layout (w-full bottom section) */}
             <div className="absolute bottom-0 w-full bg-white/40 backdrop-blur-sm px-4 py-6 flex flex-col gap-3 items-center text-center sm:hidden z-20">
               <span className="text-2xl font-bold leading-tight text-gray-900">
                 {slider.titleUp} <br />
@@ -93,7 +92,6 @@ export default function SlideShow() {
               </div>
             </div>
 
-            {/* ✅ Original Desktop Layout (untouched!) */}
             <div
               className={`absolute hidden sm:flex flex-col gap-3 sm:px-0 sm:py-0 transition-all z-20
     ${

@@ -316,7 +316,7 @@ const AddProductPage = ({onProducts}: Props) => {
               </div>
             </div>
             <div className="border-2 border-gray-200 rounded-lg bg-gray-100 shadow-lg h-auto">
-              <RenderImage error={error} setChosenimage={setimage} success={success}/>
+              <RenderImage error={error} setBase64Image={setimage} success={success}/>
             </div>
           </div>
         </div>

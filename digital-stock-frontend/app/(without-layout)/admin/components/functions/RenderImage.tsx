@@ -7,7 +7,7 @@ import Image from "next/image";
 import { useEffect, useState, useRef } from "react";
 
 interface Props {
-  setBase64Image: (base64String: string | null) => void;
+  setBase64Image: (base64String: string) => void;
   error: string[];
   success: boolean; 
   existingBase64Image?: string;
@@ -108,7 +108,6 @@ const RenderImage = ({ error, setBase64Image, success, existingBase64Image }: Pr
       setLoadingImage(false);
       setErrorIcon(false);
       setImageErrorMsg("");
-      setBase64Image(null);
     }
   }, [success, setBase64Image]);
 

@@ -10,7 +10,7 @@ type Props = {
 
 const ProductCard = ({ product, showProps }: Props) => {
   const router = useRouter();
-  
+
   return (
     <div
       onClick={() => router.push(`./products/${product.id}`)}
@@ -21,12 +21,14 @@ const ProductCard = ({ product, showProps }: Props) => {
         <img
           src={product.image}
           alt={product.name}
-          className="object-contain max-h-full max-w-full p-3 hover:scale-110 transition-all duration-700" 
+          className="object-contain max-h-full max-w-full p-3 hover:scale-110 transition-all duration-700"
         />
-        <div className="absolute bottom-0 bg-white/60 h-10 md:opacity-0 md:h-0 px-2 md:group-hover:opacity-100 md:group-hover:h-10 w-full flex justify-between items-center transition-all duration-500">
-        <AddToWishlistButton product={product}/>
-        <AddToCartButton productId={product.id} quantity={1}/>
-        </div>
+        {showProps && (
+          <div className="absolute bottom-0 bg-white/60 h-10 md:opacity-0 md:h-0 px-2 md:group-hover:opacity-100 md:group-hover:h-10 w-full flex justify-between items-center transition-all duration-500">
+            <AddToWishlistButton product={product} />
+            <AddToCartButton productId={product.id} quantity={1} />
+          </div>
+        )}
       </div>
 
       <div className="p-2 sm:p-3 md:p-4 relative flex-grow flex flex-col justify-between">
@@ -34,7 +36,9 @@ const ProductCard = ({ product, showProps }: Props) => {
           <h6 className="text-sm sm:text-base md:text-md font-semibold text-gray-800 line-clamp-2">
             {product.name}
           </h6>
-          <h6 className="text-xs sm:text-sm text-gray-600 mt-1 sm:mt-2">${product.price}</h6>
+          <h6 className="text-xs sm:text-sm text-gray-600 mt-1 sm:mt-2">
+            ${product.price}
+          </h6>
         </div>
       </div>
     </div>
