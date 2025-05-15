@@ -49,102 +49,116 @@ const BestSoldSection = () => {
           </p>
         </div>
         <div className="relative">
-          <div className="flex items-center mx-3  pt-12 bg-white">
-
-          
-          <div
-            ref={(node) => setPrevEl(node)}
-            className="bg-white border-2 text-white px-2 py-2 rounded-r"
-          >
-            <svg
-              className="h-6 w-6 rotate-180 text-gray-900"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              strokeWidth="2"
-              stroke="currentColor"
-              fill="none"
-              strokeLinecap="round"
-              strokeLinejoin="round"
+          <div className="flex items-center mx-3 pt-12 bg-white">
+            <div
+              ref={(node) => setPrevEl(node)}
+              className="bg-white lg:border-2 text-white px-2 py-2 rounded-r"
             >
-              <path stroke="none" d="M0 0h24v24H0z" />
-              <polyline points="9 6 15 12 9 18" />
-            </svg>
-          </div>
-          
-          <Swiper
-            modules={[EffectCoverflow, Pagination, Autoplay, Navigation]}
-            effect={"coverflow"}
-            loop={true}
-            autoplay={{
-              delay: 2500,
-              disableOnInteraction: false,
-            }}
-            spaceBetween={10}
-            slidesPerView={3}
-            centeredSlides={true}
-            parallax={true}
-            coverflowEffect={{
-              rotate: 0,
-              scale: 0.7,
-              slideShadows: false,
-            }}
-            navigation={{
-              prevEl,
-              nextEl,
-            }}
-            onSlideChange={(swiper) => setActiveIndex(swiper.realIndex)}
-            onSwiper={(swiper) => setActiveIndex(swiper.realIndex)}
-            className="coverflow"
-          >
-            {bestSold.map((product, index) => (
-              <SwiperSlide key={product.id}>
-                <div>
-                  <img
-                    className="p-3 bg-white"
-                    src={product.image}
-                    alt={product.name}
-                  />
-                  {activeIndex === index && (
-                  <div className="py-4 border-y">
-                    <h3 className="w-full text-center text-gray-900 text-2xl font-medium leading-loose">
-                      {product.name}
-                    </h3>
-                      <p className="w-full p-2 text-center text-gray-600 text-base font-normal leading-relaxed">
-                        {product.description}
-                      </p>
+              <svg
+                className="h-6 w-6 rotate-180 text-gray-900"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                strokeWidth="2"
+                stroke="currentColor"
+                fill="none"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path stroke="none" d="M0 0h24v24H0z" />
+                <polyline points="9 6 15 12 9 18" />
+              </svg>
+            </div>
 
-                      <button 
-                      onClick={() => router.push(`./products/${product.id}`)}
-                      className="w-full py-2 border mt-4 tracking-wide font-semibold text-gray-600 border-gray-400 bg-gray-50 hover:tracking-widest hover:scale-[1.1] hover:text-gray-500 hover:bg-white hover:shadow-md transition-all duration-400">
-                        Learn more
-                      </button>
+            <Swiper
+              modules={[EffectCoverflow, Pagination, Autoplay, Navigation]}
+              effect={"coverflow"}
+              loop={true}
+              autoplay={{
+                delay: 2500,
+                disableOnInteraction: false,
+              }}
+              spaceBetween={10}
+              centeredSlides={true}
+              parallax={true}
+              breakpoints={{
+                0: {
+                  slidesPerView: 1,
+                  coverflowEffect: {
+                    scale: 0.9,
+                  },
+                },
+                640: {
+                  slidesPerView: 1.2,
+                },
+                768: {
+                  slidesPerView: 2,
+                },
+                1024: {
+                  slidesPerView: 3,
+                },
+              }}
+              coverflowEffect={{
+                rotate: 0,
+                scale: 0.7,
+                slideShadows: false,
+              }}
+              navigation={{
+                prevEl,
+                nextEl,
+              }}
+              onSlideChange={(swiper) => setActiveIndex(swiper.realIndex)}
+              onSwiper={(swiper) => setActiveIndex(swiper.realIndex)}
+              className="coverflow"
+            >
+              {bestSold.map((product, index) => (
+                <SwiperSlide key={product.id}>
+                  <div>
+                    <img
+                      className="p-3 bg-white"
+                      src={product.image}
+                      alt={product.name}
+                    />
+                    {activeIndex === index && (
+                      <div className="py-4 border-y">
+                        <h3 className="w-full text-center text-gray-900 text-md lg:text-2xl font-medium leading-loose">
+                          {product.name}
+                        </h3>
+
+                        <button
+                          onClick={() =>
+                            router.push(`./products/${product.id}`)
+                          }
+                          className="w-full py-2 border mt-4 tracking-wide font-semibold text-gray-600 border-gray-400  hover:tracking-widest hover:scale-[1.1] hover:text-gray-500 hover:bg-white hover:shadow-md transition-all duration-400"
+                        >
+                          Learn more
+                        </button>
+                      </div>
+                    )}
                   </div>
-                  )}
-                </div>
-              </SwiperSlide>
-            ))}
-          </Swiper>
+                </SwiperSlide>
+              ))}
+            </Swiper>
 
-          <div
-            ref={(node) => setNextEl(node)}
-            className="bg-white border-2 text-white px-2 py-2 rounded-r"
-          >
-            <svg
-              className="h-6 w-6 text-gray-900"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              strokeWidth="2"
-              stroke="currentColor"
-              fill="none"
-              strokeLinecap="round"
-              strokeLinejoin="round"
+            <div
+              ref={(node) => setNextEl(node)}
+              className="bg-white lg:border-2 text-white px-2 py-2 rounded-r"
             >
-              <path stroke="none" d="M0 0h24v24H0z" />
-              <polyline points="9 6 15 12 9 18" />
-            </svg>
-          </div>
+              <svg
+                className="h-6 w-6 text-gray-900"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                strokeWidth="2"
+                stroke="currentColor"
+                fill="none"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path stroke="none" d="M0 0h24v24H0z" />
+                <polyline points="9 6 15 12 9 18" />
+              </svg>
+            </div>
           </div>
         </div>
       </div>
