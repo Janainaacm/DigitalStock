@@ -11,7 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -20,9 +22,7 @@ import java.util.Map;
 @PreAuthorize("hasRole('ADMIN')")
 public class AdminController {
 
-
     private final AdminService adminService;
-
 
     @Autowired
     public AdminController(AdminService adminService) {
@@ -66,6 +66,11 @@ public class AdminController {
     @DeleteMapping("/categories/delete/{categoryId}")
     public ResponseEntity<Void> deleteCategory(@PathVariable Long categoryId) {
         return adminService.deleteCategory(categoryId);
+    }
+
+    @PostMapping("/{productId}/upload-image")
+    public ResponseEntity<String> uploadLogo(@PathVariable Long productId, @RequestParam("file") MultipartFile file) {
+        return adminService.uploadProductImage(productId, file);
     }
 
 

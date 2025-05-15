@@ -13,7 +13,11 @@ import com.example.digitalstockbackend.repository.UserRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.lang.reflect.Field;
+import java.util.Base64;
 import java.util.List;
 
 @Service
@@ -106,6 +110,8 @@ public class AdminService {
         product.setColorName(newData.getColorName());
         product.setImage(newData.getImage());
         product.setStock(newData.getStock());
+        product.setImage(newData.getImage());
+        System.out.println("New product being saved");
 
         Product updatedProduct = productRepository.save(product);
 
@@ -138,6 +144,22 @@ public class AdminService {
         }
         categoryRepository.deleteById(categoryId);
         return ResponseEntity.noContent().build();
+    }
+
+
+    public ResponseEntity<String> uploadProductImage(Long productId, MultipartFile file) {
+        try {
+            Product product = productRepository.findById(productId)
+                    .orElseThrow(() -> new RuntimeException("Product not found"));
+            byte[] bytes = file.getBytes();
+            product.setImage(bytes);
+            Field field = Product.class.getDeclaredField("image");
+            field.setAccessible(true);
+            productRepository.save(product);
+            return ResponseEntity.ok("Logo uploaded as blob successfully.");
+        } catch (RuntimeException | IOException | NoSuchFieldException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
 
