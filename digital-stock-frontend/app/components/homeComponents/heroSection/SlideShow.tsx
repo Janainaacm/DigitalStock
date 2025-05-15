@@ -68,7 +68,7 @@ export default function SlideShow() {
       >
         {sliders.map((slider) => (
           <SwiperSlide key={slider.id}>
-            <div className="relative w-full h-[90vh] max-h-[1000px]">
+            <div className="relative w-full h-[70vh] md:h-[90vh] max-h-[800px]">
               <Image
                 fill
                 src={slider.image}
@@ -76,12 +76,31 @@ export default function SlideShow() {
                 className="object-cover w-full h-full"
               />
             </div>
+            {/* ✅ Mobile Layout (w-full bottom section) */}
+            <div className="absolute bottom-0 w-full bg-white/40 backdrop-blur-sm px-4 py-6 flex flex-col gap-3 items-center text-center sm:hidden z-20">
+              <span className="text-2xl font-bold leading-tight text-gray-900">
+                {slider.titleUp} <br />
+                {slider.titleDown}
+              </span>
+              <span className="text-sm italic text-gray-600">
+                {slider.subtitle}
+              </span>
+              <div className="mt-3">
+                <ShopCategoryButton
+                  category={slider.category}
+                  value={`Shop ${slider.category}`}
+                />
+              </div>
+            </div>
+
+            {/* ✅ Original Desktop Layout (untouched!) */}
             <div
-              className={
-                slider.rightText
-                  ? "absolute bg-white p-4 opacity-90 sm:bg-transparent sm:p-0 sm:opacity-100 bottom-10 right-1/2 transform translate-x-1/2 sm:transform-none sm:top-1/3 sm:right-12 flex flex-col items-center sm:items-end"
-                  : "absolute bg-white p-4 opacity-90 sm:bg-transparent sm:p-0 sm:opacity-100 bottom-10 right-1/2 transform translate-x-1/2 sm:transform-none sm:top-1/3 sm:left-12 md:left-20 lg:left-40 flex flex-col items-center sm:items-start"
-              }
+              className={`absolute hidden sm:flex flex-col gap-3 sm:px-0 sm:py-0 transition-all z-20
+    ${
+      slider.rightText
+        ? "sm:top-1/3 sm:right-12 items-end sm:items-end text-right"
+        : "sm:top-1/3 sm:left-12 md:left-20 lg:left-40 items-start text-left"
+    }`}
             >
               <div className="flex flex-col-reverse sm:flex-col items-center sm:items-start gap-2">
                 <span className="bg-gray-600 text-gray-100 italic inline-block text-xs p-1 rounded-md order-2 sm:order-1">
