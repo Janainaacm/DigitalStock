@@ -72,14 +72,14 @@ const Header = () => {
               <li className="max-lg:border-b max-lg:px-3 max-lg:py-3">
                 <button
                   onClick={() => router.push("/")}
-                  className="hover:text-gray-600 text-gray-800 transition-all duration-300 font-semibold block text-[15px]"
+                  className="hover:text-gray-600 text-gray-800 transition-all duration-300 font-semibold block text-md"
                 >
                   Home
                 </button>
               </li>
               <li className="group max-lg:border-b max-lg:px-3 max-lg:py-3 relative">
                 <button
-                  className="hover:text-gray-600 text-gray-800 transition-all duration-300 group-hover:fill-gray-600 fill-gray-800 font-semibold text-[15px] block"
+                  className="hover:text-gray-600 text-gray-800 transition-all duration-300 group-hover:fill-gray-600 fill-gray-800 font-semibold text-md block"
                   onClick={() => getAllProducts()}
                 >
                   Store
@@ -101,7 +101,7 @@ const Header = () => {
                   <li className="border-b border-gray-300 w-full pb-3">
                     <button
                       onClick={() => getAllProducts()}
-                      className="hover:text-blue-400 hover:fill-blue-400 transition-all duration-300 text-gray-600 font-semibold text-[15px] block"
+                      className="hover:text-blue-400 hover:fill-blue-400 transition-all duration-300 text-gray-600 font-semibold text-md block"
                     >
                       <svg
                         width="20px"
@@ -137,7 +137,7 @@ const Header = () => {
                   <li className="border-b border-gray-300 w-full py-3">
                     <button
                       onClick={() => searchByCategory("Computers")}
-                      className="hover:text-blue-400 hover:fill-blue-400 transition-all duration-300 text-gray-600 font-semibold text-[15px] block"
+                      className="hover:text-blue-400 hover:fill-blue-400 transition-all duration-300 text-gray-600 font-semibold text-md block"
                     >
                       <svg
                         fill="none"
@@ -160,7 +160,7 @@ const Header = () => {
                   <li className="border-b border-gray-300 w-full py-3">
                     <button
                       onClick={() => searchByCategory("Smartphones")}
-                      className="hover:text-blue-400 hover:fill-blue-400 transition-all duration-300 text-gray-600 font-semibold text-[15px] block"
+                      className="hover:text-blue-400 hover:fill-blue-400 transition-all duration-300 text-gray-600 font-semibold text-md block"
                     >
                       <svg
                         fill="none"
@@ -182,7 +182,7 @@ const Header = () => {
                   <li className="border-b border-gray-300 w-full py-3">
                     <button
                       onClick={() => searchByCategory("Earphones")}
-                      className="hover:text-blue-400 hover:fill-blue-400 transition-all duration-300 text-gray-600 font-semibold text-[15px] block"
+                      className="hover:text-blue-400 hover:fill-blue-400 transition-all duration-300 text-gray-600 font-semibold text-md block"
                     >
                       <svg
                         className="mr-4 inline-block"
@@ -203,7 +203,7 @@ const Header = () => {
                   <li className="border-b border-gray-300 w-full py-3">
                     <button
                       onClick={() => searchByCategory("Watches")}
-                      className="hover:text-blue-400 hover:fill-blue-400 transition-all duration-300 text-gray-600 font-semibold text-[15px] block"
+                      className="hover:text-blue-400 hover:fill-blue-400 transition-all duration-300 text-gray-600 font-semibold text-md block"
                     >
                       <svg
                         className="mr-4 inline-block"
@@ -228,7 +228,7 @@ const Header = () => {
               <li className="max-lg:border-b max-lg:px-3 max-lg:py-3">
                 <Link
                   href="/about"
-                  className="hover:text-gray-600 text-gray-800 transition-all duration-300 text-gray-600 font-semibold text-[15px] block"
+                  className="hover:text-gray-600 text-gray-800 transition-all duration-300 text-gray-600 font-semibold text-md block"
                 >
                   About
                 </Link>
@@ -236,7 +236,7 @@ const Header = () => {
               <li className="max-lg:border-b max-lg:px-3 max-lg:py-3">
                 <Link
                   href="/contact"
-                  className="hover:text-gray-600 text-gray-800 transition-all duration-300 text-gray-600 font-semibold text-[15px] block"
+                  className="hover:text-gray-600 text-gray-800 transition-all duration-300 text-gray-600 font-semibold text-md block"
                 >
                   Contact
                 </Link>

@@ -68,7 +68,7 @@ export default function SlideShow() {
       >
         {sliders.map((slider) => (
           <SwiperSlide key={slider.id}>
-            <div className="relative w-full h-[90vh]">
+            <div className="relative w-full h-[90vh] max-h-[1000px]">
               <Image
                 fill
                 src={slider.image}

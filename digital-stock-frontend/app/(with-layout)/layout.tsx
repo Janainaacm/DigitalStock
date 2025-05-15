@@ -21,10 +21,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <ScrollToTop />
+        <div className="max-w-[1800px] mx-auto bg-white">
+          <ScrollToTop />
         <Header />
         <ClientComponent>{children}</ClientComponent>
         <Footer />
+        </div>
       </body>
     </html>
   );

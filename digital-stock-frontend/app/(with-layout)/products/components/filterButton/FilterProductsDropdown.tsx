@@ -49,7 +49,7 @@ const FilterProductsDropdown = ({ onClose }: Props) => {
         new Set(productList.map((product) => product.colorName))
       ))
     }
-  })
+  }, [productList]);
 
   useEffect(() => {
     if (displayProducts.length === 0) {
