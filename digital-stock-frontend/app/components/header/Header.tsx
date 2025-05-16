@@ -17,7 +17,6 @@ import { useRouter } from "next/compat/router";
 
 const Header = () => {
   const [scrolled, setScrolled] = useState<boolean>(false);
-  const [showAuthForm, setShowAuthForm] = useState(false);
   const { fetchProductsByCategory, setFilteredProductList, setSearchKeyword } = useAppState();
   const router = useNavRouter();
   const Rrouter = useRouter();
@@ -27,14 +26,9 @@ const Header = () => {
   }, []);
 
   useEffect(() => {
-    const handleAuthParam = () => {
-      const search = new URLSearchParams(window.location.search).get("auth");
-      setShowAuthForm(search === "true");
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 0);
     };
-
-    if (Rrouter?.isReady) {
-      handleAuthParam();
-    }
 
     window.addEventListener("scroll", handleScroll);
 
@@ -262,7 +256,7 @@ const Header = () => {
                 <DisplaySearchBar />
               </li>
               <li>
-                <AuthForm auth={showAuthForm}>
+                <AuthForm>
                   <UserIcon />
                 </AuthForm>
               </li>

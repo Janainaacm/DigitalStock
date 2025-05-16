@@ -16,8 +16,9 @@ interface AppState {
   chosenCategory: string;
   productId: number | null;
   searchKeyword: string;
+  isAuthOpen: boolean;
 
-  // Product Actions
+  setIsAuthOpen: (isOpen: boolean) => void;
   selectProduct: (product: ProductInterface) => void;
   fetchDisplayProducts: () => void;
   fetchAllProducts: () => Promise<void>;
@@ -48,8 +49,15 @@ export const useAppState = create<AppState>((set) => ({
   chosenCategory: "",
   productId: null,
   searchKeyword: "",
+  isAuthOpen: false,
 
-  // Product Actions
+  
+  setIsAuthOpen: (isOpen: boolean) => {
+    set({
+      isAuthOpen: isOpen,
+    });
+  },
+
   selectProduct: (product: ProductInterface) => {
     set({
       product: product,

@@ -39,8 +39,8 @@ interface UserState {
 }
 
 export const useUserState = create<UserState>(() => ({
- 
-  // User Actions
+
+  // User Actions  
   fetchUserById: async (): Promise<void> => {
     const user = useAuthState.getState().user;
     if (!user) return;

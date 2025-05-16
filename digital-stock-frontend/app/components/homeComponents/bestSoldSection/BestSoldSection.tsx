@@ -20,7 +20,7 @@ import { ProductInterface } from "@/app/utils/Types";
 import { useRouter } from "next/navigation";
 
 const BestSoldSection = () => {
-  const { productList } = useAppState();
+  const { productList, selectProduct } = useAppState();
   const [bestSold, setBestSold] = useState<ProductInterface[]>([]);
   const [activeIndex, setActiveIndex] = useState(0);
   const [prevEl, setPrevEl] = useState<HTMLElement | null>(null);
@@ -36,6 +36,11 @@ const BestSoldSection = () => {
       setBestSold(topTen);
     }
   }, [productList]);
+
+  const redirect = (product: ProductInterface) => {
+    selectProduct(product);
+    router.push(`./products/details`);
+  }
 
   return (
     <section className="pt-6 bg-white pb-6 mb-12">
@@ -127,7 +132,7 @@ const BestSoldSection = () => {
 
                         <button
                           onClick={() =>
-                            router.push(`./products/${product.id}`)
+                            redirect(product)
                           }
                           className="w-full py-2 border mt-4 tracking-wide font-semibold text-gray-600 border-gray-400  hover:tracking-widest hover:scale-[1.1] hover:text-gray-500 hover:bg-white hover:shadow-md transition-all duration-400"
                         >

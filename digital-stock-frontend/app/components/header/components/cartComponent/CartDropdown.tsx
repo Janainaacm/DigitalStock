@@ -1,9 +1,10 @@
-import { CartItemInterface } from "@/app/utils/Types";
+import { CartItemInterface, ProductInterface } from "@/app/utils/Types";
 import { useUserState } from "@/app/store/UserState";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import AuthForm from "@/app/(with-layout)/auth/AuthForm";
 import { useAuthState } from "@/app/store/AuthState";
+import { useAppState } from "@/app/store/BackendAPIState";
 
 interface CartItemProps {
   cartItems: CartItemInterface[];
@@ -12,6 +13,7 @@ interface CartItemProps {
 
 const CartDropdown = ({ cartItems, onClose }: CartItemProps) => {
   const router = useRouter();
+  const { selectProduct } = useAppState();
   const { user } = useAuthState();
   const { addItemToCart, removeItemFromCart, clearCart } = useUserState();
   const [subtotal, setSubtotal] = useState(0);
@@ -45,9 +47,10 @@ const CartDropdown = ({ cartItems, onClose }: CartItemProps) => {
     router.push("../cart");
   };
 
-  const redirect = (productId: number) => {
+  const redirect = (product: ProductInterface) => {
+    selectProduct(product);
     onClose();
-    router.push(`/products/${productId}`);
+    router.push(`/products/details`);
   };
 
   const showContents = () => {
@@ -64,7 +67,7 @@ const CartDropdown = ({ cartItems, onClose }: CartItemProps) => {
                       className="grid grid-cols-3 items-start gap-4 border-b pb-4"
                     >
                       <div
-                        onClick={() => redirect(product.product.id)}
+                        onClick={() => redirect(product.product)}
                         className="col-span-2 flex items-start gap-4 cursor-pointer"
                       >
                         <div className="w-28 h-28 max-sm:w-24 max-sm:h-24 shrink-0 bg-white border border-gray-100 shadow-sm p-4 rounded-md">

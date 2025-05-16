@@ -13,7 +13,7 @@ const SearchResult = ({ product }: SearchResultProps) => {
   const search = (product: ProductInterface) => {
     selectProduct(product);
     setSearchBar("")
-    router.push(`/products/${product.id}`);
+    router.push(`/products/details`);
   };
 
   return (

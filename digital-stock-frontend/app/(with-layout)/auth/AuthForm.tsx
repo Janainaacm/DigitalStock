@@ -5,32 +5,32 @@ import Register from "./Register";
 import ForgotPassword from "./ForgotPassword";
 import { useAuthState } from "../../store/AuthState";
 import { useRouter } from "next/navigation";
+import { useAppState } from "@/app/store/BackendAPIState";
 
 type CurrentPage = "login" | "register" | "forgot-password";
 
 type Props = {
     extraClass?: string;
     children?: React.ReactNode;
-    auth?: boolean;
   };
 
-export default function AuthForm({extraClass, children, auth}: Props) {
+export default function AuthForm({extraClass, children}: Props) {
   const [currentPage, setCurrentPage] = useState<CurrentPage>("login");
   const {user} = useAuthState()
+  const { isAuthOpen, setIsAuthOpen } = useAppState();
   const router = useRouter()
-  const [open, setOpen] = useState(auth || false);
 
-  const toggleModal = () => setOpen((prev) => !prev);
+  const toggleModal = () => setIsAuthOpen(!isAuthOpen);
   
   useEffect(() => {
-    if (user && open) {
+    if (user && isAuthOpen) {
       if (user.role === "ROLE_ADMIN") {
         router.push("/admin");
       } else {
         router.push("/user"); 
       }
 
-      setOpen(false); 
+      setIsAuthOpen(false); 
     }
 
   }, [user, open, router]);
@@ -57,7 +57,7 @@ export default function AuthForm({extraClass, children, auth}: Props) {
       <button onClick={toggleModal} className={`btn ${extraClass}`}>
         {children}
       </button>
-      <Transition show={open} as={Fragment}>
+      <Transition show={isAuthOpen} as={Fragment}>
         <Dialog onClose={toggleModal} className="relative z-[999]">
           <div className="fixed inset-0 bg-black-300 bg-opacity-50" />
           <div className="fixed inset-0 flex items-center justify-center">

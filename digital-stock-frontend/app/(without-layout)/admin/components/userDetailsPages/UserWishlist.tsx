@@ -1,4 +1,5 @@
-import { WishlistInterface, WishlistItemsInterface } from "@/app/utils/Types";
+import { useAppState } from "@/app/store/BackendAPIState";
+import { ProductInterface, WishlistInterface, WishlistItemsInterface } from "@/app/utils/Types";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -10,6 +11,7 @@ const UserWishlistAdminPage = ({wishlist}: Props) => {
   const [wishlistNumber, setWishlistNumber] = useState(0)
   const [wishlistItems, setWishlistItems] = useState<WishlistItemsInterface[]>([])
   const [extended, setExtended] = useState<number | null>(null); 
+  const { selectProduct } = useAppState();
   const router = useRouter();
 
   useEffect(() => {
@@ -30,6 +32,11 @@ const UserWishlistAdminPage = ({wishlist}: Props) => {
               Wishlist is empty :(
           </div>
       )
+  }
+
+  const handleClick = (product: ProductInterface) => {
+    selectProduct(product);
+    router.push(`./products/details`);
   }
 
     return (
@@ -134,7 +141,7 @@ const UserWishlistAdminPage = ({wishlist}: Props) => {
                         <div className="flex jusitfy-between flex-col lg:flex-row items-center mt-6 w-full space-y-4 lg:space-y-0 lg:space-x-4 xl:space-x-8">
                           <div className="w-full">
                             <button 
-                            onClick={() => router.push(`./products/${item.product.id}`)}
+                            onClick={() => handleClick(item.product)}
                             className="focus:outline-none focus:ring-gray-800 focus:ring-offset-2 focus:ring-2 text-gray-800 w-full tracking-tight py-4 text-lg leading-4 hover:bg-gray-300 hover:text-gray-800 bg-white border border-gray-800">
                               More information
                             </button>

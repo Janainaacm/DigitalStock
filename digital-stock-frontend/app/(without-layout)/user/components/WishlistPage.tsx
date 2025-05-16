@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import { useAuthState } from "../../../store/AuthState";
-import { WishlistItemsInterface } from "../../../utils/Types";
+import { ProductInterface, WishlistItemsInterface } from "../../../utils/Types";
 import { useUserState } from "../../../store/UserState";
 import { useRouter } from "next/navigation";
+import { useAppState } from "@/app/store/BackendAPIState";
 
 const WishlistPage = () => {
   const { wishlist } = useAuthState();
@@ -10,6 +11,7 @@ const WishlistPage = () => {
   const [wishlistItems, setWishlistItems] = useState<WishlistItemsInterface[]>([]);
   const [wishlistNumber, setWishlistNumber] = useState(0);
   const [extended, setExtended] = useState<number | null>(null); 
+  const { selectProduct } = useAppState();
   const router = useRouter();
 
 
@@ -34,6 +36,11 @@ const WishlistPage = () => {
   const handleAddToCart = (id: number) => {
     addItemToCart(id, 1);
   }
+
+    const handleClick = (product: ProductInterface) => {
+      selectProduct(product);
+      router.push(`./products/details`);
+    }
 
   return (
     <>
@@ -164,7 +171,7 @@ const WishlistPage = () => {
                     <div className="flex jusitfy-between flex-col lg:flex-row items-center mt-6 w-full space-y-4 lg:space-y-0 lg:space-x-4 xl:space-x-8">
                       <div className="w-full">
                         <button 
-                        onClick={() => router.push(`./products/${item.product.id}`)}
+                        onClick={() => handleClick(item.product)}
                         className="focus:outline-none focus:ring-gray-800 focus:ring-offset-2 focus:ring-2 text-gray-800 w-full tracking-tight py-4 text-lg leading-4 hover:bg-gray-300 hover:text-gray-800 bg-white border border-gray-800">
                           More information
                         </button>

@@ -5,15 +5,15 @@ import { API_URL } from "./config/config";
 import axiosInstance from './config/axiosConfig';
 import Cookies from "js-cookie";
 
-
-
-
 interface AuthState {
   user: UserInterface | null;
   wishlist: WishlistInterface | null;
   orders: OrderInterface[];
   cart: CartInterface | null;
   isAuthenticated: boolean;
+
+  adminAuthCheck: () => Promise<boolean>;
+  userAuthCheck: () => Promise<boolean>;
 
   initializeState: () => void; 
   signIn: (username: string, password: string) => Promise<void>;
@@ -33,6 +33,29 @@ export const useAuthState = create<AuthState>((set) => ({
   isAuthenticated: false,
 
 
+  adminAuthCheck: async(): Promise<boolean> => {
+    try {
+      const response = await axiosInstance.get(`${API_URL}/auth/admin-auth-check`, {
+        withCredentials: true,
+      });
+      
+      return response.data;
+    } catch {
+      return false;
+    }
+  },
+
+  userAuthCheck: async(): Promise<boolean> => {
+    try {
+      const response = await axiosInstance.get(`${API_URL}/auth/user-auth-check`, {
+        withCredentials: true,
+      });
+      
+      return response.data;
+    } catch {
+      return false;
+    }
+  },
 
   initializeState: async () => {
     const user = await useAuthState.getState().fetchUser();

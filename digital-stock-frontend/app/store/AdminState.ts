@@ -41,6 +41,7 @@ export const useAdminState = create<AdminState>((set) => ({
   userDetails: null,
   productDetails: null,
 
+  
   fetchAllUsers: async (): Promise<void> => {
     try {
       const response = await axiosInstance.get(`${API_URL}/admin/users`);
