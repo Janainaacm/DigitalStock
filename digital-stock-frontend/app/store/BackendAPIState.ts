@@ -18,7 +18,7 @@ interface AppState {
   searchKeyword: string;
 
   // Product Actions
-  setProductIdState: (productId: number) => void;
+  selectProduct: (product: ProductInterface) => void;
   fetchDisplayProducts: () => void;
   fetchAllProducts: () => Promise<void>;
   fetchAllCategories: () => Promise<void>;
@@ -50,10 +50,9 @@ export const useAppState = create<AppState>((set) => ({
   searchKeyword: "",
 
   // Product Actions
-  setProductIdState: (productId: number) => {
-    localStorage.setItem("productId", productId.toString());
+  selectProduct: (product: ProductInterface) => {
     set({
-      productId: productId,
+      product: product,
     });
   },
 

@@ -7,11 +7,11 @@ type SearchResultProps = {
 };
 
 const SearchResult = ({ product }: SearchResultProps) => {
-  const { setProductIdState, setSearchBar } = useAppState();
+  const { selectProduct, setSearchBar } = useAppState();
   const router = useRouter();
 
   const search = (product: ProductInterface) => {
-    setProductIdState(product.id);
+    selectProduct(product);
     setSearchBar("")
     router.push(`/products/${product.id}`);
   };

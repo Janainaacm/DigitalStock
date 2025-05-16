@@ -2,6 +2,7 @@ import { ProductInterface } from "@/app/utils/Types";
 import AddToCartButton from "./AddToCartButton";
 import AddToWishlistButton from "./AddToWishlistButton";
 import { useRouter } from "next/navigation";
+import { useAppState } from "@/app/store/BackendAPIState";
 
 type Props = {
   product: ProductInterface;
@@ -10,10 +11,16 @@ type Props = {
 
 const ProductCard = ({ product, showProps }: Props) => {
   const router = useRouter();
+  const { selectProduct } = useAppState();
+
+  const handleClick = () => {
+    selectProduct(product);
+    router.push(`./products/${product.id}`);
+  };
 
   return (
     <div
-      onClick={() => router.push(`./products/${product.id}`)}
+      onClick={handleClick}
       className="group overflow-hidden cursor-pointer relative bg-white 
         h-80 sm:h-86 md:h-90 lg:h-96 w-full flex flex-col"
     >
