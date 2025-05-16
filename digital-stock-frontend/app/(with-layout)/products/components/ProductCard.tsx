@@ -15,7 +15,7 @@ const ProductCard = ({ product, showProps }: Props) => {
 
   const handleClick = () => {
     selectProduct(product);
-    router.push(`./products/${product.id}`);
+    router.push(`./products/details`);
   };
 
   return (

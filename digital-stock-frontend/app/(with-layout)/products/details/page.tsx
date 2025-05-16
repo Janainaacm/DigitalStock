@@ -1,6 +1,5 @@
 "use client";
 
-import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useAppState } from "@/app/store/BackendAPIState";
 import GoBackButton from "@/app/components/buttons/GoBackButton";

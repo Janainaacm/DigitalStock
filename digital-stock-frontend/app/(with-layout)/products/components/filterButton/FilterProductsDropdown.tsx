@@ -325,7 +325,7 @@ const FilterProductsDropdown = ({ onClose }: Props) => {
                     </li>
                     <li
                       className={`border-b py-2 ${
-                        selectedField == "name-az"
+                        selectedField == "name-za"
                           ? "bg-white text-blue-400"
                           : "bg-gray-50 text-gray-600 shadow-inner"
                       }`}
@@ -342,7 +342,7 @@ const FilterProductsDropdown = ({ onClose }: Props) => {
                     </li>
                     <li
                       className={`border-b py-2 ${
-                        selectedField == "name-za"
+                        selectedField == "sold"
                           ? "bg-white text-blue-400"
                           : "bg-gray-50 text-gray-600 shadow-inner"
                       }`}
