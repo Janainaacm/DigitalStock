@@ -17,8 +17,8 @@ public class CorsConfig {
 
         CorsConfiguration corsConfiguration = new CorsConfiguration();
 
-        corsConfiguration.addAllowedOrigin("http://localhost:3000");
-        corsConfiguration.addAllowedOrigin("https://digitalstock-ds-backend.up.railway.app/");
+        corsConfiguration.addAllowedOrigin("https://dsfrontend.z1.web.core.windows.net");
+        corsConfiguration.addAllowedOrigin("https://dsbackend-hkfybte0dnadb2df.swedencentral-01.azurewebsites.net");
         corsConfiguration.addAllowedMethod("*");
         corsConfiguration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type"));
         corsConfiguration.setExposedHeaders(List.of("Set-Cookie"));

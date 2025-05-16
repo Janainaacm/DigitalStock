@@ -37,6 +37,7 @@ public class AdminService {
         this.dto = dto;
     }
 
+
     //Users
     public ResponseEntity<List<UserDTO>> fetchAllUsers() {
         List<CustomUser> users = userRepository.findAll();

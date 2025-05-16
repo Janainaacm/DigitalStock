@@ -27,6 +27,17 @@ public class AuthController {
         this.authService = authService;
     }
 
+    //auth
+    @GetMapping("/admin-auth-check")
+    public ResponseEntity<Boolean> checkAdminAuth(HttpServletRequest request) {
+        return authService.checkAdminAuth(request);
+    }
+
+    @GetMapping("/user-auth-check")
+    public ResponseEntity<Boolean> checkUserAuth(HttpServletRequest request) {
+        return authService.checkUserAuth(request);
+    }
+
     @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
        return authService.authenticateUser(loginRequest);

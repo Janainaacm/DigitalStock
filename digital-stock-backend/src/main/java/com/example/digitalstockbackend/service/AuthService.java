@@ -135,20 +135,54 @@ public class AuthService {
     }
 
 
+    public ResponseEntity<Boolean> checkAdminAuth(HttpServletRequest request) {
+        try {
+            String token = extractTokenFromCookie(request);
+
+            List<String> roles = extractRolesFromJwtToken(token);
+
+            if (roles.contains(ERole.ROLE_ADMIN.name())) {
+                return ResponseEntity.ok(true);
+            }
+            return ResponseEntity.ok(false);
+        } catch (Exception e) {
+            throw new RuntimeException("🚨 Missing Authentication Token", e);
+        }
+    }
+
+    public ResponseEntity<Boolean> checkUserAuth(HttpServletRequest request) {
+        try {
+            String token = extractTokenFromCookie(request);
+
+            List<String> roles = extractRolesFromJwtToken(token);
+
+            if (roles.contains(ERole.ROLE_USER.name())) {
+                return ResponseEntity.ok(true);
+            }
+            return ResponseEntity.ok(false);
+        } catch (Exception e) {
+            throw new RuntimeException("🚨 Missing Authentication Token", e);
+        }
+    }
+
 
     public ResponseEntity<List<String>> getUserRoleByToken(HttpServletRequest request) {
         String token = extractTokenFromCookie(request);
 
-        if (token == null || token.isEmpty()) {
-            return ResponseEntity.badRequest().body(Collections.emptyList());
-        }
-
-        List<String> roles = jwtUtils.getRolesFromJwtToken(token);
+        List<String> roles = extractRolesFromJwtToken(token);
 
         if (roles.isEmpty()) {
             return ResponseEntity.badRequest().body(roles);
         }
         return ResponseEntity.ok(roles);
+    }
+
+    private List<String> extractRolesFromJwtToken(String token) {
+        if (token == null || token.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        return jwtUtils.getRolesFromJwtToken(token);
     }
 
     private String extractTokenFromCookie(HttpServletRequest request) {
