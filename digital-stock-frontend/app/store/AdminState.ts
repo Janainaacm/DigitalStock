@@ -81,7 +81,7 @@ export const useAdminState = create<AdminState>((set) => ({
 
   editProduct: async (productId: number, productDetails: ProductInterface): Promise<void> => {
     try {
-      const response = await axiosInstance.put(`${API_URL}/admin/products/${productId}`, productDetails);
+      const response = await axiosInstance.put(`${API_URL}/admin/products/update/${productId}`, productDetails);
       set((state) => ({
         productList: state.productList.map((product) =>
           product.id === productId ? response.data : product 
@@ -95,7 +95,7 @@ export const useAdminState = create<AdminState>((set) => ({
 
   deleteProduct: async (productId: number): Promise<void> => {
     try {
-      await axiosInstance.delete(`${API_URL}/admin/products/${productId}`);
+      await axiosInstance.delete(`${API_URL}/admin/products/delete/${productId}`);
       set((state) => ({
         productList: state.productList.filter((product) => product.id !== productId),
       }));

@@ -16,7 +16,7 @@ type Props = {
 
 export default function AuthForm({extraClass, children}: Props) {
   const [currentPage, setCurrentPage] = useState<CurrentPage>("login");
-  const {user} = useAuthState()
+  const { user } = useAuthState()
   const { isAuthOpen, setIsAuthOpen } = useAppState();
   const router = useRouter()
 
@@ -52,9 +52,19 @@ export default function AuthForm({extraClass, children}: Props) {
     return <ForgotPassword onLogin={() => setCurrentPage("login")} />;
   };
 
+  const handleClick = () => {
+    if (user && user.role === "ROLE_ADMIN") {
+      router.push("/admin");
+    } else if (user && user.role === "ROLE_USER") {
+      router.push("/user"); 
+    } else {
+      toggleModal();
+    }
+  }
+
   return (
     <>
-      <button onClick={toggleModal} className={`btn ${extraClass}`}>
+      <button onClick={handleClick} className={`btn ${extraClass}`}>
         {children}
       </button>
       <Transition show={isAuthOpen} as={Fragment}>

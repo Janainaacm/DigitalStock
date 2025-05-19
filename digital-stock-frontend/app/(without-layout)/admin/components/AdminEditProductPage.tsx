@@ -108,6 +108,8 @@ const EditProductPage = ({onProducts}: Props) => {
     };
   
     try {
+      console.log("new product: ", newProduct);
+      console.log("productDetails: ", productDetails);
       await editProduct(productDetails.id, newProduct);
       setSuccess(true); 
       resetFields(); 

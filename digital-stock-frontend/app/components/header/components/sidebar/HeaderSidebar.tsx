@@ -9,6 +9,11 @@ import MenuIcon from "@/public/icons/MenuIcon";
 import UserIcon from "@/public/icons/UserIcon";
 import DisplaySearchBar from "@/app/components/searchBar/DisplaySearchBar";
 import { useAppState } from "@/app/store/BackendAPIState";
+import AllProductsIcon from "@/public/icons/AllProductsIcon";
+import SmartphoneIcon from "@/public/icons/SmartphoneIcon";
+import ComputerIcon from "@/public/icons/ComputerIcon";
+import EarphoneIcon from "@/public/icons/EarphoneIcon";
+import WatchIcon from "@/public/icons/WatchIcon";
 
 export default function HeaderSidebar() {
   const router = useRouter();
@@ -107,7 +112,7 @@ export default function HeaderSidebar() {
                           <svg
                             width="16px"
                             height="16px"
-                            className="ml-1 inline-block"
+                            className={`ml-1 inline-block ${extended ? "rotate-180" : ""} transition-transform duration-500`} 
                             viewBox="0 0 24 24"
                           >
                             <path
@@ -131,33 +136,7 @@ export default function HeaderSidebar() {
                               onClick={() => redirect("/products")}
                               className="hover:text-[#007bff] text-gray-600 text-[15px] block"
                             >
-                              <svg
-                                width="20px"
-                                height="20px"
-                                className="mr-4 inline-block"
-                                viewBox="0 0 1700 1700"
-                              >
-                                <path
-                                  d="M916.7 1269.4c-10.7 0-20.4-7.2-23.2-18l-29.9-114.7c-3.3-12.8 4.3-25.9 17.2-29.3 12.8-3.3 25.9 4.3 29.3 17.2l29.9 114.7c3.3 12.8-4.3 25.9-17.2 29.3-2 .5-4.1.8-6.1.8zm-169.4 0c-2 0-4-.3-6.1-.8-12.8-3.3-20.5-16.4-17.2-29.3l29.9-114.7c3.3-12.8 16.4-20.5 29.3-17.2 12.8 3.3 20.5 16.4 17.2 29.3l-29.9 114.7c-2.8 10.8-12.6 18-23.2 18z"
-                                  data-original="#000000"
-                                />
-                                <path
-                                  d="M1066.6 1358.8H597.4c-13.3 0-24-10.7-24-24 0-62.6 50.9-113.5 113.5-113.5h290.4c62.6 0 113.5 50.9 113.5 113.5-.2 13.3-10.9 24-24.2 24zm-440.7-48H1038c-9.6-24.3-33.3-41.5-60.9-41.5H686.8c-27.6.1-51.3 17.3-60.9 41.5zM276.4 762.7c-13.3 0-24-10.7-24-24V395c0-29.7 24.2-53.9 53.9-53.9h1051.4c29.7 0 53.9 24.2 53.9 53.9v297.8c0 13.3-10.7 24-24 24s-24-10.7-24-24V395c0-3.2-2.6-5.9-5.9-5.9H306.3c-3.2 0-5.9 2.6-5.9 5.9v343.7c0 13.2-10.7 24-24 24zm904.5 392H446.5c-13.3 0-24-10.7-24-24s10.7-24 24-24h734.3c13.3 0 24 10.7 24 24s-10.6 24-23.9 24zm0-120.8H446.5c-13.3 0-24-10.7-24-24s10.7-24 24-24h734.3c13.3 0 24 10.7 24 24s-10.6 24-23.9 24z"
-                                  data-original="#000000"
-                                />
-                                <path
-                                  d="M424.1 1358.8H128.4c-25.6 0-46.4-20.8-46.4-46.4V761.1c0-25.6 20.8-46.4 46.4-46.4h295.7c25.6 0 46.4 20.8 46.4 46.4v551.3c0 25.6-20.8 46.4-46.4 46.4zm-294.1-48h292.5V762.7H130z"
-                                  data-original="#000000"
-                                />
-                                <path
-                                  d="M446.5 853.6H106c-13.3 0-24-10.7-24-24s10.7-24 24-24h340.5c13.3 0 24 10.7 24 24s-10.7 24-24 24zm0 414.4H106c-13.3 0-24-10.7-24-24s10.7-24 24-24h340.5c13.3 0 24 10.7 24 24s-10.7 24-24 24zm1125.1 90.8h-368.3c-25.6 0-46.4-20.8-46.4-46.4V715.2c0-25.6 20.8-46.4 46.4-46.4h368.3c25.6 0 46.4 20.8 46.4 46.4v597.2c0 25.6-20.8 46.4-46.4 46.4zm-366.7-48H1570v-594h-365.1z"
-                                  data-original="#000000"
-                                />
-                                <path
-                                  d="M1594 811.8h-413.1c-13.3 0-24-10.7-24-24s10.7-24 24-24H1594c13.3 0 24 10.7 24 24s-10.7 24-24 24zm0 452h-413.1c-13.3 0-24-10.7-24-24s10.7-24 24-24H1594c13.3 0 24 10.7 24 24s-10.7 24-24 24z"
-                                  data-original="#000000"
-                                />
-                              </svg>
+                              <AllProductsIcon extraClass="mr-4"/>
                               All products
                             </button>
                           </li>
@@ -166,20 +145,7 @@ export default function HeaderSidebar() {
                               onClick={() => searchByCategory("Computers")}
                               className="hover:text-[#007bff] text-gray-600 text-[15px] block"
                             >
-                              <svg
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                width="20px"
-                                height="20px"
-                                stroke="currentColor"
-                                className="mr-4 inline-block"
-                              >
-                                <path
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  d="M9 17.25v1.007a3 3 0 0 1-.879 2.122L7.5 21h9l-.621-.621A3 3 0 0 1 15 18.257V17.25m6-12V15a2.25 2.25 0 0 1-2.25 2.25H5.25A2.25 2.25 0 0 1 3 15V5.25m18 0A2.25 2.25 0 0 0 18.75 3H5.25A2.25 2.25 0 0 0 3 5.25m18 0V12a2.25 2.25 0 0 1-2.25 2.25H5.25A2.25 2.25 0 0 1 3 12V5.25"
-                                />
-                              </svg>
+                              <ComputerIcon extraClass="mr-4"/>
                               Computers
                             </button>
                           </li>
@@ -188,20 +154,7 @@ export default function HeaderSidebar() {
                               onClick={() => searchByCategory("Smartphones")}
                               className="hover:text-[#007bff] text-gray-600 text-[15px] block"
                             >
-                              <svg
-                                fill="none"
-                                width="20px"
-                                height="20px"
-                                viewBox="0 0 24 24"
-                                stroke="currentColor"
-                                className="mr-4 inline-block"
-                              >
-                                <path
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  d="M10.5 1.5H8.25A2.25 2.25 0 0 0 6 3.75v16.5a2.25 2.25 0 0 0 2.25 2.25h7.5A2.25 2.25 0 0 0 18 20.25V3.75a2.25 2.25 0 0 0-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3m-3 18.75h3"
-                                />
-                              </svg>
+                              <SmartphoneIcon extraClass="mr-4"/>
                               Smartphones
                             </button>
                           </li>
@@ -210,19 +163,7 @@ export default function HeaderSidebar() {
                               onClick={() => searchByCategory("Earphones")}
                               className="hover:text-[#007bff] text-gray-600 text-[15px] block"
                             >
-                              <svg
-                                className="mr-4 inline-block"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                width="20px"
-                                height="20px"
-                                stroke="currentColor"
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                              >
-                                <path d="M3 18v-6a9 9 0 0 1 18 0v6" />
-                                <path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z" />
-                              </svg>
+                              <EarphoneIcon extraClass="mr-4"/>
                               Earphones
                             </button>
                           </li>
@@ -231,27 +172,7 @@ export default function HeaderSidebar() {
                               onClick={() => searchByCategory("Watches")}
                               className="hover:text-[#007bff] text-gray-600  text-[15px] block"
                             >
-                              <svg
-                                className="mr-4 inline-block"
-                                width="24"
-                                height="24"
-                                viewBox="0 0 24 24"
-                                stroke="currentColor"
-                                fill="none"
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                              >
-                                <path stroke="none" d="M0 0h24v24H0z" />
-                                <rect
-                                  x="6"
-                                  y="6"
-                                  width="12"
-                                  height="12"
-                                  rx="3"
-                                />
-                                <path d="M9 18v3h6v-3" />
-                                <path d="M9 6v-3h6v3" />
-                              </svg>
+                              <WatchIcon extraClass="mr-4"/>
                               Watches
                             </button>
                           </li>
@@ -285,7 +206,7 @@ export default function HeaderSidebar() {
                           </div>
                         </AuthForm>
                       </li>
-
+                     {user && user.role == "ROLE_USER" && (
                       <li className="w-full group text-xl border-b py-4 my-3 flex justify-between">
                         <button
                           onClick={() => redirect("/wishlist")}
@@ -304,6 +225,8 @@ export default function HeaderSidebar() {
                           </div>
                         </button>
                       </li>
+                     )} 
+                      
                     </ul>
                     <div className="mt-14">
                     <button
